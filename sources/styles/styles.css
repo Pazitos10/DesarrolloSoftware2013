@@ -1,0 +1,22 @@
+.myimg {}
+
+.nav-color{
+	background-color: #FFFFFF;
+	color: #000000;
+	border-color: #EEEEEE;
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    background-color: #FFFFFF;
+    color: green;
+
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: green;
+
+}
+
+.navbar-inverse .navbar-brand {
+    color: green;
+}
