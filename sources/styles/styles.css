@@ -56,6 +56,42 @@ div div a:hover, a:focus{
   background-color: green;
 }
 
+.panel-group{
+  margin-left: 20px;
+  font-size: 20px;
+  height: 300px;
+  width:300px;
+}
+
+.panel-group{
+  margin-top: 0px;
+}
+
+/*estilos para form de claudio*/
+.well {
+    background-color: #F5F5F5;
+    border: 1px solid #E3E3E3;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+    margin-left: 300px;
+    margin-top: 60px;
+    min-height: 20px;
+    padding: 10px;
+    width: 600px;
+}
+
+.panel {
+    background-color: #FFFFFF;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 0px;
+}
+
+.btn-primary{
+  margin-left: 18px;
+}
+
 
 
 
