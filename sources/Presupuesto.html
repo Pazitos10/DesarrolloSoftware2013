@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title> Presupuesto </title>
+	<link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+	<link href="/styles/styles.css" rel="stylesheet">
+
+</head>
+
+<body>
+	<div class="well">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h6 class="panel-title"> <strong> ALTA DE PRESUPUESTO </strong></h6>
+			</div>
+			<div class="panel-body">
+				<div class="container">
+					<label class="datosCliente">Datos del cliente:</label>
+					<form class="form-horizontal" id="formDatosCli" role="form">
+						<div class="form-group">
+						    <label class="col-lg-2 control-label">Número:</label>
+						    <div class="col-lg-10">
+						      	<p class="form-control-static">1</p>
+						    </div>
+						</div>
+						<div class="form-group">
+						    <label class="col-lg-2 control-label">Nombre Completo:</label>
+						    <div class="col-lg-10">
+						      	<p class="form-control-static">Juan Pérez</p>
+						    </div>
+						</div>
+						<div class="form-group">
+							<label class="col-lg-2 control-label">Dirección:</label>
+					    	<div class="col-lg-10">
+						      	<p class="form-control-static">Hipólito Yrigoyen 255</p>
+						    </div>
+						</div>
+					</form>
+					<table class="table">
+						<thead>
+							<tr>
+							  	<th>#</th>
+							  	<th>Nombre Servicio</th>
+							  	<th>Precio por metro cuadrado ($)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+							  	<td>1</td>
+							  	<td>Limpieza de vidrios</td>
+							  	<td>19,20</td>
+							</tr>
+							<tr>
+								<td>2</td>
+							  	<td>Limpieza de habitaciones</td>
+							  	<td>40,00</td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td>Limpieza de oficinas</td>
+								<td>50,00</td>
+							</tr>
+							<tr>
+								<td><strong>Total:</strong></td>
+								<td></td>
+								<td><strong>109,20</strong></td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="form-actions" id="accionesPre">
+		            	<button type="button" class="btn btn-large btn btn-success"><strong>Confirmar</strong></button>
+						<button type="button" class="btn btn-large btn btn-primary"><strong>Modificar</strong></button>
+		            	<button type="reset" class="btn btn-large btn-danger"><strong>Cancelar</strong></button>
+		            </div>
+				</div>
+			</div>
+		</div>
+
+	</div> 
+	<script src="/bootstrap/js/jquery.js"></script>
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	</div>
+</div>
+	
+</body>
+</html>
