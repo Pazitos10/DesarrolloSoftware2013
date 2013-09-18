@@ -92,6 +92,38 @@ div div a:hover, a:focus{
   margin-left: 18px;
 }
 
+/*****************************/
+
+.btn-group-vertical{
+  text-align: left;
+  margin-left: 10px;
+  width: 20%;
+}
+
+.container2 {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.jumbotron{
+  float:right;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  width: 76%;
+  height: 900px;
+  border-radius: 6px;
+}
+
+#footer{
+  clear: both;
+}
+
+.featurette-divider{
+  clear: both; 
+}
 
 
-
+.glyphicon-chevron-right{
+    float:right;
+    padding-bottom: 10px;
+}
