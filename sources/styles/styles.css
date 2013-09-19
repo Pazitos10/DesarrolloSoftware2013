@@ -6,32 +6,52 @@
 	border-color: #EEEEEE;
 }
 
+/*config para boton "inicio" a la derecha de Zenda*/
 .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
-    background-color: #FFFFFF;
     color: green;
-
+    background-color: #FFFFFF;
 }
+
+.navbar-inverse .navbar-nav > .active > a:hover{
+    background-color: #EEEEEE;
+}
+/************************************************/
 
 .navbar-inverse .navbar-nav > li > a {
     color: green;
-
 }
 
 .navbar-inverse .navbar-brand {
     color: green;
 }
 
+.navbar-brand:hover,
+.navbar-brand:focus {
+  text-decoration: none;
+  color: green;
+}
+
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-brand:focus {
+  color: green;
+  background-color: #EEEEEE;
+}
+
+
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
     background-color: #FFFFFF;
     color: green;
+    background-color: #EEEEEE;
 }
 
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
   color: green;
-  background-color: transparent;
+  background-color: #EEEEEE;
 }
 
+
+/*Css config para boton dropdown de la derecha*/
 .pull-right {
   float: right !important;
 }
@@ -41,31 +61,29 @@
   padding-top: 15px;
 }
 
-div div a{
+.dropdown:hover{
+  background-color: #EEEEEE;
+}
+
+
+div div a{ /*cambia color a texto de boton dropdown*/
   color:green;
   text-decoration: none;  
 }
 
 div div a:hover, a:focus{
   color:green;
-  text-decoration: none;  
-}
+  text-decoration: none;   
+}         /***************************************/
+
 
 .dropdown-menu > li > a:hover{
   color:white;
   background-color: green;
 }
 
-.panel-group{
-  margin-left: 20px;
-  font-size: 20px;
-  height: 300px;
-  width:300px;
-}
+/*************************************************/
 
-.panel-group{
-  margin-top: 0px;
-}
 
 /*estilos para form de claudio*/
 .well {
@@ -98,6 +116,17 @@ div div a:hover, a:focus{
   text-align: left;
   margin-left: 10px;
   width: 20%;
+  min-width: 20%;
+}
+
+.btn-group-vertical :hover{
+  color: green;
+  font-weight:700;
+}
+
+.btn-group-vertical :focus{
+  color: green;
+  font-weight:700;
 }
 
 .container2 {
@@ -112,6 +141,7 @@ div div a:hover, a:focus{
   width: 76%;
   height: 900px;
   border-radius: 6px;
+  background-color: #F9F9F9;
 }
 
 #footer{
@@ -126,4 +156,64 @@ div div a:hover, a:focus{
 .glyphicon-chevron-right{
     float:right;
     padding-bottom: 10px;
+    margin-top: -20px;
+}
+
+.form-horizontal .control-label {
+  text-align: left;
+}
+
+.col-nCli {
+  width: 0%;
+  float: right;
+  margin-right: 30px;
+}
+
+
+#accionesPre > .btn{
+  float:right;
+  margin-right: 2px;
+  margin-left: 2px;
+}
+
+#formDatosCli > .form-group{
+  margin-left: -8px;
+
+} 
+
+#formPresupuesto {
+  width: 40%;
+  float: left;
+  margin-top: 71px;
+}
+
+#formPresupuesto2 {
+  width: 34.8%;
+  float: right;
+  margin-left: 0px;
+  margin-right: 20px;
+  margin-top: 71px;
+}
+
+#formPresupuesto3{
+  clear:both;
+  width:76%;
+}
+
+
+.form-control-static {
+  margin-left: 8px;
+}
+
+#checkboxes{
+  text-align: center;
+  vertical-align: middle;
+}
+
+#diasFrec > th {
+  text-align: center;
+}
+
+#checkboxes > td{
+  padding: 0px;
 }

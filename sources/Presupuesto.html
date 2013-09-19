@@ -9,25 +9,30 @@
 </head>
 
 <body>
-	<div class="well">
+	<div class="well" id="formPresupuesto">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h6 class="panel-title"> <strong> ALTA DE PRESUPUESTO </strong></h6>
 			</div>
 			<div class="panel-body">
 				<div class="container">
-					<label class="datosCliente">Datos del cliente:</label>
 					<form class="form-horizontal" id="formDatosCli" role="form">
 						<div class="form-group">
-						    <label class="col-lg-2 control-label">Número:</label>
+						    <label class="col-lg-5 control-label">Datos del cliente:</label>
+						    <div class="col-nCli">
+						    	<p class="form-control-static">1</p>
+							</div>
+						</div>
+						<div class="form-group">
+						    <label class="col-lg-2 control-label">Nombre:</label>
 						    <div class="col-lg-10">
-						      	<p class="form-control-static">1</p>
+						      	<p class="form-control-static">Juan</p>
 						    </div>
 						</div>
 						<div class="form-group">
-						    <label class="col-lg-2 control-label">Nombre Completo:</label>
+						    <label class="col-lg-2 control-label">Apellido:</label>
 						    <div class="col-lg-10">
-						      	<p class="form-control-static">Juan Pérez</p>
+						      	<p class="form-control-static">Pérez</p>
 						    </div>
 						</div>
 						<div class="form-group">
@@ -37,12 +42,14 @@
 						    </div>
 						</div>
 					</form>
+
+					<!--Tabla de presupuesto-->
 					<table class="table">
 						<thead>
 							<tr>
 							  	<th>#</th>
 							  	<th>Nombre Servicio</th>
-							  	<th>Precio por metro cuadrado ($)</th>
+						  	<th>Precio/M<sup>2</sup> ($)</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -68,20 +75,111 @@
 							</tr>
 						</tbody>
 					</table>
+					<!--Botones de Accion-->
 					<div class="form-actions" id="accionesPre">
-		            	<button type="button" class="btn btn-large btn btn-success"><strong>Confirmar</strong></button>
-						<button type="button" class="btn btn-large btn btn-primary"><strong>Modificar</strong></button>
 		            	<button type="reset" class="btn btn-large btn-danger"><strong>Cancelar</strong></button>
+						<button type="button" class="btn btn-large btn btn-primary"><strong>Modificar</strong></button>
+		            	<button type="button" class="btn btn-large btn btn-success"><strong>Confirmar</strong></button>
 		            </div>
 				</div>
 			</div>
 		</div>
-
 	</div> 
+	<div class="well" id="formPresupuesto2">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h6 class="panel-title"> <strong> SELECCIÓN DE SERVICIOS </strong></h6>
+			</div>
+			<div class="panel-body">
+				<div class="container">
+					<table class="table">
+						<thead>
+							<tr>
+							  	<th>#</th>
+							  	<th>Nombre Servicio</th>
+						  		<th>Selección</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+							  	<td>1</td>
+							  	<td>Limpieza de vidrios</td>
+							  	<td><input type="checkbox"></td>
+							</tr>
+							<tr>
+								<td>2</td>
+							  	<td>Limpieza de habitaciones</td>
+							  	<td><input type="checkbox"></td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td>Limpieza de oficinas</td>
+								<td><input type="checkbox"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>	
+			</div>
+		</div>	
+	</div>
+	
+	<!-- Configuracion de frecuencias -->
+	<div class="well" id="formPresupuesto3">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h6 class="panel-title"> <strong> FRECUENCIA DE SERVICIO </strong></h6>
+			</div>
+			<div class="panel-body">
+				<div class="container">
+					<table class="table">
+						<thead>
+							<tr id="diasFrec">
+								<th style="text-align:left">Servicio</th>
+							  	<th>Lunes</th>
+						  		<th>Martes</th>
+						  		<th>Miércoles</th>
+						  		<th>Jueves</th>
+						  		<th>Viernes</th>
+						  		<th>Sábado</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id="checkboxes">
+								<td style="text-align:left"><strong>Limpieza de vidrios</strong></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							</tr>
+							<tr id="checkboxes">
+								<td style="text-align:left"><strong>Limpieza de habitaciones</strong></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							</tr>
+							<tr id="checkboxes">
+								<td style="text-align:left"><strong>Limpieza de oficinas</strong></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							  	<td><input type="checkbox"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>	
+			</div>
+		</div>	
+	</div>
+
 	<script src="/bootstrap/js/jquery.js"></script>
 	<script src="/bootstrap/js/bootstrap.min.js"></script>
-	</div>
-</div>
 	
 </body>
 </html>
