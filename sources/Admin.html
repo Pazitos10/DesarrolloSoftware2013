@@ -12,6 +12,30 @@
 	<!-- Bootstrap core CSS -->
 	<link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
 	<link href="/styles/styles.css" rel="stylesheet">
+	
+	<script type="text/javascript">
+		function mostrar(id) {
+			if (id == "Gestion De Clientes") {
+				$("#Gestion De Clientes").show();
+				$("#Gestion De Servicios").hide();
+				$("#Gestion De Turnos").hide();
+			}
+
+			if (id == "Gestion De Servicios") {
+				$("#Gestion De Servicios").show();
+				$("#Gestion De Turnos").hide();
+				$("#Gestion De Clientes").hide();
+			}
+
+			if (id == "Gestion De Turnos") {
+				$("#Gestion De Turnos").show();
+				$("#Gestion De Clientes").hide();
+				$("#Gestion De Servicios").hide();
+			}
+		}
+	</script>
+
+
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -61,57 +85,12 @@
 		</div>
 	</div>
 	
-	<!-- Un ejemplo de collapse-->
 	
-	<!--div class="panel-group" id="accordion">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-			  <h4 class="panel-title">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-				  Categoría 1
-				</a>
-			  </h4>
-			</div>
-			<div id="collapseOne" class="panel-collapse collapse in">
-			  <div class="panel-body">
-				Some Text 1
-			  </div>
-			</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">
-			  <h4 class="panel-title">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-				  Categoría 2
-				</a>
-			  </h4>
-			</div>
-			<div id="collapseTwo" class="panel-collapse collapse">
-				<div class="panel-body">
-					Some text 2
-				</div>
-			</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">
-			  <h4 class="panel-title">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-				  Categoría 3
-				</a>
-			  </h4>
-			</div>
-			<div id="collapseThree" class="panel-collapse collapse">
-			  <div class="panel-body">
-				Some Text 3
-			  </div>
-			</div>
-		</div>
-	</div-->
 	
 	<div class="container2">
 
 		<!--Menu izq-->
-		<div class="btn-group-vertical">
+		<div class="btn-group-vertical" onChange="mostrar(this.value);">
 			<button class="btn btn-default" type="button">
 				Gestión De Clientes<span class="glyphicon glyphicon-chevron-right"></span>
 			</button>
@@ -138,9 +117,22 @@
 			</button>				
 		</div>
 
+		<div id="Gestion De Clientes" style="display: none;">
+			<h2>Si eres estudiante...</h2>
+			<form action="index.php" method="post">
+				<p>Nombre:<br/>
+				<input type="text" name="nombre" /></p>
+				<p>Centro:<br/>
+				<input type="text" name="centro" /></p>
+				<input type="submit" name="send" value="Enviar" />
+			</form>
+		</div>
+
+
 		<!--Contenido-->
-		<div class="jumbotron">
+		<div class="contenido">
 			<div class="container">
+
 			</div>
 		</div>
 		
