@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block "title"%} Presupuesto {%endblock%}
+
+{% block "contenido" %}
+	<div class="well" id="formNewPresupuesto">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h6 class="panel-title"> <strong> ALTA DE PRESUPUESTO </strong></h6>
+			</div>
+			<div class="panel-body">
+				<div class="container">
+					<form class="form-horizontal" role="form" method="POST">{% csrf_token %}
+						<div class="btn btn-default pull-right" ><span class="glyphicon glyphicon-plus"></span><a href="{% url "cliente_alta" %}">Crear Cliente</a></div>  
+						{{buscar}}
+						{% crispy personaForm %}
+						{% crispy presupuestoForm %}
+						<br>
+						<p> Campos Obligatorios (*)</p>
+						<br>
+						{% if personaForm %}
+						<div class="panel panel-primary" >
+							<div class="panel-heading">
+								<h6 class="panel-title"> <strong> SERVICIOS </strong></h6>
+							</div>
+							<div class="panel-body">
+								<div class="container">
+									<table class="table">
+										<thead>
+											<tr>
+											  	<th>#</th>
+											  	<th>Nombre Servicio</th>
+										  		<th>Precio por M<sup>2</sup></th>
+										  		<th>Frecuencias</th>
+											</tr>
+										</thead>
+										<tbody id="servicios_seleccionados">
+											<tr>
+											  	<td>1</td>
+											  	<td><input type="text" class="form-control"></td>
+											  	<td>$ 25.00</td>
+											  	<td><a data-toggle="modal" href="#modal">Agregar Frecuencia</a></td>
+											</tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="4">
+													<button type="button" class="btn btn-small btn-success"><span class="glyphicon glyphicon-plus"></span></button>
+												</td>
+											</tr>
+										</tfoot>
+									</table>	
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						<div class="form-actions" id="accionesPre">
+					        <button type="submit" class="btn btn-large btn-success"><strong>Aceptar</strong></button>	
+					    </div>	
+					</form>
+				</div>
+			</div>	
+		</div>
+		
+	</div>
+{% endblock %}
+
+
+{% block "scripts" %}
+	{{block.super}}
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $(':input[name=persona_0]').bind('djselectableselect', function(event, ui) {
+            $(this).parents("form").submit();
+        });
+    });
+    </script>
+{% endblock %}

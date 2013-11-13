@@ -1,0 +1,18 @@
+{% extends "base.html"%}
+{% load crispy_forms_tags %}
+
+{% block "datosPersona"%}
+	{{buscar}}
+	{% crispy datosPersona %}
+{% endblock %}
+
+{% block "scripts" %}
+    {{block.super}}
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $(':input[name=persona_0]').bind('djselectableselect', function(event, ui) {
+            $(this).parents("form").submit();
+        });
+    });
+    </script>
+{% endblock %}

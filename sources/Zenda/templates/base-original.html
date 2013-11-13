@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" href="../../assets/ico/favicon.png">
+
+	<title>{% block "title" %}{% endblock %}</title>
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css" type="text/css">
+	<link href="{{STATIC_URL}}css/bootstrap/bootstrap.css" rel="stylesheet">
+	<link href="{{STATIC_URL}}css/styles/styles.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}selectable/css/dj.selectable.css" type="text/css" media="all" rel="stylesheet">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
+	<script src="{{STATIC_URL}}js/bootstrap/bootstrap.min.js"></script>
+	<script src="{{STATIC_URL}}js/bootstrap/holder.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap/bootstrap.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}selectable/js/jquery.dj.selectable.js"></script>
+
+
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('li.list-padre').click(function(){
+				$(this).find('ul').slideToggle(500);
+				$(this).nextAll().find('ul').slideUp(500);
+				$(this).prevAll().find('ul').slideUp(500);
+			})
+		});
+	</script>
+
+	<script type="text/javascript">
+		function CargarPagina(id){
+		var url=id+".html"
+		$.ajax({type: "GET",
+				url:url,
+				data:{},
+				success: function(datos){       
+					$('#cont-form').html(datos);
+					$('#cont-form').slideDown(1001);
+				}
+		});
+	}		
+	</script>
+
+	<style>
+		
+		#div-menu{
+			position:fixed;
+			top:80px;
+			left: 0px;
+		}
+
+
+		#lista_acordeon .list-padre{ 
+			border:2px solid #ccc; 
+			background-color: white; 
+			padding-top:5px;
+			font-size: 14px; 
+			text-indent: 5px; 
+			color:#7A7A7A; 
+			cursor:pointer; 
+			list-style: none;
+			width: 250px;
+			
+		} 
+
+		#lista_acordeon .list-padre li:hover{ 
+			color:green; 
+		} 
+
+		li.list-padre:first-child{ 
+			border-top-right-radius: 5px; 
+			border-top-left-radius: 5px; 
+		} 
+
+		li.list-padre:last-child{ 
+			border-bottom-right-radius: 5px; 
+			border-bottom-left-radius: 5px; 
+		} 
+
+		li.list-padre ul{ 
+			background-color: white; 
+			list-style: none; 
+			padding: 0px; 
+			display: none;  
+		} 
+
+		li.list-padre ul li{ 
+			list-style-type: circle;
+			border: 1px solid #ddd; 
+			background-color: #EEEEEE; 
+			padding:5px; 
+			cursor:pointer;
+		} 
+
+		#cont-form{
+			margin-top:80px;
+		}
+
+	</style>
+
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	  <script src="../../assets/js/html5shiv.js"></script>
+	  <script src="../../assets/js/respond.min.js"></script>
+	<![endif]-->
+
+	<!-- Custom styles for this template -->
+	<!--<link href="carousel.css" rel="stylesheet">-->
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+	<div class="navbar-wrapper">
+		<div class="navbar navbar-inverse navbar-static-top nav-color navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header navbar-brandColor">
+				  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				  </button>
+				  <a class="navbar-brand" href="index.html">Zenda</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">	
+						<li id= "AcercaDe" onClick="CargarPagina(this.id);"><a href="#about">Acerca De</a></li>
+						<li id= "Contacto" onClick="CargarPagina(this.id);"><a href="#contact">Contacto</a></li>
+					</ul>
+					<div class="pull-right">
+						<div class="dropdown">
+							<a id="dropdownBtn" class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">
+								Sesión  <b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="drop3" role="menu">
+								<li role="presentation"><a href="" tabindex="-1" role="menuitem">Action</a></li>
+								<li role="presentation"><a href="" tabindex="-1" role="menuitem">Another action</a></li>
+								<li role="presentation"><a href="" tabindex="-1" role="menuitem">Something else here</a></li>
+								<li class="divider" role="presentation"></li>
+								<li role="presentation"><a href="" tabindex="-1" role="menuitem">Separated link</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="btn-group-vertical" id="div-menu">
+		<ol id="lista_acordeon">
+			<li class="list-padre"> Gestion de clientes
+				<ul>
+					<li id= "AltaCliente" onClick="CargarPagina(this.id);"><a href="{% url "cliente_alta" %}">Alta un nuevo cliente</a></li>
+					<li id= "ModificarCliente" onClick="CargarPagina(this.id);">Modificar datos de un cliente</li>
+					<li id= "BajaCliente" onClick="CargarPagina(this.id);">Eliminar un cliente</li>
+				</ul>
+			</li>
+
+			<li class="list-padre"> Gestion de personal
+				<ul>
+					<li id= "AltaEmpleado" onClick="CargarPagina(this.id);">Alta un nuevo Empleado</li>
+					<li id= "ModificarEmpleado" onClick="CargarPagina(this.id);">Modificar datos de un empleado</li>
+					<li id= "AsignarEmpleado" onClick="CargarPagina(this.id);"><a href="{% url "turno_alta" %}">Asignar empleado a trabajo</a></li>
+					<li id= "BajaEmpleado" onClick="CargarPagina(this.id);">Eliminar un empleado</li>
+				</ul>
+			</li>
+
+			<li class="list-padre"> Gestion de servicios
+				<ul>
+					<li id= "AltaTipoServicio" onClick="CargarPagina(this.id);"><a href="{% url "tipo_servicio_alta" %}">Alta un nuevo tipo de servicio</a></li>
+					<li id= "ModificarTipoServicio" onClick="CargarPagina(this.id);">Modificar datos de un tipo de servicio</li>
+					<li id= "BajaTipoServicio" onClick="CargarPagina(this.id);">Eliminar un tipo de servicio</li>
+				</ul>
+			</li>
+
+			<li class="list-padre"> Gestion de presupuestos
+				<ul>
+					<li id= "generarPresupuesto" onClick="CargarPagina(this.id);">Nuevo presupuesto</li>
+					<li id= "valorizarPresupuesto" onClick="CargarPagina(this.id);">Valorizar presupuesto</li>
+					<li id= "ConfirmarPresupuesto" onClick="CargarPagina(this.id);">Confirmar un presupuesto</li>
+				</ul>
+			</li>
+
+			<li class="list-padre"> Gestion de contratos
+				<ul>
+					<li id= "AltaTipoServicio" onClick="CargarPagina(this.id);">Renegociación de contrato</li>
+					<li id= "ModificarTipoServicio" onClick="CargarPagina(this.id);">Eliminar contrato</li>	
+				</ul>
+			</li>
+
+		</ol>
+	</div>
+
+	
+	<div class="contenido" id="cont-form">
+		{% block "contenido" %}
+		{% endblock %}	
+	</div>
+  	</body>
+</html>

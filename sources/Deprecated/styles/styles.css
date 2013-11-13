@@ -1,0 +1,264 @@
+.myimg {}
+
+.nav-color{
+	background-color: #FFFFFF;
+	color: #000000;
+	border-color: #EEEEEE;
+}
+
+/*config para boton "inicio" a la derecha de Zenda*/
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    color: green;
+    background-color: #FFFFFF;
+}
+
+.navbar-inverse .navbar-nav > .active > a:hover{
+    background-color: #EEEEEE;
+}
+/************************************************/
+
+.navbar-inverse .navbar-nav > li > a {
+    color: green;
+}
+
+.navbar-inverse .navbar-brand {
+    color: green;
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus {
+  text-decoration: none;
+  color: green;
+}
+
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-brand:focus {
+  color: green;
+  background-color: #EEEEEE;
+}
+
+
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    background-color: #FFFFFF;
+    color: green;
+    background-color: #EEEEEE;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+  color: green;
+  background-color: #EEEEEE;
+}
+
+
+/*Css config para boton dropdown de la derecha*/
+.pull-right {
+  float: right !important;
+}
+
+.dropdown{
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+
+.dropdown:hover{
+  background-color: #EEEEEE;
+}
+
+
+div div a{ /*cambia color a texto de boton dropdown*/
+  color:green;
+  text-decoration: none;  
+}
+
+div div a:hover, a:focus{
+  color:green;
+  text-decoration: none;   
+}         /***************************************/
+
+
+.dropdown-menu > li > a:hover{
+  color:white;
+  background-color: green;
+}
+
+/*************************************************/
+
+
+/*estilos para form de claudio*/
+.well {
+    background-color: #F5F5F5;
+    border: 1px solid #E3E3E3;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+    margin-left: 300px;
+    margin-top: 60px;
+    min-height: 20px;
+    padding: 10px;
+    width: 600px;
+}
+
+.panel {
+    background-color: #FFFFFF;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 0px;
+}
+
+.btn-primary{
+  margin-left: 18px;
+}
+
+/*****************************/
+
+.btn-group-vertical{
+  text-align: left;
+  margin-left: 10px;
+  width: 20%;
+  min-width: 20%;
+}
+
+.btn-group-vertical :hover{
+  color: green;
+  font-weight:700;
+}
+
+.btn-group-vertical :focus{
+  color: green;
+  font-weight:700;
+}
+
+.container2 {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.contenido{
+  float:right;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  width: 76%;
+  height: 900px;
+  border-radius: 6px;
+  background-color: #F9F9F9;
+}
+
+#footer{
+  clear: both;
+}
+
+.featurette-divider{
+  clear: both; 
+}
+
+
+.glyphicon-chevron-right{
+    float:right;
+    padding-bottom: 10px;
+    margin-top: -20px;
+}
+
+.form-horizontal .control-label {
+  text-align: left;
+}
+
+.col-nCli {
+  width: 0%;
+  float: right;
+  margin-right: 30px;
+}
+
+
+#accionesPre > .btn{
+  float:right;
+  margin-right: 2px;
+  margin-left: 2px;
+}
+
+
+#formDatosCli > .form-group{
+  margin-left: -8px;
+
+} 
+
+#formPresupuesto {
+  width: 40%;
+  float: left;
+  margin-top: 71px;
+}
+
+#formPresupuesto2 {
+  width: 34.8%;
+  float: right;
+  margin-left: 0px;
+  margin-right: 20px;
+  margin-top: 71px;
+}
+
+#formPresupuesto3{
+  clear:both;
+  width:76%;
+}
+
+
+.form-control-static {
+  margin-left: 8px;
+}
+
+#checkboxes{
+  text-align: center;
+  vertical-align: middle;
+}
+
+#diasFrec > th {
+  text-align: center;
+}
+
+#checkboxes > td{
+  padding: 0px;
+}
+
+.zonaBusqueda {
+    float: right;
+}
+
+#busqueda {
+  float: right;
+  margin-bottom: 10px;
+  margin-right: -20px;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #DDDDDD;
+    margin-top: 40px;
+}
+
+#abmTabContent{
+  margin-top: 10px;
+}
+
+.nav-tabs > li > a {
+  margin-right: 2px;
+  line-height: 1.428571429;
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+  color:#555555;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+  color: #555555;
+  cursor: default;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-bottom-color: transparent;
+}
+
+
+
+#accionesAbm > .btn{
+  float:right;
+  margin-right: 2px;
+  margin-left: 2px;
+}
+

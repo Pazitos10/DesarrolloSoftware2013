@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block "titulo" %}Modificar tipo de servicio{% endblock %}
+{% block "contenido" %}
+	<div class="well">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h6 class="panel-title"> <strong> ALTA DE TIPO DE SERVICIO </strong></h6>
+			</div>
+			<div class="panel-body">
+				{% crispy buscar %}
+				{% crispy formulario %}
+				<p>(*) Campos Obligatorios</p>
+				
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block "scripts" %}
+	{{ block.super }}
+	<script type="text/javascript">
+	    $(document).ready(function() {
+	        $(':input[name=tipoDeServicio_0]').bind('djselectableselect', function(event, ui) {
+	            $(this).parents("form").submit();
+	        });
+	    });
+	</script>
+{% endblock "scripts" %}

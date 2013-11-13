@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" href="../../assets/ico/favicon.png">
+
+	<title>Zenda | La Higiene es Salud </title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+	<link href="/styles/styles.css" rel="stylesheet">
+	
+	<script type="text/javascript">
+		function mostrar(id) {
+			if (id == "Gestion De Clientes") {
+				$("#Gestion De Clientes").show();
+				$("#Gestion De Servicios").hide();
+				$("#Gestion De Turnos").hide();
+			}
+
+			if (id == "Gestion De Servicios") {
+				$("#Gestion De Servicios").show();
+				$("#Gestion De Turnos").hide();
+				$("#Gestion De Clientes").hide();
+			}
+
+			if (id == "Gestion De Turnos") {
+				$("#Gestion De Turnos").show();
+				$("#Gestion De Clientes").hide();
+				$("#Gestion De Servicios").hide();
+			}
+		}
+	</script>
+
+
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	  <script src="../../assets/js/html5shiv.js"></script>
+	  <script src="../../assets/js/respond.min.js"></script>
+	<![endif]-->
+
+	<!-- Custom styles for this template -->
+	<link href="carousel.css" rel="stylesheet">
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+	<div class="navbar-wrapper">
+		<div class="navbar navbar-inverse navbar-static-top nav-color">
+			<div class="container">
+				<div class="navbar-header navbar-brandColor">
+				  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				  </button>
+				  <a class="navbar-brand" href="#">Zenda</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#">Inicio</a></li>
+						<li><a href="#about">Acerca De</a></li>
+						<li><a href="#contact">Contacto</a></li>
+					</ul>
+					<div class="pull-right">
+						<div class="dropdown">
+							<a id="dropdownBtn" class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">
+								Sesión  <b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="drop3" role="menu">
+								<li role="presentation"><a href="" tabindex="-1" role="menuitem">Action</a></li>
+								<li role="presentation"><a href="" tabindex="-1" role="menuitem">Another action</a></li>
+								<li role="presentation"><a href="" tabindex="-1" role="menuitem">Something else here</a></li>
+								<li class="divider" role="presentation"></li>
+								<li role="presentation"><a href="" tabindex="-1" role="menuitem">Separated link</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	<div class="container2">
+
+		<!--Menu izq-->
+		<div class="btn-group-vertical" onChange="mostrar(this.value);">
+			<button class="btn btn-default" type="button">
+				Gestión De Clientes<span class="glyphicon glyphicon-chevron-right"></span>
+			</button>
+			<button class="btn btn-default" type="button">
+				Gestión De Servicios<span class="glyphicon glyphicon-chevron-right"></span>
+			</button>
+			<button class="btn btn-default" type="button">
+				Gestión De Turnos<span class="glyphicon glyphicon-chevron-right"></span>
+			</button>
+			<button class="btn btn-default" type="button">
+				Botón<span class="glyphicon glyphicon-chevron-right"></span>
+			</button>
+			<button class="btn btn-default" type="button">
+				Botón<span class="glyphicon glyphicon-chevron-right"></span>
+			</button>		
+			<button class="btn btn-default" type="button">
+				Botón<span class="glyphicon glyphicon-chevron-right"></span>
+			</button>		
+			<button class="btn btn-default" type="button">
+				Botón<span class="glyphicon glyphicon-chevron-right"></span>
+			</button>		
+			<button class="btn btn-default" type="button">
+				Botón<span class="glyphicon glyphicon-chevron-right"></span>
+			</button>				
+		</div>
+
+		<div id="Gestion De Clientes" style="display: none;">
+			<h2>Si eres estudiante...</h2>
+			<form action="index.php" method="post">
+				<p>Nombre:<br/>
+				<input type="text" name="nombre" /></p>
+				<p>Centro:<br/>
+				<input type="text" name="centro" /></p>
+				<input type="submit" name="send" value="Enviar" />
+			</form>
+		</div>
+
+
+		<!--Contenido-->
+		<div class="contenido">
+			<div class="container">
+
+			</div>
+		</div>
+		
+		<hr class="featurette-divider">
+		<!-- FOOTER -->
+		<footer id="footer">
+			<p class="pull-right"><a href="#">Ir Arriba</a></p>
+			<p>&copy; 2013 Powered By Pazitos10 </p>
+		</footer>
+	</div>	
+
+
+	
+
+	
+			
+
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="/bootstrap/js/jquery.js"></script>
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/bootstrap/js/holder.js"></script>
+  </body>
+</html>
