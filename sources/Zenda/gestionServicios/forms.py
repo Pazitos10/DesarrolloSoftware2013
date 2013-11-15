@@ -56,10 +56,25 @@ class BuscadorTipoDeServicioForm(forms.Form):
         
 #END NUEVO
 
-class PresupuestoForm(forms.ModelForm): 
+class PresupuestoForm(forms.ModelForm):
+    persona_id = forms.IntegerField(widget = forms.HiddenInput())
+    def __init__(self, *args, **kwargs):
+        super(PresupuestoForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_id = 'formulario'
+        self.helper.form_method = 'post'
+        self.helper.form_class='form-horizontal'
+        self.helper.add_input(Submit('submit', 'Confirmar'))
+        self.helper.label_class='col-lg-2'
+        self.helper.field_class='col-lg-6'
+
+    def save(self, *largs, **kwargs):
+        print(self.persona_id)
+        super(PresupuestoForm, self).save(*largs, **kwargs)
+
     class Meta:
         model = Presupuesto
-        exclude = ['contrato','servicios_contratados','cliente']
+        exclude = ['contrato','servicios_contratados', 'cliente']
 
 class ProductoForm(forms.ModelForm):
     class Meta:
@@ -68,6 +83,7 @@ class ProductoForm(forms.ModelForm):
 class PersonaForm(forms.ModelForm):
     class Meta:
         model = Persona
+
 
 class TipoDeServicioAltaForm(forms.ModelForm):
 
@@ -97,6 +113,27 @@ class TipoDeServicioBajaForm(forms.ModelForm):
     class Meta:
         model = TipoDeServicio
         exclude = ['productos','codigo_servicio','nombre','creacion','modificacion','valorM2']
+
+class DatosTSForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(DatosTSForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'formulario'
+        self.helper.form_method = 'post'
+
+    class Meta:
+        model = TipoDeServicio
+        exclude = ['productos', 'codigo_servicio', 'nombre', 'creacion','modificacion','baja']
+    
+    def clean(self):
+        return self.cleaned_data
+
+
+
+
+
+
 
 class ClienteAltaForm(forms.ModelForm):
 

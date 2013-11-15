@@ -153,7 +153,7 @@ class Presupuesto(models.Model):
 	contrato = models.OneToOneField('Contrato',blank=True,null=True) 
 	servicios_contratados = models.ManyToManyField('ServicioContratado', blank=True, null=True)
 	cliente = models.ForeignKey('Cliente')
-	domicilio = models.CharField(max_length=30)
+	domicilio_servicio = models.CharField(max_length=30)
 	#Basado en el CU de Alta presupuesto necesita:
 	#foreignKey's al cliente para obtener sus datos
  
@@ -171,7 +171,7 @@ class Presupuesto(models.Model):
 							fecha_fin_programada = datetime.now() 
 							)
 		estado.save()
-		self.solicitado_set.add(estado)
+		#self.solicitado_set.add(estado)
  
 	def obtener_estado_actual(self):
 		if len(self.confirmado_set.all()) != 0:
@@ -338,8 +338,6 @@ class Producto(models.Model):
  
 
 #------- Gestion turnos y frecuencias
-		 
-
 
 class Frecuencia(models.Model):
     """docstring for Frecuencia"""

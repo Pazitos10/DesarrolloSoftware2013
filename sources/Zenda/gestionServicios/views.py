@@ -142,7 +142,6 @@ def alta_empleado(request):
             #TODO HACER VALIDACIONES DEL EMAIL Y OTROS CAMPOS SI FUERA NECESARIO
             email = formulario.cleaned_data['email']
             cuil = formulario.cleaned_data['cuil']
-            print cuil
             fecha_nacimiento = formulario.cleaned_data['fecha_nacimiento']
             tipo_de_servicio = formulario.cleaned_data['tipo_de_servicio'] #devuelve objeto
             
@@ -218,26 +217,24 @@ class AsignarPersonalView(ListView):
 
 
 def presupuesto(request):
-    if request.method=='POST':
-        persona = str(request.REQUEST["tipoDeServicio_1"])
+    buscador = BuscadorClienteForm(request.GET)
+    if "persona_1" in request.GET and request.GET["persona_1"].isdigit():
+        persona = int(request.GET["persona_1"])
         persona = get_object_or_404(Persona, pk = persona)
-        presupuestoForm = PresupuestoForm(request.POST, instance=persona)
-        if presupuestoForm.is_valid():
-            presupuestoForm.save()
-            return HttpResponseRedirect('/')
     else:
-        if "persona_0" in request.REQUEST:
-            persona = int(request.REQUEST["persona_1"])# SAQUE EL CAST,NOSE PORQUE NO FUNCIONABA
-            persona = get_object_or_404(Persona, pk = persona)
-            buscador = BuscadorPersonaForm(request.REQUEST)
-            personaForm = PersonaForm(instance = persona)
-            presupuestoForm = ""
-        else:
-            buscador = BuscadorPersonaForm()
-            presupuestoForm = ""
-            personaForm = ""
-    return render_to_response("presupuestos/alta.html",
-                                                {"form": presupuestoForm, 
-                                                "personaForm": personaForm,
-                                                "buscar": buscador},
-                                                context_instance = RequestContext(request))
+        persona = None
+    if request.method=='POST':
+        formulario = PresupuestoForm(request.POST)
+        if formulario.is_valid():
+            presupuesto = formulario.save()
+            return HttpResponseRedirect('/')
+        print formulario.is_valid() 
+    else:
+        formulario = PresupuestoForm(initial = {"persona": persona})
+        
+    return render_to_response('presupuestos/alta.html', {
+        'formulario': formulario, 'buscar':buscador, 'persona': persona
+        }, context_instance=RequestContext(request))
+
+def listado_presupuestos(request):
+    return render_to_response('presupuestos/listado.html', context_instance=RequestContext(request))
