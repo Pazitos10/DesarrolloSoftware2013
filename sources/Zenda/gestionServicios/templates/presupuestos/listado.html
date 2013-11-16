@@ -1,0 +1,24 @@
+{% extends "base.html"%}
+{% load crispy_forms_tags %}
+
+{% block "title"%} Zenda | Listado Presupuestos{% endblock %}
+
+
+{% block "contenido"%}
+    <div class="panel panel-primary">
+        <div class="panel-heading" style="background-color:#428bca; color:white">
+            <h6 class="panel-title"><strong> Listado Presupuestos </strong></h6>
+        </div> 
+    </div>
+    <div class="panel-body" style="background-color:white">
+        <table class="table table-hover">
+            {%for p in presupuestos%}
+                <td>{{ p }} {{p.cliente_id}}</td>
+            {% endfor%}
+        </table>
+    </div>  
+{% endblock %}
+
+{%block "scripts"%}
+    {{block.super}}
+{% endblock%}

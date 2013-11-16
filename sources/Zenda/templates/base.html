@@ -11,10 +11,13 @@
 	<!-- Bootstrap core JavaScript
 	================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css" type="text/css">
+
+
+    <link rel="stylesheet" href="{{STATIC_URL}}css/jquery-ui.css" type="text/css">
 	<link href="{{STATIC_URL}}css/bootstrap/bootstrap.css" rel="stylesheet">
 	<link href="{{STATIC_URL}}css/styles/styles.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}selectable/css/dj.selectable.css" type="text/css" media="all" rel="stylesheet">
+
 
   </head>
 <!-- NAVBAR
@@ -145,6 +148,22 @@
 				    </div>
 				</div>
 			</div><!--5to Panel-->
+			<div class="panel panel-default">
+			    <div class="panel-heading">
+			      	<h4 class="panel-title">
+			        	<a data-toggle="collapse" data-parent="#myaccordion" href="#collapseSix">
+			          		Listado Presupuestos
+			        	</a>
+			      	</h4>
+			    </div>
+			    <div id="collapseSix" class="panel-collapse collapse">
+			      	<div class="panel-body">
+						<ul>
+							<li id= "ListadoPresupuestos" onClick="CargarPagina(this.id);"><a href="{% url "presupuesto_listados" %}">Listar todos</a></li>
+						</ul>
+			      	</div>
+			    </div>
+			</div><!--6to Panel-->
 		</div><!--Fin Acordeon-->	
 	</div><!--Fin Borde Izquierdo-->
 
@@ -157,15 +176,15 @@
 	</div>
 
 	<!-- Sección Js -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
+    <script src="{{STATIC_URL}}js/jquery.min.js"></script>
+    <script src="{{STATIC_URL}}js/jquery-ui.js"></script>
 	<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap/transition.js"></script>
 	<script src="{{STATIC_URL}}js/bootstrap/bootstrap.min.js"></script>
 	<script src="{{STATIC_URL}}js/bootstrap/holder.js"></script>
 	<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap/bootstrap.js"></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}selectable/js/jquery.dj.selectable.js"></script>
 	<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap/collapse.js"></script>
-	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+	<link href="{{STATIC_URL}}css/bootstrap/bootstrap-glyphicons.css" rel="stylesheet">
 	<script type="text/javascript">
 		$('.dropdown-toggle').dropdown();
 	</script>

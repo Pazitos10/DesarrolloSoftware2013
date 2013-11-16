@@ -113,7 +113,7 @@ class Persona(models.Model):
 
 class Rol(models.Model):
 	"""Esta clase define el objeto abstracto Rol""" 
-	personas = models.ManyToManyField('Persona')
+	persona = models.ForeignKey(Persona)
 
 	class Meta:
 		abstract = True
@@ -140,18 +140,31 @@ class Cliente(Rol):
 	def seleccionar_presupuesto(self,nroPresupuesto):
 		return Presupuesto.objects.get(id=nroPresupuesto)
 
-
 	def __str__(self):
-		return str(self.nro_cliente)
+		return "%d %s" % (self.nro_cliente, self.persona)
+
+#MODIFICADO
+# === Gestion Tipos de servicio ============
+class TipoDeServicio(models.Model):
+	"""docstring for TipoDeServicio"""
+	productos = models.ManyToManyField('Producto', related_name = "servicios")
+ 	codigo_servicio = models.CharField(max_length=4,primary_key=True)
+	nombre = models.CharField('nombre',max_length=50)
+	creacion = models.DateTimeField('creacion', auto_now=True)
+	modificacion = models.DateTimeField('modificacion', auto_now_add=True)
+	baja = models.DateTimeField('baja', blank=True, null=True)
+	valorM2 = models.FloatField('valorM1')
+	
+	def __str__(self):
+		return "%s" %(self.nombre) 
+#END MODIFICADO 
 
 
 #=== Gestion Presupuestos ============
  
 class Presupuesto(models.Model):
-	"""Esta clase define el objeto Presupuesto""" 
-	id = models.AutoField(primary_key=True)
-	contrato = models.OneToOneField('Contrato',blank=True,null=True) 
-	servicios_contratados = models.ManyToManyField('ServicioContratado', blank=True, null=True)
+	"""Esta clase define el objeto Presupuesto"""
+	contrato = models.OneToOneField('Contrato',blank=True,null=True)
 	cliente = models.ForeignKey('Cliente')
 	domicilio_servicio = models.CharField(max_length=30)
 	#Basado en el CU de Alta presupuesto necesita:
@@ -189,6 +202,29 @@ class Presupuesto(models.Model):
  
 	def __str__(self):
 		return  str(self.id)   
+
+class ServicioContratado(models.Model):
+	"""docstring for ServicioContratado"""
+	presupuesto = models.ForeignKey(Presupuesto)
+	tipo_servicio = models.ForeignKey(TipoDeServicio)
+	fin= models.DateTimeField('fin')
+	metros_cuad = models.FloatField('metros_cuad')
+	importe = models.FloatField('importe')
+ 
+	def asignar_tipo_servicio(self):
+		pass
+ 
+	def asignar_frecuencia(self):
+		pass
+		 
+	def get_frecuencia(self):
+		pass
+
+	def calcularImporte(self, valorM2):
+		return self.metros_cuad*valorM2
+ 
+	def __str__(self):
+		return str(self.nro_item)
 
 
 class EstadosPresupuesto(models.Model):
@@ -249,31 +285,7 @@ class Confirmado(EstadosPresupuesto):
 	"""Esta clase define el estado Confirmado para el objeto Presupuesto"""
 	confirmacion = models.DateTimeField('confirmacion')
 	inicio_servicio = models.DateTimeField('inicio_servicio')
-
  		
-class ServicioContratado(models.Model):
-	"""docstring for ServicioContratado"""
-	nro_item = models.AutoField('nro_item',primary_key=True)
-	fin= models.DateTimeField('fin')
-	metros_cuad = models.FloatField('metros_cuad')
-	importe = models.FloatField('importe')
- 
- 
-	def asignar_tipo_servicio(self):
-		pass
- 
-	def asignar_frecuencia(self):
-		pass
-		 
-	def get_frecuencia(self):
-		pass
-
-	def calcularImporte(self, valorM2):
-		return self.metros_cuad*valorM2
- 
-	def __str__(self):
-		return str(self.nro_item)
-
 #==== Gestion contrato====
 
 class Contrato(models.Model):
@@ -294,24 +306,6 @@ class Contrato(models.Model):
 
 	def renegociar_contrato(self):
 		pass
- 
- 
-#MODIFICADO
-# === Gestion Tipos de servicio ============
- 
-class TipoDeServicio(models.Model):
-	"""docstring for TipoDeServicio"""
-	productos = models.ManyToManyField('Producto', related_name = "servicios")
- 	codigo_servicio = models.CharField(max_length=4,primary_key=True)
-	nombre = models.CharField('nombre',max_length=50)
-	creacion = models.DateTimeField('creacion', auto_now=True)
-	modificacion = models.DateTimeField('modificacion', auto_now_add=True)
-	baja = models.DateTimeField('baja', blank=True, null=True)
-	valorM2 = models.FloatField('valorM1')
-	
-	def __str__(self):
-		return "%s" %(self.nombre) 
-#END MODIFICADO 
  
  
 class Producto(models.Model):
@@ -359,7 +353,7 @@ class Frecuencia(models.Model):
     dia = models.CharField('dia',max_length=2,choices=DIA_DE_LA_SEMANA_CHOICES)
     hora_inicio = models.TimeField('hora_inicio')
     hora_fin = models.TimeField('hora_fin')
-    servicio_contratado = models.ForeignKey('ServicioContratado')
+    servicio_contratado = models.ForeignKey(ServicioContratado)
 
     def crear_turno(self, hora_inicio_turno, hora_fin_turno, empleado):
         #TODO validar que las hs de inicio y fin de turno a crear esten dentro de la frecuencia

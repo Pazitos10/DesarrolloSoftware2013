@@ -1,0 +1,58 @@
+{% extends "presupuestos/alta.html"%}
+{% load crispy_forms_tags %}
+
+{%block "datosTS"%}
+    <div class="panel panel-primary" >
+            <div class="panel-heading">
+                <h6 class="panel-title"> <strong> SERVICIOS </strong></h6>
+            </div>
+            <div class="panel-body">
+                <div class="container">
+                    <button type="button"class="btn btn-default"><span class="glyphicon glyphicon-plus"><a href='#' id='add_row'></a></span></button>
+                    
+                    <table class="table" id='grid1'>
+                        <thead>
+                            <tr>
+                                <th>Nombre Servicio</th>
+                                <th>Precio por M<sup>2</sup></th>
+                                <th>Frecuencias</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <table id='data_table'>
+                                        <tr id='template_row'>
+                                            <td>{% crispy buscar %}</td>
+                                            {% if tipo_de_servicio != '' %}
+                                            <td>{{tipo_de_servicio.nombre}}</td>
+                                            <td>{{tipo_de_servicio.ValorM2}}</td>
+                                            {% else %}
+                                            <td> No disponible </td>
+                                            {% endif %}    
+                                            <td><a data-toggle="modal" href="#modal">Agregar Frecuencia</a></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+{%endblock%}
+
+{%block "scripts"%}
+    {{block.super}}
+    <script type="text/javascript">
+        $('#add_row').click(function(){
+            window.template = '{{ servicios|slice:":83"|escapejs }}'.replace(
+                /(id_form-)\d+(-\w+)/g, 
+                "$1{% verbatim %}{{id}}{% endverbatim %}$2"
+            );
+             //var clone = $('#template_row').clone();
+             //clone.removeAttr('id');
+             //clone.appendTo('#data_table');
+        })
+    </script>
+{% endblock %}

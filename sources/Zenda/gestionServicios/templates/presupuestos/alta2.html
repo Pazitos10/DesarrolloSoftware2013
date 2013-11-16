@@ -1,13 +1,23 @@
-{% extends "base.html"%}
+{% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block "datosPersona"%}
-	{{buscar}}
-	{% crispy datosPersona %}
+{% block "title"%} Presupuesto {%endblock%}
+
+{% block "contenido" %}
+		
+	{%crispy buscar%}
+	{% crispy formulario %}
+	{% if formulario%}
+		{%block "datosTS"%}{%endblock%}
+	{% else %}
+		<p>Crear cliente -- -Boton magico</p>
+	{% endif%}
+
 {% endblock %}
 
+
 {% block "scripts" %}
-    {{block.super}}
+	{{block.super}}
     <script type="text/javascript">
     $(document).ready(function() {
         $(':input[name=persona_0]').bind('djselectableselect', function(event, ui) {
@@ -15,4 +25,7 @@
         });
     });
     </script>
+	
+
+
 {% endblock %}

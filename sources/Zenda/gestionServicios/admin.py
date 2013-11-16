@@ -4,7 +4,15 @@ from django.contrib import admin
 class PersonaAdmin(admin.ModelAdmin):
 	search_fields = ("nombre", "apellido")
 
-admin.site.register(Presupuesto)
+class ServicioContratadoInline(admin.TabularInline):
+	model = ServicioContratado
+
+class PresupuestoAdmin(admin.ModelAdmin):
+	inlines = [
+		ServicioContratadoInline
+	]
+
+admin.site.register(Presupuesto, PresupuestoAdmin)
 admin.site.register(ServicioContratado)
 admin.site.register(TipoDeServicio)
 admin.site.register(Producto)

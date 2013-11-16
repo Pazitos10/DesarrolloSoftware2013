@@ -9,6 +9,8 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'Zenda.views.home', name='home'),
     url(r'^presupuesto/alta$', 'gestionServicios.views.presupuesto', name='presupuesto_alta'),
+    url(r'^presupuesto/listado$','gestionServicios.views.listado_presupuestos', name="presupuesto_listados"),
+    url(r'^presupuesto/agregar_servicios$','gestionServicios.views.agregarTS', name="servicios_agregar"),
     url(r'^persona/alta$', 'gestionServicios.views.personaView', name='persona_alta'),
     # url(r'^Zenda/', include('Zenda.foo.urls')),
 
@@ -24,5 +26,6 @@ urlpatterns = patterns('',
     url(r'^empleado/alta$','gestionServicios.views.alta_empleado', name="empleado_alta"),
     url(r'^empleado/modificar$','gestionServicios.views.modificar_empleado', name="empleado_modificar"),
     url(r'^turno/alta$',AsignarPersonalView.as_view(), name="turno_alta"),
+
     (r'^selectable/', include('selectable.urls')),
 )

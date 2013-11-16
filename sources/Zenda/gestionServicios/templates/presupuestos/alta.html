@@ -22,14 +22,14 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade in active" id="searchCliente"> 
-                    {% if persona %}   
-                        <p><label>Nombre:   {{persona.nombre}}</label></p> 
-                        <p><label>Apellido: {{persona.apellido}}</label></p>
-                        <p><label>Nro Documento: {{persona.nro_documento}}</label></p>
+                    {% if cliente %}   
+                        <p><label>Nombre:   {{cliente.persona.nombre}}</label></p> 
+                        <p><label>Apellido: {{cliente.persona.apellido}}</label></p>
+                        <p><label>Nro Documento: {{cliente.persona.nro_documento}}</label></p>
                         {% crispy formulario %}
-                    {% endif %}    
+                    {% endif %}
                 </div>
-                <div class="tab-pane" id="addTS">Acá agregas Tipos de servicio</div>
+                <div class="tab-pane" id="addTS">{%block "datosTS"%}{%endblock%}</div>
             </div>
         </div>
         {%endblock%}
@@ -39,7 +39,8 @@
 {% block "scripts"%}
     {{block.super}}
     <script type="text/javascript">
-    $(document).ready(function() {
+    $(function() {
+        window.template = '{{ servicios|escapejs }}'.replace(/(id_form-)\d+(-\w+)/g, "$1{% verbatim %}{{id}}{% endverbatim %}$2");
         $(':input[name=persona_0]').bind('djselectableselect', function(event, ui) {
             $(this).parents("form").submit();
         });

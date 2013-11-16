@@ -1,6 +1,8 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response,HttpResponseRedirect, get_object_or_404
 from django.template import RequestContext
+from django.forms.models import modelformset_factory
+from django.forms.formsets import formset_factory
 
 from gestionServicios.models import *
 from gestionServicios.forms import *
@@ -214,27 +216,73 @@ class AsignarPersonalView(ListView):
         buscador = BuscadorPersonaForm()
         return HttpResponse() '''
 
-
-
 def presupuesto(request):
     buscador = BuscadorClienteForm(request.GET)
-    if "persona_1" in request.GET and request.GET["persona_1"].isdigit():
-        persona = int(request.GET["persona_1"])
-        persona = get_object_or_404(Persona, pk = persona)
+    if "cliente_1" in request.GET and request.GET["cliente_1"].isdigit():
+        cliente = int(request.GET["cliente_1"])
+        cliente = get_object_or_404(Cliente, pk = cliente)
     else:
-        persona = None
+        cliente = None
     if request.method=='POST':
         formulario = PresupuestoForm(request.POST)
         if formulario.is_valid():
             presupuesto = formulario.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('agregar_servicios')
         print formulario.is_valid() 
     else:
-        formulario = PresupuestoForm(initial = {"persona": persona})
-        
+        formulario = PresupuestoForm(initial = {"cliente": cliente})
     return render_to_response('presupuestos/alta.html', {
-        'formulario': formulario, 'buscar':buscador, 'persona': persona
+        'formulario': formulario, 
+        'buscar':buscador, 
+        'cliente': cliente
         }, context_instance=RequestContext(request))
 
+
+def agregarTS(request):
+    servicios = datosTSFormset() 
+    if request.method == 'POST':
+        tipo_de_servicio = str(request.REQUEST["tipoDeServicio_1"])
+        tipo_de_servicio = get_object_or_404(TipoDeServicio, pk = tipo_de_servicio)
+        formset = servicios(request.POST)
+        buscar = BuscadorTipoDeServicioForm(request.POST)
+        if formset.is_valid():
+            #instance = formset.save()
+            return HttpResponseRedirect('/')
+    else:
+        if "tipoDeServicio_1" in request.REQUEST:
+            tipo_de_servicio = str(request.REQUEST["tipoDeServicio_1"])
+            tipo_de_servicio = get_object_or_404(TipoDeServicio, pk = tipo_de_servicio)
+            buscar = BuscadorTipoDeServicioForm(request.REQUEST)
+            formset = ''
+        else:        
+            formset = datosTSFormset()
+            buscar = BuscadorTipoDeServicioForm()
+            tipo_de_servicio = ''
+
+    return render_to_response('presupuestos/datosTS.html', {'servicios':servicios,'buscar':buscar,'tipo_de_servicio':tipo_de_servicio}, context_instance=RequestContext(request))
+
+
+    '''
+    def agregarTS(request):
+    if request.method == 'POST':
+        tipo_de_servicio = str(request.REQUEST["tipoDeServicio_1"])
+        tipo_de_servicio = get_object_or_404(TipoDeServicio, pk = tipo_de_servicio)
+        datosTSForm = DatosTSForm(request.POST,instance=tipo_de_servicio)
+        if datosTSForm.is_valid():
+            datosTSForm.save()
+            return HttpResponseRedirect('/')
+    else:
+        if "tipoDeServicio_1" in request.REQUEST:
+            tipo_de_servicio = str(request.REQUEST["tipoDeServicio_1"])
+            tipo_de_servicio = get_object_or_404(TipoDeServicio, pk = tipo_de_servicio)
+            buscador = BuscadorTipoDeServicioForm(request.REQUEST)
+            datosTSForm = DatosTSForm(request.POST,instance=tipo_de_servicio)
+        else:
+            datosTSForm = DatosTSForm()
+            buscarTS= BuscadorTipoDeServicioForm() 
+    return render_to_response ('presupuesto/datosTS.html',{'datosTSForm':datosTSForm,'buscarTS':buscarTS,'tipo_de_servicio':tipo_de_servicio },context_instance=RequestContext(request))
+    '''
+    
+
 def listado_presupuestos(request):
-    return render_to_response('presupuestos/listado.html', context_instance=RequestContext(request))
+    return render_to_response('presupuestos/listado.html', {'presupuestos':Presupuesto.objects.all()},context_instance=RequestContext(request))

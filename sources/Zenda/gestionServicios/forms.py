@@ -1,17 +1,18 @@
 from gestionServicios.models import *
 from django import forms
+from django.forms.models import modelformset_factory
+from django.forms.formsets import formset_factory
+
 from gestionServicios.lookups import *
 from selectable import forms as sforms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 class BuscadorClienteForm(forms.Form):
-    persona = sforms.AutoCompleteSelectField(
+    cliente = sforms.AutoCompleteSelectField(
         lookup_class = ClienteLookup,
         label = 'Buscar:',
-        required=False, allow_new = False,
-    
-    )
+        required=False, allow_new = False)
 
     def __init__(self, *args, **kwargs):
         super(BuscadorClienteForm, self).__init__(*args, **kwargs)
@@ -25,8 +26,7 @@ class BuscadorEmpleadoForm(forms.Form):
     persona = sforms.AutoCompleteSelectField(
         lookup_class = EmpleadoLookup,
         label = 'Buscar:',
-        required=False, allow_new = False,
-    )
+        required=False, allow_new = False)
 
     def __init__(self, *args, **kwargs):
         super(BuscadorEmpleadoForm, self).__init__(*args, **kwargs)
@@ -57,7 +57,6 @@ class BuscadorTipoDeServicioForm(forms.Form):
 #END NUEVO
 
 class PresupuestoForm(forms.ModelForm):
-    persona_id = forms.IntegerField(widget = forms.HiddenInput())
     def __init__(self, *args, **kwargs):
         super(PresupuestoForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
@@ -68,13 +67,18 @@ class PresupuestoForm(forms.ModelForm):
         self.helper.label_class='col-lg-2'
         self.helper.field_class='col-lg-6'
 
-    def save(self, *largs, **kwargs):
-        print(self.persona_id)
-        super(PresupuestoForm, self).save(*largs, **kwargs)
-
     class Meta:
         model = Presupuesto
-        exclude = ['contrato','servicios_contratados', 'cliente']
+        exclude = ['contrato','servicios_contratados']
+        widgets = {
+            "cliente": forms.HiddenInput()
+        }
+
+class DatosTSForm(forms.ModelForm ):
+    class Meta:
+        model = TipoDeServicio
+        exclude = ['productos','codigo_servicio','nombre','creacion','modificacion','baja']
+
 
 class ProductoForm(forms.ModelForm):
     class Meta:
@@ -124,16 +128,18 @@ class DatosTSForm(forms.ModelForm):
 
     class Meta:
         model = TipoDeServicio
-        exclude = ['productos', 'codigo_servicio', 'nombre', 'creacion','modificacion','baja']
+        exclude = ['productos', 'codigo_servicio', 'creacion','modificacion','baja']
     
     def clean(self):
         return self.cleaned_data
 
+datosTSFormset = formset_factory(DatosTSForm)
 
+class ServicioContratadoForm(forms.ModelForm):
+    class Meta:
+        model = ServicioContratado
 
-
-
-
+ServicioContratadoFormset = modelformset_factory(ServicioContratado)
 
 class ClienteAltaForm(forms.ModelForm):
 

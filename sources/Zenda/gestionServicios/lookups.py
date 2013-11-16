@@ -6,32 +6,12 @@ from gestionServicios.models import *
 #END MODIF
 
 class EmpleadoLookup(ModelLookup):
-    model = Persona
-    search_fields = ('nombre__icontains', 'apellido__icontains' )
-
-    def get_item_label(self, item):
-        if len(item.empleado_set.all()) > 0:
-           return str(item)
-
-    def get_item_id(self, item):
-        if len(item.empleado_set.all()) > 0:
-           return item.pk
+    model = Empleado
+    search_fields = ('persona__nombre__icontains', 'persona__apellido__icontains' )
 
 class ClienteLookup(ModelLookup): 
-    model = Persona
-    search_fields = ('nombre__icontains', 'apellido__icontains' )
-
-    def get_item_label(self, item):
-        if len(item.cliente_set.all()) > 0:
-           return str(item)
-        print 'uiiii'
-        return None   
-
-    def get_item_id(self, item):
-        if len(item.cliente_set.all()) > 0:
-            return item.pk
-        print 'uiiii X2'    
-        return None
+    model = Cliente
+    search_fields = ('persona__nombre__icontains', 'persona__apellido__icontains' )
 
 #NUEVO
 class TipoDeServicioLookup(ModelLookup):
