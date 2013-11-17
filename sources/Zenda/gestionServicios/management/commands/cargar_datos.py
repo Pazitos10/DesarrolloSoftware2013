@@ -58,6 +58,6 @@ class Command(BaseCommand):
             personas.append(Persona.objects.create(**persona))
 
         while personas:
-            index = random.randint(0, len(personas))
+            index = random.randint(0, len(personas)-1)
             Cliente.objects.create(persona = personas.pop(index))
 

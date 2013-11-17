@@ -25,7 +25,7 @@ urlpatterns = patterns('',
     url(r'^cliente/modificar$','gestionServicios.views.modificar_cliente', name="cliente_modificar"),
     url(r'^empleado/alta$','gestionServicios.views.alta_empleado', name="empleado_alta"),
     url(r'^empleado/modificar$','gestionServicios.views.modificar_empleado', name="empleado_modificar"),
-    url(r'^turno/alta$',AsignarPersonalView.as_view(), name="turno_alta"),
+    url(r'^turno/alta$','gestionServicios.views.alta_turnos', name="turno_alta"),
 
     (r'^selectable/', include('selectable.urls')),
 )

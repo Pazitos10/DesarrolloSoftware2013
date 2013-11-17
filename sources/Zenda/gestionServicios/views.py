@@ -99,8 +99,8 @@ def alta_cliente(request):
             persona.save()
 
             cliente = Cliente()
+            cliente.persona = persona
             cliente.save()
-            persona.cliente_set.add(cliente)
 
             return HttpResponseRedirect('/')
     else:
@@ -160,9 +160,11 @@ def alta_empleado(request):
             empleado = Empleado()
             empleado.CUIL = cuil
             empleado.nacimiento = fecha_nacimiento
-            tipo_de_servicio.empleado_set.add(empleado)
+            empleado.especialidad = tipo_de_servicio
+            empleado.persona = persona
             empleado.save()
-            persona.empleado_set.add(empleado)
+            #tipo_de_servicio.empleado_set.add(empleado)
+            
             return HttpResponseRedirect('/')
     else:
         formulario=EmpleadoAltaForm()
@@ -201,20 +203,6 @@ def modificar_empleado(request):
 #END NUEVO
 
 
-class AsignarPersonalView(ListView):
-    template_name = 'turnos/alta.html'
-    model = Presupuesto
-    ''' buscar cliente , mostrar presupuestos, selecciona uno, 
-        muestra tipos de servicio, selecciona uno , despliega frecuencias, 
-        elige una,busca un empleado disponible,escoje a uno,
-        crea un turno dentro de esa frecuencia
-    '''
-    def get_queryset(self):
-        return super(AsignarPersonalView,self).get_queryset()
-
-    '''def get(self, request):
-        buscador = BuscadorPersonaForm()
-        return HttpResponse() '''
 
 def presupuesto(request):
     buscador = BuscadorClienteForm(request.GET)
@@ -239,14 +227,14 @@ def presupuesto(request):
 
 
 def agregarTS(request):
-    servicios = datosTSFormset() 
+    servicios = FrecuenciaFormset() 
     if request.method == 'POST':
         tipo_de_servicio = str(request.REQUEST["tipoDeServicio_1"])
         tipo_de_servicio = get_object_or_404(TipoDeServicio, pk = tipo_de_servicio)
         formset = servicios(request.POST)
         buscar = BuscadorTipoDeServicioForm(request.POST)
         if formset.is_valid():
-            #instance = formset.save()
+            formset.save()
             return HttpResponseRedirect('/')
     else:
         if "tipoDeServicio_1" in request.REQUEST:
@@ -255,34 +243,42 @@ def agregarTS(request):
             buscar = BuscadorTipoDeServicioForm(request.REQUEST)
             formset = ''
         else:        
-            formset = datosTSFormset()
             buscar = BuscadorTipoDeServicioForm()
             tipo_de_servicio = ''
 
     return render_to_response('presupuestos/datosTS.html', {'servicios':servicios,'buscar':buscar,'tipo_de_servicio':tipo_de_servicio}, context_instance=RequestContext(request))
-
-
-    '''
-    def agregarTS(request):
-    if request.method == 'POST':
-        tipo_de_servicio = str(request.REQUEST["tipoDeServicio_1"])
-        tipo_de_servicio = get_object_or_404(TipoDeServicio, pk = tipo_de_servicio)
-        datosTSForm = DatosTSForm(request.POST,instance=tipo_de_servicio)
-        if datosTSForm.is_valid():
-            datosTSForm.save()
-            return HttpResponseRedirect('/')
-    else:
-        if "tipoDeServicio_1" in request.REQUEST:
-            tipo_de_servicio = str(request.REQUEST["tipoDeServicio_1"])
-            tipo_de_servicio = get_object_or_404(TipoDeServicio, pk = tipo_de_servicio)
-            buscador = BuscadorTipoDeServicioForm(request.REQUEST)
-            datosTSForm = DatosTSForm(request.POST,instance=tipo_de_servicio)
-        else:
-            datosTSForm = DatosTSForm()
-            buscarTS= BuscadorTipoDeServicioForm() 
-    return render_to_response ('presupuesto/datosTS.html',{'datosTSForm':datosTSForm,'buscarTS':buscarTS,'tipo_de_servicio':tipo_de_servicio },context_instance=RequestContext(request))
-    '''
     
 
 def listado_presupuestos(request):
     return render_to_response('presupuestos/listado.html', {'presupuestos':Presupuesto.objects.all()},context_instance=RequestContext(request))
+
+
+def alta_turnos(request):
+    buscador = BuscadorClienteForm(request.GET)
+    if "cliente_1" in request.GET and request.GET["cliente_1"].isdigit():
+        cliente = int(request.GET["cliente_1"])
+        cliente = get_object_or_404(Cliente, pk = cliente)
+        presupuestos = cliente.presupuesto_set.all()
+    else:
+        cliente = None
+        presupuestos = None
+    if request.method=='POST':
+        formulario = PresupuestoForm(request.POST)
+        if formulario.is_valid():
+            presupuesto = formulario.save()
+            return HttpResponseRedirect('agregar_servicios')
+        print formulario.is_valid() 
+    else:
+        formulario = PresupuestoForm(initial = {"cliente": cliente})
+    return render_to_response('turnos/alta.html', {
+        'formulario': formulario, 
+        'buscar':buscador, 
+        'cliente': cliente,
+        'presupuestos': presupuestos
+        }, context_instance=RequestContext(request))
+
+
+
+
+
+

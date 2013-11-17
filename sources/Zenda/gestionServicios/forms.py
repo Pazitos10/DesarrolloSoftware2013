@@ -133,7 +133,14 @@ class DatosTSForm(forms.ModelForm):
     def clean(self):
         return self.cleaned_data
 
-datosTSFormset = formset_factory(DatosTSForm)
+
+class FrecuenciasForm(forms.ModelForm):
+    class Meta: 
+        model = Frecuencia
+        exclude = ['lu','ma','mi','ju','vi','sa','DIA_DE_LA_SEMANA_CHOICES','servicio_contratado'] 
+
+FrecuenciaFormset = formset_factory(FrecuenciasForm)        
+
 
 class ServicioContratadoForm(forms.ModelForm):
     class Meta:
@@ -216,3 +223,9 @@ class EmpleadoModificarForm(forms.ModelForm):
     class Meta:
         model = Persona
         exclude = ['tipo_documento', 'nro_documento', 'baja', 'motivo']
+
+
+class TurnosForm(forms.ModelForm):
+    class Meta:
+        model = Turno
+        

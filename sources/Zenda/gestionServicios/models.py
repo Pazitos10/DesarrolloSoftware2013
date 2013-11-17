@@ -127,12 +127,12 @@ class Empleado(Rol):
 	nacimiento = models.DateTimeField('fecha_nacimiento')
 
 	def __str__(self):
-		return "nombre - %s, CUIL = %s" % (self.personas.all()[0].apellido, self.CUIL)	
+		return "CUIL = %s" %  (self.CUIL)	
 
 
 class Cliente(Rol):
 	"""Esta clase define el objeto Rol Cliente"""
-	nro_cliente	= models.AutoField(primary_key=True)
+	#nro_cliente	= models.AutoField(primary_key=True)
 
 	def obtener_presupuestos(self):
 		return self.presupuestos
@@ -141,7 +141,7 @@ class Cliente(Rol):
 		return Presupuesto.objects.get(id=nroPresupuesto)
 
 	def __str__(self):
-		return "%d %s" % (self.nro_cliente, self.persona)
+		return "%s" %  (self.persona)
 
 #MODIFICADO
 # === Gestion Tipos de servicio ============
@@ -224,7 +224,7 @@ class ServicioContratado(models.Model):
 		return self.metros_cuad*valorM2
  
 	def __str__(self):
-		return str(self.nro_item)
+		return str(self.tipo_servicio.nombre)
 
 
 class EstadosPresupuesto(models.Model):
@@ -368,3 +368,6 @@ class Turno(models.Model):
     empleado = models.ForeignKey(Empleado)
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
+
+    def __str__(self):
+    	return "turnito"

@@ -3,56 +3,183 @@
 
 {%block "datosTS"%}
     <div class="panel panel-primary" >
-            <div class="panel-heading">
-                <h6 class="panel-title"> <strong> SERVICIOS </strong></h6>
+        <div class="panel-heading">
+            <h6 class="panel-title"> <strong> SERVICIOS </strong></h6>
+        </div>
+        <div class="panel-body">
+            <div class="container">
+                <button type="button"class="btn btn-success pull-right" onClick="addRow('grid1','tipo_de_servicio.nombre','tipo_de_servicio.valorM2');" ><span class="glyphicon glyphicon-plus"><a href='#' id='add_row'></a></span> Agregar a listado </button>
+                {% crispy buscar %}
+                <p>Datos del Servicio:</p>
+                {% if tipo_de_servicio != '' %}
+                    <p><strong>Nombre:</strong> {{tipo_de_servicio.nombre}}</p> 
+                    <p><strong>Valor M<sup>2</sup>:</strong> {{tipo_de_servicio.valorM2}}</p>
+                    <table class="table" style="text-align:center">
+                    <thead>
+                        <tr>
+                            <th>Nombre Servicio</th>
+                            <th>Precio por M<sup>2</sup></th>
+                            <th>Frecuencias</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <table id='grid1'>
+                        <tr id='template_row'>
+                            <td>{{tipo_de_servicio.nombre}} </td>
+                            <td>{{tipo_de_servicio.valorM2}} </td>
+                            <td><a data-toggle="modal" href="#modal">Agregar Frecuencia</a></td>
+                        </tr>
+                        </table>
+                    </tbody>
+                </table>
+                {% else %}
+                    <p> No disponible </p>
+                {% endif %}
             </div>
-            <div class="panel-body">
-                <div class="container">
-                    <button type="button"class="btn btn-default"><span class="glyphicon glyphicon-plus"><a href='#' id='add_row'></a></span></button>
-                    
-                    <table class="table" id='grid1'>
-                        <thead>
-                            <tr>
-                                <th>Nombre Servicio</th>
-                                <th>Precio por M<sup>2</sup></th>
-                                <th>Frecuencias</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <table id='data_table'>
-                                        <tr id='template_row'>
-                                            <td>{% crispy buscar %}</td>
-                                            {% if tipo_de_servicio != '' %}
-                                            <td>{{tipo_de_servicio.nombre}}</td>
-                                            <td>{{tipo_de_servicio.ValorM2}}</td>
-                                            {% else %}
-                                            <td> No disponible </td>
-                                            {% endif %}    
-                                            <td><a data-toggle="modal" href="#modal">Agregar Frecuencia</a></td>
+            <input type="submit" name="botonSubmit">
+        </div>
+    </div>
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><strong>Agregar Frecuencia</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="containerFrecAttr">
+                        {%crispy servicios%}
+                        <button type="button"class="btn btn-success pull-right" onClick="addRow('tablaFrec','tipo_de_servicio.nombre','tipo_de_servicio.valorM2');" ><span class="glyphicon glyphicon-plus"><a href='#' id='add_row'></a></span> Agregar a listado </button>
+                    </div>  
+                    <div class="panel panel-primary" style="margin-top:55px;">
+                        <div class="panel-heading"><strong>Frecuencias agregadas</strong></div>
+                        <div class="panel-body" style="padding-top:5px; border:solid; border-color:#fafafa">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Día</th>
+                                        <th>Hora inicio</th>
+                                        <th>Hora fin</th>
+                                        <th><span class="glyphicon glyphicon-trash"></span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <table id="tablaFrec">
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Lunes</td>
+                                            <td>8</td>
+                                            <td>10</td>
+                                            <td><input type="checkbox"></td>
                                         </tr>
                                     </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                            <button type="button" class="btn btn-danger" onClick="deleteRow('tablaFrec');">Eliminar selección</button>
+                        </div>  
+                    </div>  
                 </div>
-            </div>
-        </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Aceptar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
 {%endblock%}
 
 {%block "scripts"%}
     {{block.super}}
     <script type="text/javascript">
-        $('#add_row').click(function(){
-            window.template = '{{ servicios|slice:":83"|escapejs }}'.replace(
-                /(id_form-)\d+(-\w+)/g, 
-                "$1{% verbatim %}{{id}}{% endverbatim %}$2"
-            );
-             //var clone = $('#template_row').clone();
-             //clone.removeAttr('id');
-             //clone.appendTo('#data_table');
+        function AgregarBoton(nombreTS, valorM2){
+            
+
+            /*var clone = $('#template_row').clone();
+            clone.removeAttr('id');
+            clone.appendTo('#grid1');
+            console.log(clone.val())
+            */    
+
+
+            //window.template = '{{ servicios|slice:":83"|escapejs }}'.replace(
+            //    /(id_form-)\d+(-\w+)/g, 
+            //    "$1{% verbatim %}{{id}}{% endverbatim %}$2"
+            //);
+
+        }
+        function addRow(tableID, nombreTS,valorM2) {
+            console.log('HEASLDKAJSDLKJ')
+ 
+            var table = document.getElementById(tableID);
+ 
+            var rowCount = table.rows.length;
+            console.log(rowCount.value)
+
+            var row = table.insertRow(rowCount);
+ 
+            var colCount = table.rows[0].cells.length;
+ 
+            for(var i=0; i<colCount; i++) {
+ 
+                var newcell = row.insertCell(i);
+ 
+                newcell.innerHTML = table.rows[0].cells[i].innerHTML;
+                //alert(newcell.childNodes);
+                switch(newcell.childNodes[0].type) {
+                    case "text":
+                            newcell.childNodes[0].value = "";
+                            break;
+                    case "checkbox":
+                            newcell.childNodes[0].checked = false;
+                            break;
+                    case "select-one":
+                            newcell.childNodes[0].selectedIndex = 0;
+                            break;
+                }
+            }
+        }
+
+        function deleteRow(tableID) {
+            try {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+ 
+            for(var i=0; i<rowCount; i++) {
+                var row = table.rows[i];
+                var chkbox = row.cells[0].childNodes[0];
+                if(null != chkbox && true == chkbox.checked) {
+                    if(rowCount <= 1) {
+                        alert("Cannot delete all the rows.");
+                        break;
+                    }
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+ 
+ 
+            }
+            }catch(e) {
+                alert(e);
+            }
+        }
+
+        $(function(){
+            console.log('asldkjalskdjalksdjlaksdjlkajsd')
+            $(this).parents("form").submit();
         })
+
+
     </script>
+
+    
+    
+
+
+
+
+
 {% endblock %}
