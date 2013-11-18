@@ -305,11 +305,6 @@ def confirmar_presupuesto(request):
         'presupuestos': presupuestos
         }, context_instance=RequestContext(request))
 
-    
-
-
-
-
 def valorizar_presupuesto(request):
     buscador = BuscadorClienteForm(request.GET)
     
