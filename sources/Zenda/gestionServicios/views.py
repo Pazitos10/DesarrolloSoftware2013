@@ -278,6 +278,32 @@ def alta_turnos(request):
         }, context_instance=RequestContext(request))
 
 
+def confirmar_presupuesto(request):
+    buscador = BuscadorClienteForm(request.GET)
+    if "cliente_1" in request.GET and request.GET["cliente_1"].isdigit():
+        cliente = int(request.GET["cliente_1"])
+        cliente = get_object_or_404(Cliente, pk = cliente)
+        presupuestos = Presupuesto.objects.filter(cliente=cliente)         #Tomo TODOS los presupuestos del cliente
+        presupuestos = presupuestos.filter(valorizado__nombre = 'Valorizado')       #Tomo los presupuestos VALORIZADOS del cliente
+    else:
+        cliente = None
+        presupuestos = None
+    if request.method=='POST':
+        formulario = PresupuestoForm(request.POST)
+        if formulario.is_valid():
+            presupuesto = formulario.save()
+            return HttpResponseRedirect('agregar_servicios')
+        print formulario.is_valid() 
+    else:
+        formulario = PresupuestoForm(initial = {"cliente": cliente})
+    return render_to_response('presupuestos/confirmar.html', {
+        'formulario': formulario, 
+        'buscar':buscador, 
+        'cliente': cliente,
+        'presupuestos': presupuestos
+        }, context_instance=RequestContext(request))
+
+    
 
 
 

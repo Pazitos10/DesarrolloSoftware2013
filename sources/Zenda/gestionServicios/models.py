@@ -187,12 +187,15 @@ class Presupuesto(models.Model):
 		#self.solicitado_set.add(estado)
  
 	def obtener_estado_actual(self):
-		if len(self.confirmado_set.all()) != 0:
-			return self.confirmado_set.all()[0] 
-		elif len(self.valorizado_set.all()) != 0:
-			return self.valorizado_set.all()[0]
+		if hasattr(self,'confirmado'):
+			print 'Confirmado'
+			#return self.confirmado_set.all()[0] 
+		elif hasattr(self,'valorizado'):
+			print 'Valorizado'
+			#return self.valorizado_set.all()[0]
 		else:
-			return self.solicitado_set.all()[0] 
+			print 'Confirmado'
+			#return self.solicitado_set.all()[0] 
 
 	def listar_servicios_contratados(self):
 		return self.servicios_contratados.all()
@@ -251,12 +254,12 @@ class Solicitado(EstadosPresupuesto):
 							valor_final = self.calcular_valor_final(), 
 							)   
 		estado.save()
-		self.presupuesto.valorizado_set.add(estado)
+		self.presupuesto.valorizado = estado
 
 	def calcular_valor_final(self):
 		valor_total = 0
-		for sc in self.presupuesto.servicios_contratados.all():
-			valorMetro = sc.tipodeservicio_set.all()[0].valorM2 
+		for sc in self.presupuesto.serviciocontratado_set.all():
+			valorMetro = sc.tipo_servicio.valorM2
 			valor_total += sc.calcularImporte(valorMetro)
 		return valor_total                        
 				 

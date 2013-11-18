@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block "contenido" %}
+            <div class="well">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h6 class="panel-title"> <strong> Gestion de turnos </strong></h6>
+                </div>
+                <div class="panel-body">                
+                    <div id="busqueda">
+                            {% crispy buscar %} 
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    {%if cliente%}
+                        <div>
+                            <h5><b>DATOS DE CLIENTE</b></h5>
+                                <p><label>Nombre:   {{cliente.persona.nombre}}</label></p>
+                                <p><label>Apellido: {{cliente.persona.apellido}}</label></p>
+                                <p><label>Nro Documento: {{cliente.persona.nro_documento}}</label></p>
+                                <br>
+                                <h5><b>SELECCIONE UN CONTRATO</b></h5>  
+                                <div>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>N° contrato</th>
+                                                <th>Fecha inicio</th>
+                                                <th>Fecha fin</th>
+                                                <th>Direccion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {%for presupuesto in presupuestos%}
+                                            <tr>
+                                                <td><span class="chk2a" commandargument="00968">
+                                                    <input id="ContentPlaceHolder1_gvDetalhe_chkSelect_0" type="checkbox" onclick="ManipulaGrid('ContentPlaceHolder1_gvDetalhe_chkSelect_0',968);" name="ctl00$ContentPlaceHolder1$gvDetalhe$ctl02$chkSelect">
+                                                </span></td>
+                                                <td>{{presupuesto.id}}</td>
+                                                <td>{{presupuesto.contrato.inicio}}</td>
+                                                <td>{{presupuesto.contrato.fecha_fin_real}}</td>
+                                                <td>{{presupuesto.domicilio_servicio}}</td>
+                                            </tr>
+                                        {%endfor%}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="form-actions" id="accionesAbm">                         
+                                    <button type="submit" class="btn btn-large btn-success"><strong>Aceptar</strong></button>
+                                </div>
+                        </div>
+                        {%endif%}
+                </div>
+
+
+
+{% endblock %}
