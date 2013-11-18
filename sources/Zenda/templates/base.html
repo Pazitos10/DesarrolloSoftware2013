@@ -127,7 +127,7 @@
 				    <div class="panel-body">
 				        <ul>
 							<li id= "generarPresupuesto" onClick="CargarPagina(this.id);"><a href="{% url "presupuesto_alta" %}">Nuevo presupuesto</li>
-							<li id= "valorizarPresupuesto" onClick="CargarPagina(this.id);">Valorizar presupuesto</li>
+							<li id= "valorizarPresupuesto" onClick="CargarPagina(this.id);"><a href="{% url "presupuesto_valorizar" %}">Valorizar presupuesto</li>
 							<li id= "ConfirmarPresupuesto" onClick="CargarPagina(this.id);">Confirmar un presupuesto</li>
 						</ul>
 				    </div>
@@ -174,7 +174,7 @@
 	</div><!--Fin Contenido-->
 
 	<div id="footer">
-			<p class="text-muted credit">Powered by ZendaTeam - Desarrollo de Software 2013 - UNPSJB - SEDE TRELEW</p>
+		<p class="text-muted credit">Powered by ZendaTeam - Desarrollo de Software 2013 - UNPSJB - SEDE TRELEW</p>
 	</div>
 
 	<!-- Sección Js -->
