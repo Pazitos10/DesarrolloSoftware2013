@@ -249,6 +249,8 @@ def agregarTS(request):
     return render_to_response('presupuestos/datosTS.html', {'servicios':servicios,'buscar':buscar,'tipo_de_servicio':tipo_de_servicio}, context_instance=RequestContext(request))
     
 
+
+
 def listado_presupuestos(request):
     return render_to_response('presupuestos/listado.html', {'presupuestos':Presupuesto.objects.all()},context_instance=RequestContext(request))
 
@@ -304,6 +306,44 @@ def confirmar_presupuesto(request):
         }, context_instance=RequestContext(request))
 
     
+
+
+
+
+def valorizar_presupuesto(request):
+    buscador = BuscadorClienteForm(request.GET)
+    
+    # GET
+    if "cliente_1" in request.GET and request.GET["cliente_1"].isdigit():
+        cliente = int(request.GET["cliente_1"])
+        cliente = get_object_or_404(Cliente, pk = cliente)
+        presupuestos = cliente.presupuesto_set.all()
+    else:
+        cliente = None
+        presupuestos = None
+    
+    if request.method=='POST':
+        print request.POST['id_presupuesto']
+        #request.session['presupuesto'] = request.POST['presupuesto.id'] 
+        return HttpResponseRedirect('valorizar/servicios_contratados')
+
+    return render_to_response('presupuestos/valorizar.html', { 
+        'buscar':buscador, 
+        'cliente': cliente,
+        'presupuestos': presupuestos
+        }, context_instance=RequestContext(request))
+
+
+def servicios_contratados(request):
+    #id_presupuesto = request.session['presupuesto']
+    #print id_presupuesto
+    #id_presupuesto = id_presupuesto.id
+    #sc = ServicioContratado.objects.filter('presupuesto' ==id_presupuesto)
+    #sc_Formset= ServicioContratadoFormset(initial={"ServicioContratado":sc})
+    return render_to_response('presupuestos/servicios_contratados.html', { 
+        'servicios':''
+        }, context_instance=RequestContext(request))
+
 
 
 

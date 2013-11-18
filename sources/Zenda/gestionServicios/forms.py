@@ -145,8 +145,9 @@ FrecuenciaFormset = formset_factory(FrecuenciasForm)
 class ServicioContratadoForm(forms.ModelForm):
     class Meta:
         model = ServicioContratado
+        
 
-ServicioContratadoFormset = modelformset_factory(ServicioContratado)
+ServicioContratadoFormset = formset_factory(ServicioContratadoForm)
 
 class ClienteAltaForm(forms.ModelForm):
 

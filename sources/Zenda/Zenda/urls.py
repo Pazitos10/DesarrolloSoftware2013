@@ -12,6 +12,9 @@ urlpatterns = patterns('',
     url(r'^presupuesto/confirmar$', 'gestionServicios.views.confirmar_presupuesto', name='presupuesto_confirmar'),
     url(r'^presupuesto/listado$','gestionServicios.views.listado_presupuestos', name="presupuesto_listados"),
     url(r'^presupuesto/agregar_servicios$','gestionServicios.views.agregarTS', name="servicios_agregar"),
+    url(r'^presupuesto/valorizar$','gestionServicios.views.valorizar_presupuesto', name="presupuesto_valorizar"),
+    url(r'^presupuesto/valorizar/servicios_contratados$','gestionServicios.views.servicios_contratados', name="presupuesto_servicios_contratados"),
+    
     url(r'^persona/alta$', 'gestionServicios.views.personaView', name='persona_alta'),
     # url(r'^Zenda/', include('Zenda.foo.urls')),
 
