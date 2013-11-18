@@ -148,7 +148,7 @@ class Cliente(Rol):
 class TipoDeServicio(models.Model):
 	"""docstring for TipoDeServicio"""
 	productos = models.ManyToManyField('Producto', related_name = "servicios")
- 	codigo_servicio = models.CharField(max_length=4,primary_key=True)
+	codigo_servicio = models.CharField(max_length=4,primary_key=True)
 	nombre = models.CharField('nombre',max_length=50)
 	creacion = models.DateTimeField('creacion', auto_now=True)
 	modificacion = models.DateTimeField('modificacion', auto_now_add=True)
@@ -195,7 +195,7 @@ class Presupuesto(models.Model):
 			#return self.valorizado_set.all()[0]
 		else:
 			print 'Confirmado'
-			#return self.solicitado_set.all()[0] 
+			#return self.solicitado_set.all()[0]
 
 	def listar_servicios_contratados(self):
 		return self.servicios_contratados.all()
@@ -211,8 +211,8 @@ class ServicioContratado(models.Model):
 	presupuesto = models.ForeignKey(Presupuesto)
 	tipo_servicio = models.ForeignKey(TipoDeServicio)
 	fin= models.DateTimeField('fin')
-	metros_cuad = models.FloatField('metros_cuad')
-	importe = models.FloatField('importe')
+	metros_cuad = models.FloatField('metros_cuad', blank=True, null=True)
+	importe = models.FloatField('importe', blank=True, null=True)
  
 	def asignar_tipo_servicio(self):
 		pass
@@ -254,12 +254,12 @@ class Solicitado(EstadosPresupuesto):
 							valor_final = self.calcular_valor_final(), 
 							)   
 		estado.save()
-		self.presupuesto.valorizado = estado
+		self.presupuesto.valorizado_set.add(estado)
 
 	def calcular_valor_final(self):
 		valor_total = 0
-		for sc in self.presupuesto.serviciocontratado_set.all():
-			valorMetro = sc.tipo_servicio.valorM2
+		for sc in self.presupuesto.servicios_contratados.all():
+			valorMetro = sc.tipodeservicio_set.all()[0].valorM2 
 			valor_total += sc.calcularImporte(valorMetro)
 		return valor_total                        
 				 
@@ -288,7 +288,7 @@ class Confirmado(EstadosPresupuesto):
 	"""Esta clase define el estado Confirmado para el objeto Presupuesto"""
 	confirmacion = models.DateTimeField('confirmacion')
 	inicio_servicio = models.DateTimeField('inicio_servicio')
- 		
+		
 #==== Gestion contrato====
 
 class Contrato(models.Model):
@@ -337,40 +337,40 @@ class Producto(models.Model):
 #------- Gestion turnos y frecuencias
 
 class Frecuencia(models.Model):
-    """docstring for Frecuencia"""
-    lu = 'lu'
-    ma = 'ma'
-    mi = 'mi'
-    ju = 'ju'
-    vi = 'vi'
-    sa = 'sa'
-    DIA_DE_LA_SEMANA_CHOICES = (
-        (lu,'Lunes'),
-        (ma,'Martes'),
-        (mi,'Miércoles'),
-        (ju,'Jueves'),
-        (vi,'Viernes'),
-        (sa,'Sábado')
-    )
-    
-    dia = models.CharField('dia',max_length=2,choices=DIA_DE_LA_SEMANA_CHOICES)
-    hora_inicio = models.TimeField('hora_inicio')
-    hora_fin = models.TimeField('hora_fin')
-    servicio_contratado = models.ForeignKey(ServicioContratado)
+	"""docstring for Frecuencia"""
+	lu = 'lu'
+	ma = 'ma'
+	mi = 'mi'
+	ju = 'ju'
+	vi = 'vi'
+	sa = 'sa'
+	DIA_DE_LA_SEMANA_CHOICES = (
+		(lu,'Lunes'),
+		(ma,'Martes'),
+		(mi,'Miércoles'),
+		(ju,'Jueves'),
+		(vi,'Viernes'),
+		(sa,'Sábado')
+	)
+	
+	dia = models.CharField('dia',max_length=2,choices=DIA_DE_LA_SEMANA_CHOICES)
+	hora_inicio = models.TimeField('hora_inicio')
+	hora_fin = models.TimeField('hora_fin')
+	servicio_contratado = models.ForeignKey(ServicioContratado)
 
-    def crear_turno(self, hora_inicio_turno, hora_fin_turno, empleado):
-        #TODO validar que las hs de inicio y fin de turno a crear esten dentro de la frecuencia
-        #TODO validar que no haya un turno creado en el rango de horario del turno a crear
-        t = Turno.objects.create(hora_inicio=hora_inicio_turno, hora_fin=hora_fin_turno, frecuencia = self, empleado = empleado)
+	def crear_turno(self, hora_inicio_turno, hora_fin_turno, empleado):
+		#TODO validar que las hs de inicio y fin de turno a crear esten dentro de la frecuencia
+		#TODO validar que no haya un turno creado en el rango de horario del turno a crear
+		t = Turno.objects.create(hora_inicio=hora_inicio_turno, hora_fin=hora_fin_turno, frecuencia = self, empleado = empleado)
 
-    def __str__(self):
-        return 'Dia %s - Hora inicio: %s - Hora fin: %s' %(self.dia, self.hora_inicio, self.hora_fin)
+	def __str__(self):
+		return 'Dia %s - Hora inicio: %s - Hora fin: %s' %(self.dia, self.hora_inicio, self.hora_fin)
 
 class Turno(models.Model):
-    frecuencia = models.ForeignKey(Frecuencia)
-    empleado = models.ForeignKey(Empleado)
-    hora_inicio = models.TimeField()
-    hora_fin = models.TimeField()
+	frecuencia = models.ForeignKey(Frecuencia)
+	empleado = models.ForeignKey(Empleado)
+	hora_inicio = models.TimeField()
+	hora_fin = models.TimeField()
 
-    def __str__(self):
-    	return "turnito"
+	def __str__(self):
+		return "turnito"

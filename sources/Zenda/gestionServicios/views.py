@@ -279,7 +279,6 @@ def alta_turnos(request):
         'presupuestos': presupuestos
         }, context_instance=RequestContext(request))
 
-
 def confirmar_presupuesto(request):
     buscador = BuscadorClienteForm(request.GET)
     if "cliente_1" in request.GET and request.GET["cliente_1"].isdigit():
@@ -303,7 +302,10 @@ def confirmar_presupuesto(request):
         'buscar':buscador, 
         'cliente': cliente,
         'presupuestos': presupuestos
-        }, context_instance=RequestContext(request))
+            }, context_instance=RequestContext(request))
+
+
+
 
 def valorizar_presupuesto(request):
     buscador = BuscadorClienteForm(request.GET)
@@ -318,8 +320,7 @@ def valorizar_presupuesto(request):
         presupuestos = None
     
     if request.method=='POST':
-        print request.POST['id_presupuesto']
-        #request.session['presupuesto'] = request.POST['presupuesto.id'] 
+        request.session['id_presupuesto'] = request.POST['id_presupuesto'] 
         return HttpResponseRedirect('valorizar/servicios_contratados')
 
     return render_to_response('presupuestos/valorizar.html', { 
@@ -330,13 +331,17 @@ def valorizar_presupuesto(request):
 
 
 def servicios_contratados(request):
-    #id_presupuesto = request.session['presupuesto']
-    #print id_presupuesto
-    #id_presupuesto = id_presupuesto.id
-    #sc = ServicioContratado.objects.filter('presupuesto' ==id_presupuesto)
+    id_presupuesto = request.session['id_presupuesto']
+    sc = Presupuesto.objects.get(id = id_presupuesto).serviciocontratado_set.all()
     #sc_Formset= ServicioContratadoFormset(initial={"ServicioContratado":sc})
+    if request.method == 'POST':
+        valorM2 = request.POST['valorM2']
+        servicio = TipoDeServicio.objects.get(codigo_servicio = request.POST['cod_servicio'])
+        
+
+
     return render_to_response('presupuestos/servicios_contratados.html', { 
-        'servicios':''
+        'servicios': sc
         }, context_instance=RequestContext(request))
 
 
