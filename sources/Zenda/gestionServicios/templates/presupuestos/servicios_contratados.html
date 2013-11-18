@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block "contenido" %}
+    <div class="well">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="panel-title"> <strong> SERVICIOS CONTRATADOS </strong></h6>
+            </div>
+            <div>
+                {% csrf_token %}
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tipo de servicio</th>
+                            <th>Metros cuadrados</th>
+                            <th></th>
+                            <th>Monto total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {%for servicio in servicios%}
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <tr>
+                                <td>{{servicio}}</td>
+                                <td><input type="text" name="valorM2"></td>
+                                <td><input type="Submit">
+                                    <input type="hidden" value="{{servicio.tipo_servicio.codigo_servicio}}" name="cod_servicio">
+                                </td>
+                            </tr>
+                        </form>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>    
+{% endblock %}

@@ -9,7 +9,6 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'Zenda.views.home', name='home'),
     url(r'^presupuesto/alta$', 'gestionServicios.views.presupuesto', name='presupuesto_alta'),
-    url(r'^presupuesto/confirmar$', 'gestionServicios.views.confirmar_presupuesto', name='presupuesto_confirmar'),
     url(r'^presupuesto/listado$','gestionServicios.views.listado_presupuestos', name="presupuesto_listados"),
     url(r'^presupuesto/agregar_servicios$','gestionServicios.views.agregarTS', name="servicios_agregar"),
     url(r'^presupuesto/valorizar$','gestionServicios.views.valorizar_presupuesto', name="presupuesto_valorizar"),

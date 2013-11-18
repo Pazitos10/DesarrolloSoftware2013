@@ -187,15 +187,12 @@ class Presupuesto(models.Model):
 		#self.solicitado_set.add(estado)
  
 	def obtener_estado_actual(self):
-		if hasattr(self,'confirmado'):
-			print 'Confirmado'
-			#return self.confirmado_set.all()[0] 
-		elif hasattr(self,'valorizado'):
-			print 'Valorizado'
-			#return self.valorizado_set.all()[0]
+		if len(self.confirmado_set.all()) != 0:
+			return self.confirmado_set.all()[0] 
+		elif len(self.valorizado_set.all()) != 0:
+			return self.valorizado_set.all()[0]
 		else:
-			print 'Confirmado'
-			#return self.solicitado_set.all()[0] 
+			return self.solicitado_set.all()[0] 
 
 	def listar_servicios_contratados(self):
 		return self.servicios_contratados.all()
@@ -211,8 +208,8 @@ class ServicioContratado(models.Model):
 	presupuesto = models.ForeignKey(Presupuesto)
 	tipo_servicio = models.ForeignKey(TipoDeServicio)
 	fin= models.DateTimeField('fin')
-	metros_cuad = models.FloatField('metros_cuad')
-	importe = models.FloatField('importe')
+	metros_cuad = models.FloatField('metros_cuad', blank=True, null=True)
+	importe = models.FloatField('importe', blank=True, null=True)
  
 	def asignar_tipo_servicio(self):
 		pass
@@ -254,12 +251,12 @@ class Solicitado(EstadosPresupuesto):
 							valor_final = self.calcular_valor_final(), 
 							)   
 		estado.save()
-		self.presupuesto.valorizado = estado
+		self.presupuesto.valorizado_set.add(estado)
 
 	def calcular_valor_final(self):
 		valor_total = 0
-		for sc in self.presupuesto.serviciocontratado_set.all():
-			valorMetro = sc.tipo_servicio.valorM2
+		for sc in self.presupuesto.servicios_contratados.all():
+			valorMetro = sc.tipodeservicio_set.all()[0].valorM2 
 			valor_total += sc.calcularImporte(valorMetro)
 		return valor_total                        
 				 
