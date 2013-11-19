@@ -187,7 +187,6 @@ class Presupuesto(models.Model):
 		#self.solicitado_set.add(estado)
  
 	def obtener_estado_actual(self):
-		def obtener_estado_actual(self):
 		if hasattr(self,'confirmado'):
 			print 'Confirmado'
 			#return self.confirmado_set.all()[0] 
