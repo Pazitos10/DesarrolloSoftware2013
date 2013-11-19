@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response,HttpResponseRedirect, get_object
 from django.template import RequestContext
 from django.forms.models import modelformset_factory
 from django.forms.formsets import formset_factory
+import ast
 
 from gestionServicios.models import *
 from gestionServicios.forms import *
@@ -279,6 +280,7 @@ def alta_turnos(request):
         'presupuestos': presupuestos
         }, context_instance=RequestContext(request))
 
+
 def confirmar_presupuesto(request):
     buscador = BuscadorClienteForm(request.GET)
     if "cliente_1" in request.GET and request.GET["cliente_1"].isdigit():
@@ -306,7 +308,6 @@ def confirmar_presupuesto(request):
 
 
 
-
 def valorizar_presupuesto(request):
     buscador = BuscadorClienteForm(request.GET)
     
@@ -331,14 +332,12 @@ def valorizar_presupuesto(request):
 
 
 def servicios_contratados(request):
-    id_presupuesto = request.session['id_presupuesto']
-    sc = Presupuesto.objects.get(id = id_presupuesto).serviciocontratado_set.all()
-    #sc_Formset= ServicioContratadoFormset(initial={"ServicioContratado":sc})
+    sc = get_object_or_404(Presupuesto, id = request.session['id_presupuesto']).serviciocontratado_set.all()
     if request.method == 'POST':
-        valorM2 = request.POST['valorM2']
-        servicio = TipoDeServicio.objects.get(codigo_servicio = request.POST['cod_servicio'])
-        
-
+        serv_cont = ServicioContratado.objects.filter(id = int(request.POST['servicio_contratado'])
+        #sc.calcularImporte(sc.tipo_servicio.valorM2)
+        #sc.importe = sc.metros_cuad * sc.tipo_servicio.valorM2
+        #print sc.importe
 
     return render_to_response('presupuestos/servicios_contratados.html', { 
         'servicios': sc
