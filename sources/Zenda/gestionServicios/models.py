@@ -230,7 +230,7 @@ class ServicioContratado(models.Model):
 		return str(self.tipo_servicio.nombre)
 
 
-class EstadosPresupuesto(models.Model):
+class EstadoPresupuesto(models.Model):
 	"""Esta clase define el estado de un Presupuesto"""
 	nombre = models.CharField(max_length=30)
 	presupuesto = models.OneToOneField('Presupuesto')
@@ -241,7 +241,7 @@ class EstadosPresupuesto(models.Model):
 	class Meta:
 		abstract = True
  
-class Solicitado(EstadosPresupuesto):
+class Solicitado(EstadoPresupuesto):
 	"""docstring for Solicitado"""
 	fecha_creacion = models.DateTimeField('fecha_creacion')
 	fecha_fin_programada = models.DateTimeField('fecha_fin_programada')
@@ -264,7 +264,7 @@ class Solicitado(EstadosPresupuesto):
 		return valor_total                        
 				 
  
-class Valorizado(EstadosPresupuesto):
+class Valorizado(EstadoPresupuesto):
 	"""Esta clase define el estado Valorizado para el objeto Presupuesto"""
 	valorizacion = models.DateTimeField('fecha_valorizacion')
 	valor_final = models.FloatField('valor_final')
@@ -284,10 +284,15 @@ class Valorizado(EstadosPresupuesto):
 			contrato.presupuesto_set.add(self.presupuesto)#self.presupuesto.contrato.add(contrato)   
  
  
-class Confirmado(EstadosPresupuesto):
+class Confirmado(EstadoPresupuesto):
 	"""Esta clase define el estado Confirmado para el objeto Presupuesto"""
 	confirmacion = models.DateTimeField('confirmacion')
 	inicio_servicio = models.DateTimeField('inicio_servicio')
+
+class Rechazado(EstadoPresupuesto):
+	"""Esta clase define el estado Rechazado para el objeto Presupuesto"""
+	fecha = models.DateTimeField()
+
 		
 #==== Gestion contrato====
 
