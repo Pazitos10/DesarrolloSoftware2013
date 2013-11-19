@@ -153,7 +153,7 @@ class TipoDeServicio(models.Model):
 	creacion = models.DateTimeField('creacion', auto_now=True)
 	modificacion = models.DateTimeField('modificacion', auto_now_add=True)
 	baja = models.DateTimeField('baja', blank=True, null=True)
-	valorM2 = models.FloatField('valorM1')
+	valorM2 = models.FloatField('valorM1',blank=True, null=True)
 	
 	def __str__(self):
 		return "%s" %(self.nombre) 

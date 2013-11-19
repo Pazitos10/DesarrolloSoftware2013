@@ -333,8 +333,8 @@ def valorizar_presupuesto(request):
 
 def servicios_contratados(request):
     sc = get_object_or_404(Presupuesto, id = request.session['id_presupuesto']).serviciocontratado_set.all()
-    if request.method == 'POST':
-        serv_cont = ServicioContratado.objects.filter(id = int(request.POST['servicio_contratado'])
+    #if request.method == 'POST':
+     #   serv_cont = ServicioContratado.objects.filter(id = int(request.POST['servicio_contratado'])
         #sc.calcularImporte(sc.tipo_servicio.valorM2)
         #sc.importe = sc.metros_cuad * sc.tipo_servicio.valorM2
         #print sc.importe
