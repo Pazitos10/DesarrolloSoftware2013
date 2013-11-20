@@ -16,10 +16,14 @@
         <div class="panel-body" style="background-color:white">    
             <button type="button" class="btn btn-default pull-right"><span class="glyphicon glyphicon-plus"></span><a href="{% url "cliente_alta" %}"> Crear Cliente </a></button>
             {% crispy buscar %}
+
+            {%block "activo"%}
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#searchCliente" data-toggle="tab">Buscar Cliente</a></li>
                 <li><a href="#addTS" data-toggle="tab">Agregar Tipos de servicio</a></li>
             </ul>
+            {%endblock%}
+
             <div class="tab-content">
                 <div class="tab-pane fade in active" id="searchCliente"> 
                     {% if cliente %}   

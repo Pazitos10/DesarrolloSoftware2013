@@ -38,6 +38,9 @@ PERSONAS = [ {
 "nro_documento": 11235678
 } ]
 
+
+SERVICIOS = ["Limpieza vidrios","Limpieza alfombra","Limpieza oficiona","limpieza sillones","limpieza salon","limpieza casa"]
+
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('--long', '-l', dest='long',
@@ -46,10 +49,10 @@ class Command(BaseCommand):
     help = 'Help text goes here'
 
     def handle(self, **options):
-    	for prod,cap  in zip(["detergente", "lavandina"],[200,260,280]):
+    	for prod,cap  in zip(["Detergente", "Lavandina","Jabon","Abrillantador de piso","Esponja","Cera para piso"],[200,260,280,580,102,460]):
 			Producto.objects.create(
 				nombre= prod,
-				marca = 'queseyo',
+				marca = 'generica',
 				unidad_medida='cm3',
 				capacidad=cap)
 
@@ -61,3 +64,14 @@ class Command(BaseCommand):
             index = random.randint(0, len(personas)-1)
             Cliente.objects.create(persona = personas.pop(index))
 
+
+        productos = Producto.objects.all()
+        cod = 01
+        for producto,servicio in zip(productos,SERVICIOS):
+            ts = TipoDeServicio()
+            ts.codigo_servicio = "L0"+str(cod)
+            ts.nombre = servicio
+            ts.valorM2 = 10
+            ts.save()
+            ts.productos.add(producto)
+            cod = cod + 1 

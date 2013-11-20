@@ -225,6 +225,7 @@ class ServicioContratado(models.Model):
 
 	def calcularImporte(self, valorM2):
 		self.importe = self.metros_cuad*valorM2
+		self.save()
  
 	def __str__(self):
 		return str(self.tipo_servicio.nombre)
