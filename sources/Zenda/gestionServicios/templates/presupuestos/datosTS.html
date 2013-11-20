@@ -2,12 +2,21 @@
 {% load crispy_forms_tags %}
 
 {%block "datosTS"%}
+{%block "activo"%}<!-- ESTA BIEN QUE ABRA ESTE BLOQUE -->
     <div class="panel panel-primary" >
         <div class="panel-heading">
             <h6 class="panel-title"> <strong> SERVICIOS </strong></h6>
         </div>
         <div class="panel-body">
             <div class="container">
+
+               
+                <ul class="nav nav-tabs">
+                    <li><a href="#searchCliente" data-toggle="tab">Buscar Cliente</a></li>
+                    <li class="active"><a href="#addTS" data-toggle="tab">Agregar Tipos de servicio</a></li>
+                </ul>
+                
+
                 <button type="button"class="btn btn-success pull-right" onClick="addRow('grid1','tipo_de_servicio.nombre','tipo_de_servicio.valorM2');" ><span class="glyphicon glyphicon-plus"><a href='#' id='add_row'></a></span> Agregar a listado </button>
                 {% crispy buscar %}
                 <p>Datos del Servicio:</p>
@@ -88,7 +97,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-
+{%endblock%}
 {%endblock%}
 
 {%block "scripts"%}
@@ -174,12 +183,4 @@
 
 
     </script>
-
-    
-    
-
-
-
-
-
 {% endblock %}

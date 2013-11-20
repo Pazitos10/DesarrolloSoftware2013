@@ -25,9 +25,10 @@
                             <tr>
                                 <td>{{servicio}}</td>
                                 <td><input type="text" name="cantidadM2"></td>
-                                <td><input type="Submit">
+                                <td><input type="Submit" value="$">
                                     <input type="hidden" value="{{servicio.id}}" name="servicio_contratado">
                                 </td>
+                                <td>{{servicio.importe}}</td>
                             </tr>
                         </form>
                         {%endfor%}
