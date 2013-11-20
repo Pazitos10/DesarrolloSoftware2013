@@ -147,7 +147,7 @@ class Cliente(Rol):
 # === Gestion Tipos de servicio ============
 class TipoDeServicio(models.Model):
 	"""docstring for TipoDeServicio"""
-	productos = models.ManyToManyField('Producto', related_name = "servicios")
+	productos = models.ManyToManyField('Producto')#, related_name = "servicios")
  	codigo_servicio = models.CharField(max_length=4,primary_key=True)
 	nombre = models.CharField('nombre',max_length=50)
 	creacion = models.DateTimeField('creacion', auto_now=True)
