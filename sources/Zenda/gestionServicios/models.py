@@ -151,7 +151,7 @@ class TipoDeServicio(models.Model):
  	codigo_servicio = models.CharField(max_length=4,primary_key=True)
 	nombre = models.CharField('nombre',max_length=50)
 	creacion = models.DateTimeField('creacion', auto_now=True)
-	modificacion = models.DateTimeField('modificacion', auto_now_add=True)
+	modificacion = models.DateTimeField('modificacion', auto_now_add=True, blank=True, null=True)
 	baja = models.DateTimeField('baja', blank=True, null=True)
 	valorM2 = models.FloatField('valorM1',blank=True, null=True)
 	
