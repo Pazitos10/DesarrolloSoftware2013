@@ -10,7 +10,12 @@ urlpatterns = patterns('',
     url(r'^$', 'Zenda.views.home', name='home'),
     url(r'^presupuesto/alta$', 'gestionServicios.views.presupuesto', name='presupuesto_alta'),
     url(r'^presupuesto/listado$','gestionServicios.views.listado_presupuestos', name="presupuesto_listados"),
-    url(r'^presupuesto/agregar_servicios$','gestionServicios.views.agregarTS', name="servicios_agregar"),
+    # ----- Presupuestar y la puta que te pario
+    url(r'^presupuesto/(?P<id_presupuesto>\d+)/agregar_servicios$','gestionServicios.views.agregarTS', name="servicios_agregar"),
+    url(r'^presupuesto/(?P<id_presupuesto>\d+)/quitar_servicio/(?P<id_serviciocontratado>\d+)$','gestionServicios.views.quitarSC', name="quitar_servicio_contratado"),
+    url(r'^contratado/(?P<id_serviciocontratado>\d+)$','gestionServicios.views.frecuencias_de_servicio', name="motrar_frecuencias"),
+    url(r'^contratado/(?P<id_serviciocontratado>\d+)/agregar_frecuencia$','gestionServicios.views.agregar_frecuencia', name="agregar_frecuencia"),
+
     url(r'^presupuesto/valorizar$','gestionServicios.views.valorizar_presupuesto', name="presupuesto_valorizar"),
     url(r'^presupuesto/confirmar$','gestionServicios.views.confirmar_presupuesto', name="presupuesto_confirmar"),
     url(r'^presupuesto/valorizar/servicios_contratados$','gestionServicios.views.servicios_contratados', name="presupuesto_servicios_contratados"),

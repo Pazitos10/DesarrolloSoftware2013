@@ -38,17 +38,4 @@
         </div>
         {%endblock%}
     </div>
-{% endblock %}  
-
-{% block "scripts"%}
-    {{block.super}}
-    <script type="text/javascript">
-    $(function() {
-        window.template = '{{ servicios|escapejs }}'.replace(/(id_form-)\d+(-\w+)/g, "$1{% verbatim %}{{id}}{% endverbatim %}$2");
-        $(':input[name=persona_0]').bind('djselectableselect', function(event, ui) {
-            $(this).parents("form").submit();
-        });
-    });
-    </script>
-    
-{%endblock %}
+{% endblock %}

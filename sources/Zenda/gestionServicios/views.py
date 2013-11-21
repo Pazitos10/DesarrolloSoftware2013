@@ -1,5 +1,5 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response,HttpResponseRedirect, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render_to_response, get_object_or_404,redirect
 from django.template import RequestContext
 from django.forms.models import modelformset_factory
 from django.forms.formsets import formset_factory
@@ -215,19 +215,20 @@ def presupuesto(request):
         formulario = PresupuestoForm(request.POST)
         if formulario.is_valid():
             presupuesto = formulario.save()
-            presupuesto.solicitar()
-            return HttpResponseRedirect('agregar_servicios') 
+            return redirect('servicios_agregar', id_presupuesto = presupuesto.id)
+        print formulario.is_valid()
     else:
         formulario = PresupuestoForm(initial = {"cliente": cliente})
     return render_to_response('presupuestos/alta.html', {
-        'formulario': formulario, 
-        'buscar':buscador, 
+        'formulario': formulario,
+        'buscar':buscador,
         'cliente': cliente
         }, context_instance=RequestContext(request))
 
-
-def agregarTS(request):
-    servicios = FrecuenciaFormset() 
+def agregarTS(request, id_presupuesto):
+    presupuesto = get_object_or_404(Presupuesto, pk = id_presupuesto)
+    buscar = BuscadorTipoDeServicioForm()
+    servicios = FrecuenciaFormset()
     if request.method == 'POST':
         tipo_de_servicio = str(request.REQUEST["tipoDeServicio_1"])
         tipo_de_servicio = get_object_or_404(TipoDeServicio, pk = tipo_de_servicio)
@@ -236,20 +237,35 @@ def agregarTS(request):
         if formset.is_valid():
             formset.save()
             return HttpResponseRedirect('/')
-    else:
-        if "tipoDeServicio_1" in request.REQUEST:
-            tipo_de_servicio = str(request.REQUEST["tipoDeServicio_1"])
-            tipo_de_servicio = get_object_or_404(TipoDeServicio, pk = tipo_de_servicio)
-            buscar = BuscadorTipoDeServicioForm(request.REQUEST)
-            formset = ''
-        else:        
-            buscar = BuscadorTipoDeServicioForm()
-            tipo_de_servicio = ''
-
-    return render_to_response('presupuestos/datosTS.html', {'servicios':servicios,'buscar':buscar,'tipo_de_servicio':tipo_de_servicio}, context_instance=RequestContext(request))
+    elif "tipoDeServicio_1" in request.GET:
+        tipo_de_servicio = get_object_or_404(TipoDeServicio, 
+                pk = request.GET["tipoDeServicio_1"])
+        presupuesto.contratar_servicio(tipo_de_servicio)
+    servicios_contratados = ServicioContratadoFormset(queryset = presupuesto.serviciocontratado_set.all())
+    return render_to_response('presupuestos/datosTS.html', {'servicios':servicios,
+        'presupuesto': presupuesto,
+        'buscar':buscar,
+        'contratados': servicios_contratados }, context_instance=RequestContext(request))
     
+def quitarSC(request, id_presupuesto, id_serviciocontratado):
+    presupuesto = get_object_or_404(Presupuesto, pk = id_presupuesto)
+    presupuesto.serviciocontratado_set.get(pk = id_serviciocontratado).delete()
+    return redirect('servicios_agregar', id_presupuesto = presupuesto.id)
 
+def frecuencias_de_servicio(request, id_serviciocontratado):
+    serviciocontratado = get_object_or_404(ServicioContratado, pk = id_serviciocontratado)
+    return render_to_response('presupuestos/frecuencias.html', { 
+        "contratado": serviciocontratado
+        }, context_instance=RequestContext(request))
 
+def agregar_frecuencia(request, id_serviciocontratado):
+    serviciocontratado = get_object_or_404(ServicioContratado, pk = id_serviciocontratado)
+    if request.method == "POST":
+        frecuencia = FrecuenciasForm(request.POST)
+        if frecuencia.is_valid():
+            frecuencia.save()
+        print(frecuencia.errors)
+    return HttpResponse("ok")
 
 def listado_presupuestos(request):
     return render_to_response('presupuestos/listado.html', {'presupuestos':Presupuesto.objects.all()},context_instance=RequestContext(request))
@@ -321,8 +337,7 @@ def servicios_contratados(request):
 
 
 
-
-def alta_turnos(request):
+def valorizar_presupuesto(request):
     buscador = BuscadorClienteForm(request.GET)
     if "cliente_1" in request.GET and request.GET["cliente_1"].isdigit():
         cliente = int(request.GET["cliente_1"])
