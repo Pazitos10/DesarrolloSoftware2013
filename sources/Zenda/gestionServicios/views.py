@@ -215,8 +215,8 @@ def presupuesto(request):
         formulario = PresupuestoForm(request.POST)
         if formulario.is_valid():
             presupuesto = formulario.save()
-            return HttpResponseRedirect('agregar_servicios')
-        print formulario.is_valid() 
+            presupuesto.solicitar()
+            return HttpResponseRedirect('agregar_servicios') 
     else:
         formulario = PresupuestoForm(initial = {"cliente": cliente})
     return render_to_response('presupuestos/alta.html', {
@@ -253,31 +253,6 @@ def agregarTS(request):
 
 def listado_presupuestos(request):
     return render_to_response('presupuestos/listado.html', {'presupuestos':Presupuesto.objects.all()},context_instance=RequestContext(request))
-
-
-def alta_turnos(request):
-    buscador = BuscadorClienteForm(request.GET)
-    if "cliente_1" in request.GET and request.GET["cliente_1"].isdigit():
-        cliente = int(request.GET["cliente_1"])
-        cliente = get_object_or_404(Cliente, pk = cliente)
-        presupuestos = cliente.presupuesto_set.all()
-    else:
-        cliente = None
-        presupuestos = None
-    if request.method=='POST':
-        formulario = PresupuestoForm(request.POST)
-        if formulario.is_valid():
-            presupuesto = formulario.save()
-            return HttpResponseRedirect('agregar_servicios')
-        print formulario.is_valid() 
-    else:
-        formulario = PresupuestoForm(initial = {"cliente": cliente})
-    return render_to_response('turnos/alta.html', {
-        'formulario': formulario, 
-        'buscar':buscador, 
-        'cliente': cliente,
-        'presupuestos': presupuestos
-        }, context_instance=RequestContext(request))
 
 
 def confirmar_presupuesto(request):
@@ -329,16 +304,62 @@ def valorizar_presupuesto(request):
 
 
 def servicios_contratados(request):
-    sc = get_object_or_404(Presupuesto, id = request.session['id_presupuesto']).serviciocontratado_set.all() #todos los SC de un presupuesto
+    presupuesto = get_object_or_404(Presupuesto, id = request.session['id_presupuesto'])
+    sc = presupuesto.serviciocontratado_set.all() #todos los SC de un presupuesto
+    total = 0
     if request.method == 'POST':
         serv_contratado =get_object_or_404(ServicioContratado, id = int(request.POST['servicio_contratado']))#un SC del presupuesto
-        serv_contratado.metros_cuad = float(request.POST['cantidadM2'])
+        if request.POST['cantidadM2'] != '':
+            serv_contratado.metros_cuad = float(request.POST['cantidadM2'])
+        else:
+            serv_contratado.metros_cuad = 0
         serv_contratado.calcularImporte(serv_contratado.tipo_servicio.valorM2)
-    return render_to_response('presupuestos/servicios_contratados.html', { 
-                                                                        'servicios': sc,
-                                                                        }, context_instance=RequestContext(request))
+        total = presupuesto.calcularTotal()
+        print total
+    return render_to_response('presupuestos/servicios_contratados.html',
+     {'servicios': sc, 'total':total}, context_instance=RequestContext(request))
 
 
 
+
+def alta_turnos(request):
+    buscador = BuscadorClienteForm(request.GET)
+    if "cliente_1" in request.GET and request.GET["cliente_1"].isdigit():
+        cliente = int(request.GET["cliente_1"])
+        cliente = get_object_or_404(Cliente, pk = cliente)
+        presupuestos = cliente.presupuesto_set.filter(confirmado__nombre = 'Confirmado')
+    else:
+        cliente = None
+        presupuestos = None
+    
+    if request.method=='POST':
+        request.session['id_presupuesto'] = request.POST['id_presupuesto'] 
+        return HttpResponseRedirect('asignar/turno_servicios_contratados')
+
+    return render_to_response('turnos/alta.html', { 
+        'buscar':buscador, 
+        'cliente': cliente,
+        'presupuestos': presupuestos
+        }, context_instance=RequestContext(request))
+
+
+def turno_servicios_contratados(request):
+    presupuesto = get_object_or_404(Presupuesto, id = request.session['id_presupuesto'])
+    sc = presupuesto.serviciocontratado_set.all() #todos los SC de un presupuesto
+    if request.method == 'POST':
+        request.session['servicio_contratado'] = request.POST['servicio_contratado'] 
+        return HttpResponseRedirect('empleados_disponibles')
+
+    return render_to_response('turnos/servicios_contratados.html',
+     {'servicios': sc}, context_instance=RequestContext(request))
+
+def empleados_disponibles(request):
+    sc = get_object_or_404(ServicioContratado, id = request.session['servicio_contratado'])
+    if request.method == 'POST':
+        serv_contratado =get_object_or_404(ServicioContratado, id = int(request.POST['servicio_contratado']))#un SC del presupuesto
+        return HttpResponseRedirect('asignar/empleados_disponibles')
+
+    return render_to_response('turnos/servicios_contratados.html',
+     {'empleados': empleados}, context_instance=RequestContext(request))
 
 

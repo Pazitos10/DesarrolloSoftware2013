@@ -7,8 +7,8 @@
             <div class="panel-heading">
                 <h6 class="panel-title"> <strong> SERVICIOS CONTRATADOS </strong></h6>
             </div>
-            <div>
-                {% csrf_token %}
+            <div class="panel-body">
+                <!--{% csrf_token %}-->
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -19,21 +19,25 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {%for servicio in servicios%}
-                        <form action="" method="post">
-                            {% csrf_token %}
+                            {%for servicio in servicios%}
                             <tr>
-                                <td>{{servicio}}</td>
-                                <td><input type="text" name="cantidadM2"></td>
-                                <td><input type="Submit" value="$">
-                                    <input type="hidden" value="{{servicio.id}}" name="servicio_contratado">
-                                </td>
-                                <td>{{servicio.importe}}</td>
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <td>{{servicio.tipo_servicio}}</td>
+                                    <td><input type="text" name="cantidadM2" value="{{servicio.metros_cuad}}"></td>
+                                        <input type="hidden" value="{{servicio.id}}" name="servicio_contratado">
+                                        <input type="hidden" value="{{servicio.tipo_servicio.codigo_servicio}}" name="tipo_de_servicio">
+                                    </td>
+                                    <td><input type="Submit" value="$" style="vertical-align:left">
+                                    <td>{{servicio.importe}}</td>
+                                </form>
                             </tr>
-                        </form>
-                        {%endfor%}
+                            {%endfor%}
                     </tbody>
                 </table>
+                <div class="pull-right">
+                    <p> Total: <input type="text" value="{{total}}"></p>
+                </div>
             </div>
         </div>
     </div>    
