@@ -2,36 +2,51 @@
 {% load crispy_forms_tags %}
 
 {%block "datosTS"%}
+{%block "activo"%}<!-- ESTA BIEN QUE ABRA ESTE BLOQUE -->
     <div class="panel panel-primary" >
         <div class="panel-heading">
             <h6 class="panel-title"> <strong> SERVICIOS </strong></h6>
         </div>
         <div class="panel-body">
             <div class="container">
+
+               
+                <ul class="nav nav-tabs">
+                    <li><a href="#searchCliente" data-toggle="tab">Buscar Cliente</a></li>
+                    <li class="active"><a href="#addTS" data-toggle="tab">Agregar Tipos de servicio</a></li>
+                </ul>
+                
+
                 <button type="button"class="btn btn-success pull-right" onClick="addRow('grid1','tipo_de_servicio.nombre','tipo_de_servicio.valorM2');" ><span class="glyphicon glyphicon-plus"><a href='#' id='add_row'></a></span> Agregar a listado </button>
                 {% crispy buscar %}
                 <p>Datos del Servicio:</p>
                 {% if tipo_de_servicio != '' %}
                     <p><strong>Nombre:</strong> {{tipo_de_servicio.nombre}}</p> 
                     <p><strong>Valor M<sup>2</sup>:</strong> {{tipo_de_servicio.valorM2}}</p>
+                    <form method="post" action="">
                     <table class="table" style="text-align:center">
                     <thead>
                         <tr>
                             <th>Nombre Servicio</th>
                             <th>Precio por M<sup>2</sup></th>
-                            <th>Frecuencias</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <table id='grid1'>
-                        <tr id='template_row'>
-                            <td>{{tipo_de_servicio.nombre}} </td>
-                            <td>{{tipo_de_servicio.valorM2}} </td>
-                            <td><a data-toggle="modal" href="#modal">Agregar Frecuencia</a></td>
-                        </tr>
-                        </table>
+                            {{ contratados.management_form }}
+                            {% for contratado in contratados %}
+                                <tr>
+                                {% for field in contratado %}
+                                    <td>{{ field }}</td>
+                                {% endfor %}
+                                <td>
+                                    <a class="frecuencias" contratado="{{contratado.instance.pk}}">Frecuencias</a> |
+                                    <a href="{% url "quitar_servicio_contratado" presupuesto.pk contratado.instance.pk %}">Quitar</a></td>
+                                </tr>
+                            {% endfor %}
                     </tbody>
                 </table>
+                </form>
                 {% else %}
                     <p> No disponible </p>
                 {% endif %}
@@ -39,7 +54,7 @@
             <input type="submit" name="botonSubmit">
         </div>
     </div>
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="frecuencia-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -48,37 +63,11 @@
                 </div>
                 <div class="modal-body">
                     <div id="containerFrecAttr">
-                        {%crispy servicios%}
-                        <button type="button"class="btn btn-success pull-right" onClick="addRow('tablaFrec','tipo_de_servicio.nombre','tipo_de_servicio.valorM2');" ><span class="glyphicon glyphicon-plus"><a href='#' id='add_row'></a></span> Agregar a listado </button>
+                        {% crispy servicios %}
+                        <button id="agregar-frecuencia" type="button" class="btn btn-success pull-right" ><span class="glyphicon glyphicon-plus"><a href='#' id='add_row'></a></span> Agregar a listado </button>
                     </div>  
-                    <div class="panel panel-primary" style="margin-top:55px;">
-                        <div class="panel-heading"><strong>Frecuencias agregadas</strong></div>
-                        <div class="panel-body" style="padding-top:5px; border:solid; border-color:#fafafa">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Día</th>
-                                        <th>Hora inicio</th>
-                                        <th>Hora fin</th>
-                                        <th><span class="glyphicon glyphicon-trash"></span></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <table id="tablaFrec">
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Lunes</td>
-                                            <td>8</td>
-                                            <td>10</td>
-                                            <td><input type="checkbox"></td>
-                                        </tr>
-                                    </table>
-                                </tbody>
-                            </table>
-                            <button type="button" class="btn btn-danger" onClick="deleteRow('tablaFrec');">Eliminar selección</button>
-                        </div>  
-                    </div>  
+                    <div id="contratado-frecuencias">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success">Aceptar</button>
@@ -88,98 +77,36 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-
+{%endblock%}
 {%endblock%}
 
 {%block "scripts"%}
     {{block.super}}
     <script type="text/javascript">
-        function AgregarBoton(nombreTS, valorM2){
-            
-
-            /*var clone = $('#template_row').clone();
-            clone.removeAttr('id');
-            clone.appendTo('#grid1');
-            console.log(clone.val())
-            */    
-
-
-            //window.template = '{{ servicios|slice:":83"|escapejs }}'.replace(
-            //    /(id_form-)\d+(-\w+)/g, 
-            //    "$1{% verbatim %}{{id}}{% endverbatim %}$2"
-            //);
-
-        }
-        function addRow(tableID, nombreTS,valorM2) {
-            console.log('HEASLDKAJSDLKJ')
- 
-            var table = document.getElementById(tableID);
- 
-            var rowCount = table.rows.length;
-            console.log(rowCount.value)
-
-            var row = table.insertRow(rowCount);
- 
-            var colCount = table.rows[0].cells.length;
- 
-            for(var i=0; i<colCount; i++) {
- 
-                var newcell = row.insertCell(i);
- 
-                newcell.innerHTML = table.rows[0].cells[i].innerHTML;
-                //alert(newcell.childNodes);
-                switch(newcell.childNodes[0].type) {
-                    case "text":
-                            newcell.childNodes[0].value = "";
-                            break;
-                    case "checkbox":
-                            newcell.childNodes[0].checked = false;
-                            break;
-                    case "select-one":
-                            newcell.childNodes[0].selectedIndex = 0;
-                            break;
-                }
-            }
-        }
-
-        function deleteRow(tableID) {
-            try {
-            var table = document.getElementById(tableID);
-            var rowCount = table.rows.length;
- 
-            for(var i=0; i<rowCount; i++) {
-                var row = table.rows[i];
-                var chkbox = row.cells[0].childNodes[0];
-                if(null != chkbox && true == chkbox.checked) {
-                    if(rowCount <= 1) {
-                        alert("Cannot delete all the rows.");
-                        break;
-                    }
-                    table.deleteRow(i);
-                    rowCount--;
-                    i--;
-                }
- 
- 
-            }
-            }catch(e) {
-                alert(e);
-            }
-        }
-
         $(function(){
-            console.log('asldkjalskdjalksdjlaksdjlkajsd')
-            $(this).parents("form").submit();
-        })
+            $(".frecuencias").click(function(event) {
+                event.preventDefault();
+                var contratado = $(event.target).attr("contratado");
+                $("#contratado-frecuencias").load("/contratado/" + contratado);
+                $("#agregar-frecuencia").unbind("click");
+                $("#agregar-frecuencia").click(function(event){
+                    $.ajax({
+                        url:"/contratado/" + contratado + "/agregar_frecuencia",
+                        data: {
+                            "csrfmiddlewaretoken": '{{ csrf_token }}',
+                            "servicio_contratado": contratado,
+                            "dia": $("#id_form-0-dia").val(),
+                            "hora_inicio": $("#id_form-0-hora_inicio").val(), 
+                            "hora_fin": $("#id_form-0-hora_fin").val()},
+                        method:"POST",
+                        success:function(){
+                            $("#contratado-frecuencias").load("/contratado/" + contratado);
+                        }
+                    })
+                });
+                $("#frecuencia-modal").modal();
 
-
+            });
+        });
     </script>
-
-    
-    
-
-
-
-
-
 {% endblock %}

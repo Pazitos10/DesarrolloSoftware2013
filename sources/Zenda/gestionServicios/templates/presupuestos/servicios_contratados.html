@@ -24,10 +24,11 @@
                             {% csrf_token %}
                             <tr>
                                 <td>{{servicio}}</td>
-                                <td><input type="text" name="valorM2"></td>
-                                <td><input type="Submit">
-                                    <input type="hidden" value="{{servicio.tipo_servicio.codigo_servicio}}" name="cod_servicio">
+                                <td><input type="text" name="cantidadM2"></td>
+                                <td><input type="Submit" value="$">
+                                    <input type="hidden" value="{{servicio.id}}" name="servicio_contratado">
                                 </td>
+                                <td>{{servicio.importe}}</td>
                             </tr>
                         </form>
                         {%endfor%}
