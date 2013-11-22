@@ -146,7 +146,6 @@ class Cliente(Rol):
 #MODIFICADO
 # === Gestion Tipos de servicio ============
 class TipoDeServicio(models.Model):
-<<<<<<< HEAD
     """docstring for TipoDeServicio"""
     productos = models.ManyToManyField('Producto')#, related_name = "servicios"
     codigo_servicio = models.CharField(max_length=4,primary_key=True)
