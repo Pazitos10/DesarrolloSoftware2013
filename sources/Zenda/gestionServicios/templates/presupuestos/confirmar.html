@@ -5,7 +5,7 @@
             <div class="well">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h6 class="panel-title"> <strong> Confirmación de presupuesto </strong></h6>
+                    <h6 class="panel-title"> <strong> CONFIRMAR PRESUPUESTO </strong></h6>
                 </div>
                 <div class="panel-body">                
                     <div id="busqueda">
@@ -14,44 +14,45 @@
                     <br>
                     <br>
                     <br>
-                    {%if cliente%}
-                        <div>
-                            <h5><b>DATOS DE CLIENTE</b></h5>
-                                <p><label>Nombre:   {{cliente.persona.nombre}}</label></p>
-                                <p><label>Apellido: {{cliente.persona.apellido}}</label></p>
-                                <p><label>Nro Documento: {{cliente.persona.nro_documento}}</label></p>
-                                <br>
-                                <h5><b>SELECCIONE UN CONTRATO</b></h5>  
-                                <div>
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>N° contrato</th>
-                                                <th>Fecha inicio</th>
-                                                <th>Fecha fin</th>
-                                                <th>Direccion</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        {%for presupuesto in presupuestos%}
-                                            <tr>
-                                                <td><span class="chk2a" commandargument="00968">
-                                                    <input id="ContentPlaceHolder1_gvDetalhe_chkSelect_0" type="checkbox" onclick="ManipulaGrid('ContentPlaceHolder1_gvDetalhe_chkSelect_0',968);" name="ctl00$ContentPlaceHolder1$gvDetalhe$ctl02$chkSelect">
-                                                </span></td>
-                                                <td>{{presupuesto.id}}</td>
-                                                <td>{{presupuesto.contrato.inicio}}</td>
-                                                <td>{{presupuesto.contrato.fecha_fin_real}}</td>
-                                                <td>{{presupuesto.domicilio_servicio}}</td>
-                                            </tr>
-                                        {%endfor%}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="form-actions" id="accionesAbm">                         
-                                    <button type="submit" class="btn btn-large btn-success"><strong>Aceptar</strong></button>
-                                </div>
-                        </div>
-                        {%endif%}
+                     {%if cliente%}
+                <div>
+                    <h5><b>DATOS DE CLIENTE</b></h5>
+                    <p><label>Nombre:   {{cliente.persona.nombre}}</label></p>
+                    <p><label>Apellido: {{cliente.persona.apellido}}</label></p>
+                    <p><label>Nro Documento: {{cliente.persona.nro_documento}}</label></p>
+                    <br>
+                    <h5><b>SELECCIONE UN PRESUPUESTO</b></h5>  
+                    <div>
+                            {% csrf_token %}
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>N° presupuesto</th>
+                                        <th>Fecha inicio</th>
+                                        <th>Fecha fin</th>
+                                        <th>Direccion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {%for presupuesto in presupuestos%}
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <tr>
+                                        <td>{{presupuesto.id}}</td>
+                                        <td>{{presupuesto.contrato.inicio}}</td>
+                                        <td>{{presupuesto.contrato.fecha_fin_real}}</td>
+                                        <td>{{presupuesto.domicilio_servicio}}</td>
+                                        <td>
+                                            <input type="Submit" value="Crear contrato">
+                                            <input type="hidden" value="{{presupuesto.id}}" name="id_presupuesto">
+                                        </td>
+                                    </tr>
+                                </form>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {%endif%}
                 </div>
 {% endblock %}

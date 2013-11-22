@@ -303,7 +303,7 @@ def confirmar_presupuesto(request):
         'buscar':buscador, 
         'cliente': cliente,
         'presupuestos': presupuestos
-            }, context_instance=RequestContext(request))
+        }, context_instance=RequestContext(request))
 
 
 
