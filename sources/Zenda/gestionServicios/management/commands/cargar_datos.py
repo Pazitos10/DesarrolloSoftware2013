@@ -36,10 +36,27 @@ PERSONAS = [ {
 "tipo_documento": "dni",
 "domicilio": "9 de Julio",
 "nro_documento": 11235678
-} ]
+}, { 
+"nombre": "Pep",
+"apellido": "Guardiola",
+"email": "pg@hotmail.com",
+"telefono": 463251,
+"tipo_documento": "dni",
+"domicilio": "9 de Julio",
+"nro_documento": 3534615
+}, { 
+"nombre": "Marcelo",
+"apellido": "Tinelli",
+"email": "mt@hotmail.com",
+"telefono": 643562,
+"tipo_documento": "dni",
+"domicilio": "9 de Julio",
+"nro_documento": 6854329
+}   ]
 
+PRODUCTOS = ["Detergente", "Lavandina", "Jabon", "Abrillantador de piso", "Esponja", "Cera para piso"]
+SERVICIOS = ["Limpieza vidrios", "Limpieza alfombra", "Limpieza oficina", "Limpieza sillones", "Limpieza salon", "Limpieza casa"]
 
-SERVICIOS = ["Limpieza vidrios","Limpieza alfombra","Limpieza oficiona","limpieza sillones","limpieza salon","limpieza casa"]
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -49,12 +66,23 @@ class Command(BaseCommand):
     help = 'Help text goes here'
 
     def handle(self, **options):
-    	for prod,cap  in zip(["Detergente", "Lavandina","Jabon","Abrillantador de piso","Esponja","Cera para piso"],[200,260,280,580,102,460]):
-			Producto.objects.create(
-				nombre= prod,
-				marca = 'generica',
-				unidad_medida='cm3',
-				capacidad=cap)
+            for prod,cap in zip(PRODUCTOS, [200, 260, 280, 580, 102, 460]):
+                        Producto.objects.create(
+                                nombre= prod,
+                                marca = 'generica',
+                                unidad_medida='cm3',
+                                capacidad=cap
+            )
+
+        count = 1
+        for nombre in SERVICIOS:
+            ts = TipoDeServicio()
+            ts.codigo_servicio = "L00" + str(count)
+            ts.nombre = nombre
+            ts.valorM2 = random.randint(15, 70)
+            ts.save()
+            ts.productos.add(Producto.objects.get(pk=random.randint(1, Producto.objects.count())))
+            count+=1
 
         personas = []       
         for persona in PERSONAS:
@@ -62,16 +90,14 @@ class Command(BaseCommand):
 
         while personas:
             index = random.randint(0, len(personas)-1)
-            Cliente.objects.create(persona = personas.pop(index))
 
-
-        productos = Producto.objects.all()
-        cod = 01
-        for producto,servicio in zip(productos,SERVICIOS):
-            ts = TipoDeServicio()
-            ts.codigo_servicio = "L0"+str(cod)
-            ts.nombre = servicio
-            ts.valorM2 = 10
-            ts.save()
-            ts.productos.add(producto)
-            cod = cod + 1 
+            r = random.randint(0, 1)
+            if r:
+                empleado = Empleado()
+                empleado.CUIL = random.randint(0, 9999999999)
+                empleado.nacimiento = datetime.now()
+                empleado.especialidad = TipoDeServicio.objects.get(pk='L00'+str(random.randint(1, TipoDeServicio.objects.count())))
+                empleado.persona = personas.pop(index)
+                empleado.save()    
+            else:
+                Cliente.objects.create(persona = personas.pop(index))
