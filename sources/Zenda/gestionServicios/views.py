@@ -51,26 +51,6 @@ def modificar_tipo_de_servicio(request):
     return render_to_response('tiposDeServicio/modificar.html', {'formulario': formulario, 'buscar':buscador}, context_instance=RequestContext(request))
 #END NUEVO
 
-def baja_tipo_de_servicio(request):
-    if request.method=='POST':
-        tipo_de_servicio = str(request.REQUEST["tipoDeServicio_1"])
-        tipo_de_servicio = get_object_or_404(TipoDeServicio, pk = tipo_de_servicio)
-        formulario = TipoDeServicioBajaForm(request.POST, instance=tipo_de_servicio)
-        if formulario.is_valid():
-            formulario.save()
-            return HttpResponseRedirect('/')
-    else:
-        if "tipoDeServicio_1" in request.REQUEST:
-            tipo_de_servicio = str(request.REQUEST["tipoDeServicio_1"])# SAQUE EL CAST,NOSE PORQUE NO FUNCIONABA
-            tipo_de_servicio = get_object_or_404(TipoDeServicio, pk = tipo_de_servicio)
-            buscador = BuscadorTipoDeServicioForm(request.REQUEST)
-            formulario = TipoDeServicioBajaForm(instance = tipo_de_servicio)
-        else:
-            buscador = BuscadorTipoDeServicioForm()
-            formulario = ""
-    return render_to_response('tiposDeServicio/baja.html', {'formulario': formulario, 'buscar':buscador}, context_instance=RequestContext(request))
-
-
 def alta_cliente(request):
     if request.method=='POST':
         formulario = ClienteAltaForm(request.POST)
@@ -202,7 +182,31 @@ def modificar_empleado(request):
 
 #END NUEVO
 
-
+def alta_turnos(request):
+    buscador = BuscadorClienteForm(request.GET)
+    if "cliente_1" in request.GET and request.GET["cliente_1"].isdigit():
+        cliente = int(request.GET["cliente_1"])
+        cliente = get_object_or_404(Cliente, pk = cliente)
+        presupuestos = cliente.presupuesto_set.all()
+    else:
+        cliente = None
+        presupuestos = None
+    if request.method=='POST':
+        formulario = PresupuestoForm(request.POST)
+        if formulario.is_valid():
+            presupuesto = formulario.save()
+            return HttpResponseRedirect('agregar_servicios')
+        print formulario.is_valid() 
+    else:
+        formulario = PresupuestoForm(initial = {"cliente": cliente})
+    return render_to_response('turnos/alta.html', {
+        'formulario': formulario, 
+        'buscar':buscador, 
+        'cliente': cliente,
+        'presupuestos': presupuestos
+        }, context_instance=RequestContext(request))
+        
+        
 
 def presupuesto(request):
     buscador = BuscadorClienteForm(request.GET)
