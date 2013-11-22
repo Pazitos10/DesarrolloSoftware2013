@@ -13,9 +13,7 @@
                     <thead>
                         <tr>
                             <th>Tipo de servicio</th>
-                            <th>Metros cuadrados</th>
                             <th></th>
-                            <th>Monto total</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -24,20 +22,15 @@
                                 <form action="" method="post">
                                     {% csrf_token %}
                                     <td>{{servicio.tipo_servicio}}</td>
-                                    <td><input type="text" name="cantidadM2" value="{{servicio.metros_cuad}}"></td>
                                         <input type="hidden" value="{{servicio.id}}" name="servicio_contratado">
                                         <input type="hidden" value="{{servicio.tipo_servicio.codigo_servicio}}" name="tipo_de_servicio">
                                     </td>
-                                    <td><input type="Submit" value="$" style="vertical-align:left">
-                                    <td>{{servicio.importe}}</td>
+                                    <td><input type="Submit" value="Asignar Empleado" style="vertical-align:left">
                                 </form>
                             </tr>
                             {%endfor%}
                     </tbody>
                 </table>
-                <div class="pull-right">
-                    <p> Total: <input type="text" value="{{total}}"></p>
-                </div>
             </div>
         </div>
     </div>    

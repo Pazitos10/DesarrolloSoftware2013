@@ -66,12 +66,12 @@ class Command(BaseCommand):
     help = 'Help text goes here'
 
     def handle(self, **options):
-    	for prod,cap in zip(PRODUCTOS, [200, 260, 280, 580, 102, 460]):
-			Producto.objects.create(
-				nombre= prod,
-				marca = 'generica',
-				unidad_medida='cm3',
-				capacidad=cap
+            for prod,cap in zip(PRODUCTOS, [200, 260, 280, 580, 102, 460]):
+                        Producto.objects.create(
+                                nombre= prod,
+                                marca = 'generica',
+                                unidad_medida='cm3',
+                                capacidad=cap
             )
 
         count = 1

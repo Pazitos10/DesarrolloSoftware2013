@@ -2,6 +2,7 @@ from gestionServicios.models import *
 from django import forms
 from django.forms.models import modelformset_factory
 from django.forms.formsets import formset_factory
+from django.forms.formsets import BaseFormSet
 
 from gestionServicios.lookups import *
 from selectable import forms as sforms
@@ -137,7 +138,9 @@ class DatosTSForm(forms.ModelForm):
 class FrecuenciasForm(forms.ModelForm):
     class Meta: 
         model = Frecuencia
-        exclude = ['lu','ma','mi','ju','vi','sa','DIA_DE_LA_SEMANA_CHOICES','servicio_contratado'] 
+        widgets = {
+            "servicio_contratado": forms.HiddenInput()
+        } 
 
 FrecuenciaFormset = formset_factory(FrecuenciasForm)        
 
@@ -145,9 +148,23 @@ FrecuenciaFormset = formset_factory(FrecuenciasForm)
 class ServicioContratadoForm(forms.ModelForm):
     class Meta:
         model = ServicioContratado
-        
+        widgets = {
+            "tipo_servicio": forms.TextInput()
+        }
+        fields = ("tipo_servicio", "fin")
 
-ServicioContratadoFormset = formset_factory(ServicioContratadoForm)
+    def __init__(self, *largs, **kwargs):
+        super(ServicioContratadoForm, self).__init__(*largs, **kwargs)
+        self.fields["fin"].widget.attrs["class"] = "datepicker"
+
+class ServicioContratadoBaseFormset(BaseFormSet):
+     def clean(self):
+        return super(ServicioContratadoBaseFormset, self).clean()
+
+ServicioContratadoFormset = modelformset_factory(ServicioContratado,
+    form=ServicioContratadoForm,
+    #formset=ServicioContratadoBaseFormset,
+    extra=0)
 
 class ClienteAltaForm(forms.ModelForm):
 
