@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block "contenido" %}
+    <div class="well">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="panel-title"> <strong> EMPLEADOS DISPONIBLES </strong></h6>
+            </div>
+            <div class="panel-body">
+                <!--{% csrf_token %}-->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Nro.Documento</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {%for empleado in empleados%}
+                            <tr>
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <td>{{empleado.nombre}}</td>
+                                    <td>{{empleado.apellido}}</td>
+                                    <td>{{empleado.nro_documento}}</td>
+                                        <input type="hidden" value="{{servicio.id}}" name="servicio_contratado">
+                                        <input type="hidden" value="{{servicio.tipo_servicio.codigo_servicio}}" name="tipo_de_servicio">
+                                    </td>
+                                    <td><input type="Submit" value="Asignar Empleado" style="vertical-align:left">
+                                </form>
+                            </tr>
+                            {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>    
+{% endblock %}
