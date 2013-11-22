@@ -336,28 +336,6 @@ def servicios_contratados(request):
      {'servicios': sc, 'total':total}, context_instance=RequestContext(request))
 
 
-
-def valorizar_presupuesto(request):
-    buscador = BuscadorClienteForm(request.GET)
-    if "cliente_1" in request.GET and request.GET["cliente_1"].isdigit():
-        cliente = int(request.GET["cliente_1"])
-        cliente = get_object_or_404(Cliente, pk = cliente)
-        presupuestos = cliente.presupuesto_set.filter(confirmado__nombre = 'Confirmado')
-    else:
-        cliente = None
-        presupuestos = None
-    
-    if request.method=='POST':
-        request.session['id_presupuesto'] = request.POST['id_presupuesto'] 
-        return HttpResponseRedirect('asignar/turno_servicios_contratados')
-
-    return render_to_response('turnos/alta.html', { 
-        'buscar':buscador, 
-        'cliente': cliente,
-        'presupuestos': presupuestos
-        }, context_instance=RequestContext(request))
-
-
 def turno_servicios_contratados(request):
     presupuesto = get_object_or_404(Presupuesto, id = request.session['id_presupuesto'])
     sc = presupuesto.serviciocontratado_set.all() #todos los SC de un presupuesto
