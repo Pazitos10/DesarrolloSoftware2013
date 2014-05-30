@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+	<meta charset="utf-8">	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>{% block "title" %}{% endblock %}</title>
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	{% block estilos %}
+    <link rel="stylesheet" href="{{STATIC_URL}}css/jquery-ui.css" type="text/css">
+	<link href="{{STATIC_URL}}css/bootstrap/bootstrap.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<!--COMENTO PARA ARREGLAR DATETIMEPICKER-->
+	<!--<link href="{{STATIC_URL}}css/bootstrap/bootstrap-datetimepicker.min.css" rel="stylesheet">-->
+	<!--END COMENTO PARA ARREGLAR DATETIMEPICKER-->
+	<link href="{{STATIC_URL}}css/styles/styles.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}selectable/css/dj.selectable.css" type="text/css" media="all" rel="stylesheet">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" type="text/css" id="" media="print, projection, screen" />
+    <!--NUEVO-->
+    <link rel="stylesheet" href="{{STATIC_URL}}bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+	<link rel="stylesheet" href="{{STATIC_URL}}css/jquery.datetimepicker.css"/>
+
+    <script type="text/javascript" language="javascript" src="{{STATIC_URL}}js/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/moment.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap/transition.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap/collapse.js"></script>
+	  	<!--END NUEVO-->
+  	<!--NUEVO by chiqui-->
+  	<script src="{{STATIC_URL}}js/spin.min.js"></script>
+  	<script src="{{STATIC_URL}}js/spin.js"></script>
+
+	<!--END NUEVO by chiqui-->
+	{%endblock estilos%}
+  	
+
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body style="padding-top: 50px;">
+    
+	<div class="navbar-wrapper" id="navbar-ext">
+			<div class="navbar navbar-inverse navbar-static-top nav-color navbar-fixed-top" id="nav-cont">
+				<div class="container">
+					<div class="navbar-header navbar-brandColor">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<!--nuevo_jueves-->
+					  	{%if request.session.rol_empleado or request.user.is_superuser %}
+							<a class="navbar-brand" href="{%url "home"%}" id="texto">Zenda</a>
+						{% else %}
+							<a class="navbar-brand" href="{%url "privado"%}" id="texto">Zenda</a>	
+						{% endif %}
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">	
+						<li id= "AcercaDe"><a id="texto" href="#about">Acerca De</a></li>
+					</ul>
+					<ul class="nav navbar-nav pull-right">
+						<li id="ayudaOnline"><a id="texto" href="#" class="ayuda-online-button"><span class="glyphicon glyphicon-question-sign"></span></a></li>
+						<li id= "CasillaMensaje"><a id="texto" href="{%url "casilla_mensaje"%}"><span class="glyphicon glyphicon-envelope"></span></a></li>
+						<li class="dropdown" id="dropdownBtn">
+				        	<a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownBtn">
+								 <!--nuevo_jueves-->
+								 {{ user }} <b class="caret"></b>
+							</a>
+
+							<ul class="dropdown-menu" id="menuDropDown">
+
+								<!-- agregado x claudio-->
+								<li><a href="{% url "password_change" %}"><span class="glyphicon glyphicon-cog"></span> cambiar clave</a></li>
+								<li class="divider"></li>
+								
+								<li class="divider"></li>
+								{%if request.user.groups.all.count > 1%}
+								<li><a href="{% url "vista_change_rol" %}"><span class="glyphicon glyphicon-sort"></span> Cambiar Rol</a></li>
+								{%endif%}
+								<li><a href="{% url "vista_logout" %}"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
+							</ul>
+				      	</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div><!--Fin Navbar Superior-->
+
+	<div class="panel-group" id="myaccordion">
+
+		{%if request.session.rol_empleado or request.user.is_superuser %}
+	  	<div class="panel panel-default">
+		    <div class="panel-heading">
+		      	<h4 class="panel-title">
+		        	<a data-toggle="collapse" data-parent="#myaccordion" href="#collapseOne">
+		          		Gestión de clientes
+		        	<b class="arrow glyphicon glyphicon-chevron-down"></b>
+		        	</a>
+		      	</h4>
+		    </div>
+		    <div id="collapseOne" class="panel-collapse collapse">
+		      	<div class="panel-body">
+					<ul>
+						
+						<li id= "AltaCliente" ><a href="{% url "cliente_alta" %}">Alta un nuevo cliente</a></li>
+						
+						
+						<li id= "ModificarCliente" ><a href="{% url "cliente_modificar" %}">Modificar datos de un cliente</a></li>
+						
+					</ul>
+		      	</div>
+		    </div>
+		</div><!--1er Panel-->
+		{% endif %}
+		
+		{%if request.session.rol_empleado or request.user.is_superuser %}
+		<div class="panel panel-default">
+		    <div class="panel-heading">
+			    <h4 class="panel-title">
+			    	<a data-toggle="collapse" data-parent="#myaccordion" href="#collapseTwo">
+			    		Gestión de personal
+			    	<b class="arrow glyphicon glyphicon-chevron-down"></b>
+			    	</a>
+			    </h4>
+		    </div>
+		    <div id="collapseTwo" class="panel-collapse collapse">
+		      	<div class="panel-body">
+		        	<ul>
+		        		{%if request.session.rol_empleado or request.user.is_superuser %}
+						<li id= "AltaEmpleado"><a href="{% url "empleado_alta" %}">Alta un nuevo empleado</a></li>
+						{% endif %}
+
+						{%if request.user.is_superuser %}
+						<li id= "ModificarEmpleado" ><a href="{% url "empleado_modificar" %}">Modificar un empleado</a></li>
+						{% endif %}
+						
+						{%if request.user.is_superuser %}
+						<li id= "AsignarEmpleado" ><a href="{% url "turno_alta" %}">Asignar empleado a trabajo</a></li>
+						{% endif %}
+
+						{% if 'gestionServicios.Consultar_turnos' in perms %}
+						<li id= "AsignarEmpleado" ><a href="{% url "empleados_por_fecha" %}">Consultar turnos</a></li>
+						{% endif %}
+
+						{%if request.session.rol_empleado%}			
+							<li><a href="{% url "turnos_empleado" %}">Consultar turnos</a></li>
+						{%endif%}
+						
+						{%if request.user.is_superuser %}
+						<li id= "BajaEmpleado"><a href="{% url "empleado_baja" %}">Dar de baja</a></li>
+						{% endif %}
+					</ul>
+		      	</div>
+		    </div>
+		</div><!--2do Panel-->
+		{% endif %}
+		
+		{%if request.user.is_superuser %}
+			<div class="panel panel-default">
+				<div class="panel-heading">
+				      <h4 class="panel-title">
+				        <a data-toggle="collapse" data-parent="#myaccordion" href="#collapseThree">
+				          Gestión de servicios
+				        <b class="arrow glyphicon glyphicon-chevron-down"></b>
+				        </a>
+				        
+				      </h4>
+				</div>
+				<div id="collapseThree" class="panel-collapse collapse">
+				    <div class="panel-body">
+				        <ul>
+				        	
+							<li id= "AltaTipoServicio"><a href="{% url "tipo_servicio_alta" %}">Alta tipo de servicio</a></li>
+							
+							
+							<li id= "ModificarTipoServicio"><a href="{% url "tipo_servicio_modificar" %}">Modificar tipo de servicio</a></li>
+							
+							
+							<li id= "BajaTipoServicio"><a href="{% url "tipo_servicio_baja" %}">Eliminar tipo de servicio</li>
+							
+						</ul>
+				    </div>
+				</div>
+			</div><!--3er Panel-->
+		{% endif %}
+		
+		<!--NUEVO-->
+		{%if request.session.rol_empleado or request.user.is_superuser %}
+			<div class="panel panel-default">
+				<div class="panel-heading">
+				      <h4 class="panel-title">
+				        <a data-toggle="collapse" data-parent="#myaccordion" href="#collapseFour">
+				          Gestión de presupuestos
+				          <b class="arrow glyphicon glyphicon-chevron-down"></b>
+				        </a>
+				        
+				      </h4>
+				</div>
+				<div id="collapseFour" class="panel-collapse collapse">
+				    <div class="panel-body">
+				        <ul>
+				        	{%if request.session.rol_empleado or request.user.is_superuser%}				        	
+							<li id= "generarPresupuesto"><a href="{% url "presupuesto_alta" %}">Nuevo presupuesto</li>
+							{% endif %}
+							
+							{%if request.user.is_superuser%}				        
+							<li id= "valorizarPresupuesto"><a href="{% url "presupuesto_valorizar" %}">Valorizar</li>
+							{% endif %}
+
+							{%if request.user.is_superuser%}				        
+							<li id= "alta_contrato" ><a href="{% url "presupuesto_confirmar" %}">Confirmar</li>
+							{% endif %}
+						</ul>
+				    </div>
+				</div>
+			</div><!--4to Panel-->
+		{% endif %}
+		<!--END NUEVO-->
+
+		{%if request.user.is_superuser%}				        
+			<div class="panel panel-default">
+				<div class="panel-heading">
+				      <h4 class="panel-title">
+				        <a data-toggle="collapse" data-parent="#myaccordion" href="#collapseFive">
+				          Gestión de contratos
+				          <b class="arrow glyphicon glyphicon-chevron-down"></b>
+				        </a>
+				        
+				      </h4>
+				</div>
+				<div id="collapseFive" class="panel-collapse collapse">
+				    <div class="panel-body">
+				        <ul>
+				        	
+							<li id= "RenegociacionContrato"><a href="{% url "contrato_renegociar" %}">Renegociar</li>
+							
+							
+							<li id= "BajaContrato"><a href="{% url "contrato_eliminar" %}">Eliminar contrato</li>
+							
+						</ul>
+				    </div>
+				</div>
+			</div><!--5to Panel-->
+		{% endif %}
+
+		{%if request.session.rol_empleado or request.session.rol_cliente or request.user.is_superuser%}			      
+			<div class="panel panel-default">
+			    <div class="panel-heading">
+			      	<h4 class="panel-title">
+			        	<a data-toggle="collapse" data-parent="#myaccordion" href="#collapseSix">
+			          		Listados
+			          		<b class="arrow glyphicon glyphicon-chevron-down"></b>
+			        	</a>
+			        	
+			      	</h4>
+			    </div>
+			    <div id="collapseSix" class="panel-collapse collapse">
+			      	<div class="panel-body">
+						<ul>
+								<!--
+								<li><a href="{% url "listar_presupuestos_usuario" %}">Presupuestos</a></li>
+								-->
+								{%if request.session.rol_empleado or request.user.is_superuser%}			      
+								<li><a href="{% url "listar_clientes" %}">Clientes</a></li>
+								{% endif%}
+
+								{%if request.session.rol_empleado or request.user.is_superuser%}			      
+								<li><a href="{% url "listar_empleados" %}">Empleados</a></li>
+								{% endif %}
+
+								{%if request.session.rol_empleado or request.user.is_superuser%}			      
+								<li><a href="{% url "parte_diario" %}">Parte Diario</a></li>
+								{% endif%}
+
+								{%if request.session.rol_empleado or request.session.rol_cliente or request.user.is_superuser%}			      
+								<li><a href="{% url "listar_presupuestos" %}">Presupuestos</a></li>
+								{% endif%}
+							
+						</ul>
+			      	</div>
+			    </div>
+
+			</div><!--6to Panel-->
+		{% endif %}
+		
+		<!--{%if request.user.is_superuser%}				        
+			<div class="panel panel-default">
+			    <div class="panel-heading">
+			      	<h4 class="panel-title">
+			        	<a data-toggle="collapse" data-parent="#myaccordion" href="#collapseSeven">
+			          		Gestión de Usuarios
+			          		<b class="arrow glyphicon glyphicon-chevron-down"></b>
+			        	</a>
+			        	
+			      	</h4>
+			    </div>
+			    <div id="collapseSeven" class="panel-collapse collapse">
+			      	<div class="panel-body">
+						<ul>
+							
+							<li id= "AltaUsuario" ><a href="{% url "vista_registro" %}">Alta un nuevo Usuario</a></li>
+							
+						</ul>
+			      	</div>
+			    </div>
+			</div><!--7mo Panel
+		{% endif %}-->
+		
+		{%if request.user.is_superuser %}
+			<div class="panel panel-default">
+			    <div class="panel-heading">
+			      	<h4 class="panel-title">
+			        	<a data-toggle="collapse" data-parent="#myaccordion" href="#collapseEight">
+			          		Estadísticas	
+			          		<b class="arrow glyphicon glyphicon-chevron-down"></b>
+			        	</a>
+			        	
+			      	</h4>
+			    </div>
+			    <div id="collapseEight" class="panel-collapse collapse">
+			      	<div class="panel-body">
+						<ul>
+							{%if request.session.rol_cliente %}
+								<li><a href="{% url "estadistica_cliente" %}">Clientes</a></li>
+							{% endif %}
+							
+							<li><a href="{% url "estadistica_presupuestos" %}">Presupuestos</a></li>
+							<li><a href="{% url "estadistica_empleados" %}">Empleados</a></li>
+							
+						</ul>
+			      	</div>
+			    </div>
+			</div><!--7mo Panel-->
+		{% endif %}
+	</div><!--Fin Acordeon-->	
+
+	<div class="pull-right contenido " id="cont-form">
+		{% block "contenido"%}{% endblock %}		
+	</div><!--Fin Contenido-->
+
+
+	<!-- Modal -->
+    <div class="modal fade" id="ayuda-online-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="ayuda-online-dialog modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Ayuda online</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="div-ayuda-online"></div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+	<!--
+	{% block breadcrumbs %}Home{% endblock %}
+	<div id="footer">
+		<p class="text-muted credit">Powered by ZendaTeam - Desarrollo de Software 2013 - UNPSJB - SEDE TRELEW</p>
+	</div>
+	-->
+
+	<!-- Sección Js -->
+	<!--COMENTO PARA ARREGLAR DATETIMEPICKER-->
+	<!--
+	<script type="text/javascript" src="{{STATIC_URL}}js/jquery-latest.js"></script>
+    <script src="{{STATIC_URL}}js/jquery.min.js"></script>
+	-->
+	<!--END COMENTO PARA ARREGLAR DATETIMEPICKER-->
+    <script src="{{STATIC_URL}}js/jquery-ui.js"></script>	<!--Necesario para selectable-->
+    <!--COMENTO PARA ARREGLAR DATETIMEPICKER-->
+	<!--
+	<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap/transition.js"></script>
+	-->
+	<!--END COMENTO PARA ARREGLAR DATETIMEPICKER-->
+	<script src="{{STATIC_URL}}js/bootstrap/bootstrap.min.js"></script>
+	<!--COMENTO PARA ARREGLAR DATETIMEPICKER-->
+	<!--
+    <script src="{{STATIC_URL}}js/bootstrap/bootstrap-datetimepicker.min.js"></script>
+    -->
+	<!--END COMENTO PARA ARREGLAR DATETIMEPICKER-->
+	<script src="{{STATIC_URL}}js/bootstrap/holder.js"></script>
+    <script type="text/javascript" src="{{STATIC_URL}}js/jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/chart/highcharts.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/chart/exporting.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap/bootstrap.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}selectable/js/jquery.dj.selectable.js"></script>
+	
+	<!--NUEVO-->  	
+  	<!--NECESARIO PARA ELIMINAR CONTRATO -->
+	<script src="{{STATIC_URL}}js/jquery.form.min.js"></script>
+	<script src="{{STATIC_URL}}js/demo.js"></script>
+
+	<!--END NECESARIO PARA ELIMINAR CONTRATO -->
+	<!--END NUEVO -->
+	
+	<script type="text/javascript">
+		$('.dropdown-toggle').dropdown();
+	</script>
+	
+	<!--COMENTO PARA ARREGLAR DATETIMEPICKER-->
+	<!--
+	<script>
+        $(document).ready(function() {
+          $('.datepicker').datetimepicker({pickDate: true,pickTime:false});
+        });
+    </script>
+    <script>
+    </script>
+    <!- END COMENTO PARA ARREGLAR DATETIMEPICKER-->
+
+  	<!-- Fin Sección Js -->
+	<script type="text/javascript">
+       $(function(){
+            $(".ayuda-online-button").click(function(event) {
+                event.preventDefault();
+                $("#div-ayuda-online").load("/ayuda_online");
+                $("#div-ayuda-online").unbind("click");
+                $("#ayuda-online-modal").modal();
+            });
+        });
+    </script>
+    
+	{% block "scripts" %}
+		{# Scripts de usuario #}
+ 
+		<script type="text/javascript" src="{{STATIC_URL}}/js/bootstrap-datetimepicker.js"></script>
+		<script type="text/javascript" src="{{STATIC_URL}}/js/bootstrap-datetimepicker.es.js"></script>
+
+
+	{% endblock "scripts" %}
+
+</body>
+</html>

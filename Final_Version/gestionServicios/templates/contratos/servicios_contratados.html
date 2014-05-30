@@ -1,0 +1,129 @@
+{% extends "presupuestos/alta.html"%}
+{% load crispy_forms_tags %}
+{% block "contenido_well"%}
+
+<div class="well"  id="formPresupuesto">
+    <div class="panel panel-primary" >
+        <div class="panel-heading" style="background-color:#428bca; color:white">
+            <h6 class="titulo panel-title"><strong>Servicios </strong></h6>
+        </div> 
+        <div class="panel-body">
+            <div class="container">
+                {% crispy buscar %}
+                {% if tipo_de_servicio != '' %}
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <table class="table" id="tablaFrecCabezera">
+                        <thead>
+                            <tr>
+                                <th>Nombre Servicio</th>
+                                <th>Código Servicio</th>
+                                <th>Fecha Fin</th>
+                                <th></th>
+                                <th>Acciones</th>
+                                <th>Precio por M<sup>2</sup></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {{ contratados.management_form }}
+                                {% for contratado in contratados %}
+                                <tr>
+                                    <td>{{contratado.instance}} </td>
+                                    {% for field in contratado %}
+                                        <td>{{field }}</td>
+                                    {% endfor %}
+                                    <td>
+                                        <a class=" btn btn-primary frecuencias" contratado="{{contratado.instance.pk}}">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                        </a>
+                                            <a class="btn btn-primary" href="{% url "quitar_servicio_contratado" presupuesto.pk contratado.instance.pk %}">
+                                            <span class="glyphicon glyphicon-minus-sign"></span>                     
+                                            </a-->
+                                    </td>
+                                    <td>$ {{contratado.instance.tipo_servicio.valorM2}}</td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                    <input class="btn btn-success pull-right" type="submit" name="botonSubmit" value="Confirmar">
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="frecuencia-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><strong>Agregar Frecuencia</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST">
+                        <div id="containerFrecAttr">
+                            {% crispy servicios %}
+                             <a class="btn btn-success pull-right" href="#" id="agregar-frecuencia">
+                                <span class="glyphicon glyphicon-plus"></span>Agregar a listado</a> 
+                        </div>  
+                        <div id="contratado-frecuencias">
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <input type="Submit" class="btn btn-success"  data-dismiss="modal" value="Aceptar">
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div><!-- /.well -->
+{%endblock%}
+
+{%block "scripts"%}
+    {{block.super}}
+    <script type="text/javascript">
+        $(function(){
+            function cargar_recuencias(contratado) {
+                $("#contratado-frecuencias").load("/contratado/" + contratado,function(){
+                    $(".quitarFrec").click(function(event){
+                        event.preventDefault();
+                        var url = $(event.currentTarget).attr("href");
+                        $.ajax({
+                            url: url,
+                            method: 'GET',
+                            success: function(){
+                                cargar_recuencias(contratado);
+                            }
+                        });
+                    });
+                });
+            }
+            $(".frecuencias").click(function(event) {
+                event.preventDefault();
+                var contratado = $(event.currentTarget).attr("contratado");
+                cargar_recuencias(contratado);
+                $("#agregar-frecuencia").unbind("click");
+                $("#agregar-frecuencia").click(function(event){
+                    $.ajax({
+                        url:"/contratado/" + contratado + "/agregar_frecuencia",
+                        data: {
+                            "csrfmiddlewaretoken": '{{ csrf_token }}',
+                            "servicio_contratado": contratado,
+                            "dia": $("#id_form-0-dia").val(),
+                            "hora_inicio": $("#id_form-0-hora_inicio").val(), 
+                            "hora_fin": $("#id_form-0-hora_fin").val()},
+                        method:"POST",
+                        success:function(){
+                            cargar_recuencias(contratado);
+                        }
+                    })
+                });
+                $("#frecuencia-modal").modal('show');
+                $('#frecuencia-modal').on('shown.bs.modal', function () {
+                    bindPickers();
+                });  
+            });
+        });            
+        
+    </script>
+{% endblock %}

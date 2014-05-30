@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block "title" %}Modificar cliente{% endblock %}
+{% block "contenido" %}
+	<div class="well">
+		<div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="titulo panel-title" > <strong> Modificar datos de cliente </strong></h6>
+            </div>    
+			<div class="panel-body">
+				<form action="" method="get">
+                    <div class="column" id="busqueda">
+                            {%csrf_token%}
+                            {% crispy buscar%} 
+                            <button class="search-button btn btn-default button-search " role="button" ><span class="glyphicon glyphicon-search"></span></button>
+                    </div>
+                </form>
+                <div>
+					{% crispy formulario %}
+					{%if formulario != ""%}
+						<h4>Campo obligatorio (*)</h4>
+					{%endif%}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}	
+{% block "scripts" %}
+	{{ block.super }}
+	<script type="text/javascript">
+	    $(document).ready(function() {
+	        $(':input[name=persona_0]').bind('djselectableselect', function(event, ui) {
+	            $(this).parents("form").submit();
+	        });
+	    });
+	</script>
+{% endblock "scripts" %}

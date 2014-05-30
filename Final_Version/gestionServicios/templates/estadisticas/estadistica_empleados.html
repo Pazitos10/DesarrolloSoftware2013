@@ -1,0 +1,202 @@
+
+{% extends "base.html" %}
+{% block "title"%} Zenda | Home {%endblock%}
+
+{% block "contenido" %}
+    <div class="well">
+        <div class="panel panel-primary " id="panel-interno">
+            <div class="panel-heading">
+                <h6 class="titulo panel-title"><strong> Estadistica empleados </strong></h6>
+            </div>
+
+            <div class="tabbable">
+               <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-stats"></a></li>
+                  <li><a href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-adjust"></a></li>
+                  <li><a href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-tasks"></a></li>
+                  
+                </ul>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab1"></div>
+                        <div class="tab-pane" id="tab2"></div>
+                        <div class="tab-pane" id="tab3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+{%block "scripts"%}
+
+    <script type="text/javascript">
+        $(function () {
+            var chart;
+            var empleados_servicio = []
+            {%for cambio in empleados_por_servicio%}
+               empleados_servicio.push(["{{cambio.0}}",{{cambio.1}}])
+            {%endfor%}
+            
+            $(document).ready(function () {
+                $('#tab2').highcharts({
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        width:950,
+                        height:420,
+                    },
+                    title: {
+                        text: 'Porcentaje de empleados por tipo de servicio'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: 'Cantidad de empleados',
+                        data: empleados_servicio
+                    }]
+                });
+            });
+            
+        });
+    </script>
+
+    <script type="text/javascript">
+    	$(function () {
+    		var servicios = []
+    		var datos = []
+    		{%for servicio in empleados_por_servicio%}
+               servicios.push("{{servicio.0}}")
+               datos.push({{servicio.1}})
+            {%endfor%}
+
+	        $('#tab1').highcharts({
+	            chart: {
+	                type: 'column',
+	                margin: [ 50, 50, 100, 80],
+	                width:950,
+                    height:420,
+	            },
+	            title: {
+	                text: 'Estadistica empleado'
+	            },
+	            xAxis: {
+	                categories: servicios,
+	                labels: {
+	                    rotation: -45,
+	                    align: 'right',
+	                    style: {
+	                        fontSize: '13px',
+	                        fontFamily: 'Verdana, sans-serif'
+	                    }
+	                }
+	            },
+	            yAxis: {
+	                min: 0,
+	                title: {
+	                    text: 'Cantidad'
+	                }
+	            },
+	            legend: {
+	                enabled: false
+	            },
+	            tooltip: {
+	                pointFormat: 'Cantidad de empleados: <b>{point.y}</b>',
+	            },
+	            series: [{
+	                name: 'Empleados',
+	                data: datos,
+	                dataLabels: {
+	                    enabled: true,
+	                    rotation: -90,
+	                    color: '#FFFFFF',
+	                    align: 'right',
+	                    x: 4,
+	                    y: 10,
+	                    style: {
+	                        fontSize: '13px',
+	                        fontFamily: 'Verdana, sans-serif',
+	                        textShadow: '0 0 3px black'
+	                    }
+	                }
+	            }]
+	        });
+	    });
+    
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+    		var serie = []
+    		{%for servicio in empleados_por_servicio%}
+               serie.push({name:"{{servicio.0}}" ,data:[0,{{servicio.1}},0]})
+            {%endfor%}
+
+            $('#tab3').highcharts({
+                chart: {
+                    type: 'area',
+                    width:950,
+                    height:420,
+                },
+                title: {
+                    text: 'Estadisticas presupuestos'
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    categories:['2013','2014','2015'] ,
+                    tickmarkPlacement: 'on',
+                    title: {
+                        enabled: false
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Porcentaje'
+                    }
+                },
+                tooltip: {
+                    pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f})<br/>',
+                    shared: true
+                },
+                plotOptions: {
+                    area: {
+                        stacking: 'percent',
+                        lineColor: '#ffffff',
+                        lineWidth: 1,
+                        marker: {
+                            lineWidth: 1,
+                            lineColor: '#ffffff'
+                        }
+                    }
+                },
+                series:serie,
+            });
+        });
+    </script>
+
+
+    <script>
+		$('[data-toggle=tab]').click(function(){
+			if ($(this).parent().hasClass('active')){
+				$($(this).attr("href")).toggleClass('active');
+			}
+		})
+	</script>
+
+{%endblock%}

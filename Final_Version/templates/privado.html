@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block "title"%} Zenda | Privado {%endblock%}
+
+{% block "contenido" %}
+    <div class="container">
+        <div class="page-header">
+            <h1 id="timeline">Actividades</h1>
+        </div>
+        <ul class="timeline">
+            {%for actividad in linea_de_tiempo%}
+                {%if actividad.tipo_actividad == "info"%}
+                <li>
+                    <div class="timeline-badge info"><i class="glyphicon glyphicon-check"></i></div>
+                {%elif actividad.tipo_actividad == "success"%}
+                <li class="timeline-inverted">
+                    <div class="timeline-badge success"><i class="glyphicon glyphicon-check"></i></div>
+                {%elif actividad.tipo_actividad == "warning"%}
+                <li class="timeline-inverted">
+                    <div class="timeline-badge warning"><i class="glyphicon glyphicon-check"></i></div>
+                {%elif actividad.tipo_actividad == "danger"%}
+                <li class="timeline-inverted">
+                    <div class="timeline-badge danger"><i class="glyphicon glyphicon-check"></i></div>
+                {%endif%}
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4 class="timeline-title">{{actividad.titulo}}</h4>
+                            <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>{{actividad.tiempo_de_actividad}}</small></p>
+                        </div>
+                        <div class="timeline-body">
+                            <p>{{actividad.descripcion}}</p>
+                        </div>
+                    </div>
+                </li>
+            {%endfor%}
+        </ul>
+    </div>
+{% endblock %}
+
+
+                    
+{% block "scripts" %}
+    {{block.super}}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var lis = $('.timeline li');
+            for  (var i=0; i< lis.length  ; i++) {
+                if (i % 2 === 0){  
+                    $(lis[i]).attr('class','timeline-inverted')
+                }
+            }
+        });
+    </script>
+    
+{% endblock "scripts" %}

@@ -1,0 +1,150 @@
+
+{% extends "base.html" %}
+{% block "title"%} Zenda | Home {%endblock%}
+
+{% block "contenido" %}
+    {% if notifications %}
+        {% for message in notifications %}
+            {%if message%}
+                <div class="alert alert-success">
+                        <ul class="messages">
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        </ul>
+                </div>
+            {%endif%}
+        {% endfor %}
+    {% endif %}
+
+    <div id="estadisticas-home">
+        <div class="well col-sm-6 col-md-4 estadistica-visual" id="estadistica-visual">
+            <div class="resultado-estadistica-visual col-sm-6 col-md-4">{{usuarios_totales}}</div>
+            <div class="titulo-estadistica-visual col-sm-6 col-md-4">Usuarios</div>
+            <div class="footer-estadistica-visual">Totales</div>
+        </div>
+        <div class="well col-sm-6 col-md-4 estadistica-visual" id="estadistica-visual">
+            <div class="resultado-estadistica-visual col-sm-6 col-md-4">{{contratos_ultimo_anio}}</div>
+            <div class="titulo-estadistica-visual col-sm-6 col-md-4">Contratos</div> 
+            <div class="footer-estadistica-visual">Año actual</div>
+            {% for s in solicitado_stats %}  
+                <p>{{s0}} {{s1}} {{s2}} {{s3}}</p>
+            {% endfor %}
+        </div>
+        <div class="well col-sm-6 col-md-4 estadistica-visual" id="estadistica-visual">
+            <div class="resultado-estadistica-visual col-sm-6 col-md-4">{{contratos_terminados_ultimo_anio}}</div>
+            <div class="titulo-estadistica-visual col-sm-6 col-md-4">Contratos</div>
+            <div class="footer-estadistica-visual">Finalizados</div>
+        </div>
+    <div>
+    <div class="column">
+        <div class="well col-sm-6 col-md-4  estadistica-well ">
+            <div id="presupuestos_14_dias" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        </div>
+        <div class="well col-sm-6 col-md-4  estadistica-well ">
+            <div id="empleados_por_servicio_image_pie"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{%block "scripts"%}
+
+    <script type='text/javascript'>
+        $(function () {
+            var datos1 = [];
+            {% for s in solicitado_stats %}  
+                datos1.push([Date.UTC({{s.0}},{{s.1}},{{s.2}}),{{s.3}}])
+            {% endfor %}
+
+            var datos2 = [];
+            {% for s in confirmado_stats %}  
+                datos2.push([Date.UTC({{s.0}},{{s.1}},{{s.2}}),{{s.3}}])
+            {% endfor %}
+
+            $('#presupuestos_14_dias').highcharts({
+            chart: {
+                type: 'spline',
+                width:950,
+                height:200,
+            },
+            title: {
+                text: 'Presupuestos solicitados'
+            },
+            subtitle: {
+                text: 'ultimas 2 semanas'
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%b',
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Cantidad'
+                },
+                min: 0
+            },
+            tooltip: {
+                formatter: function() {
+                        return '<b>'+ this.series.name +'</b><br/>'+
+                        Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y ;
+                }
+            },
+            
+            series: [{
+                name: 'Solicitados',
+                data:datos1,
+            },{
+                name: 'Confirmados',
+                data:datos2
+                
+            }]
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            var chart;
+            var empleados_servicio = []
+            {%for cambio in empleados_por_servicio%}
+               empleados_servicio.push(["{{cambio.0}}",{{cambio.1}}])
+            {%endfor%}
+
+            $(document).ready(function () {
+                $('#empleados_por_servicio_image_pie').highcharts({
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        width:950,
+                        height:200,
+                    },
+                    title: {
+                        text: 'Porcentaje de empleados por tipo de servicio'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: 'Cantidad de empleados',
+                        data: empleados_servicio
+                    }]
+                });
+            });
+            
+        });
+    </script>
+
+{%endblock%}

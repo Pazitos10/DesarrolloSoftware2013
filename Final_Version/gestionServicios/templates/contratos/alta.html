@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block "contenido" %}
+
+    {% if notifications %}
+        <div class="alert alert-danger">
+                <ul class="messages">
+                        {% for message in notifications %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                </ul>
+        </div>
+    {% endif %}
+    
+    <div class="well">
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="background-color:#428bca; color:white">
+                <h6 class="titulo panel-title"><strong>Creación de contrato</strong></h6>
+            </div> 
+            <div class="panel-body">
+            <form class="form-horizontal" id="form-confirmar" action="" method ="POST">
+                {% csrf_token%}
+                <div id="div_id_inicio" class="form-group">
+                    <label for="id_inicio" class="control-label col-lg-2 requiredField">
+                        Fecha inicio
+                        <span class="asteriskField">*</span>
+                    </label>
+                    <div class="controls col-lg-6">
+                        <input type="text" id="id_inicio" name="id_inicio" class="form-control datepicker col-lg-2" style="background-color:white">
+                    </div>
+                </div>
+                <div id="div_id_fin" class="form-group">
+                    <label for="id_fin" class="control-label col-lg-2 requiredField">
+                        Fecha fin
+                        <span class="asteriskField">*</span>
+                    </label>
+                    <div class="controls col-lg-6">
+                        <input type="text" id="id_fin" name="id_fin" class="form-control datepicker col-lg-2" style="background-color:white">
+                    </div>
+                </div>
+                <table class="table" id="tablaFrecCabezera">
+                        <thead>
+                            <tr>
+                                <th>Nombre Servicio</th>
+                                <th>Fecha Fin</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for servicio in servicios %}
+                                <tr>
+                                    <td>{{servicio}}</td>
+                                    <td><input type="text" name="fechaFin-{{forloop.counter}}" id="fechaFinServicio-{{forloop.counter}}" class="form-control datepicker col-lg-2" disabled="true"></td>
+                                </tr>
+                            {% endfor %}  
+                        </tbody>
+                    </table>
+                    <input id="btn-confirmar" class="btn btn-success pull-right" type="submit" name="botonSubmit" value="Confirmar">
+            </form>
+            </div>
+        </div>                
+    </div>                
+    <script type="text/javascript">
+        $("#id_inicio").attr("readonly",true);
+        $("#id_fin").attr("readonly",true);
+        $("input[name^='fechaFin']").attr("readonly",true);
+        $(function () {
+            $('#id_inicio').datetimepicker({
+                language: 'es',
+                showToday: true,
+                minDate: moment().subtract(1, "d"), 
+                pickTime: false,
+                daysOfWeekDisabled:[0],
+            });
+            
+        });
+
+        $(function () {
+            $( "input[name^='fechaFin']" ).datetimepicker({
+                    language: 'es',
+                    showToday: false,
+                    pickTime: false,
+                    daysOfWeekDisabled:[0],                   
+                });
+        });
+
+        document.getElementById("id_fin").disabled = false; //poner a true dsps
+
+        var fechaInicio = document.getElementById("id_inicio");
+        fechaInicio.onchange = function () {
+            //var inputs = document.getElementsByName('fechaFin');
+            if (this.value != "" || this.value.length > 0) {
+                var str_fecha = this.value;
+                var dia = String(str_fecha.split("/")[0]);
+                var mes = str_fecha.split("/")[1];
+                var anio = String(str_fecha.split("/")[2]);
+                var fechaFinMin = new Date(mes+'/'+dia+'/'+anio);
+                fechaFinMin.setMonth(fechaFinMin.getMonth() + 1);
+                $('input[name^="fechaFin-"]').each(function(){$(this).data("DateTimePicker").setMinDate(fechaFinMin)}); //ANDA DE DIEZ LPM!
+                $( "input[name^='fechaFin']" ).val('');
+                $( "input[name^='fechaFin']" ).prop('disabled', false);
+            }else{
+                $( "input[name^='fechaFin']" ).val('');
+                $( "input[name^='fechaFin']" ).prop('disabled', true);
+                $( "input[id='id_fin']" ).val('');
+            }
+        }
+
+        var maxDate = new Date();
+        var date = new Date();
+        var primerFecha;
+        var otraFecha;
+        //var inputs = document.getElementsByName('fechaFin');
+        var inputs = $('input[name^="fechaFin-"]');
+        console.log($('input[name^="fechaFin-"]').length);
+
+        //DESPUES SIMPLIFICAR ESTO CON UN FOR EACH
+        $('#tablaFrecCabezera').change(function(){
+            //Busco la primer fecha que colocaron y la tomo como la mayor
+            for(var i = 0; i < inputs.length; i++) {
+                primerFecha = document.getElementById("fechaFinServicio-".concat((1).toString())).value;
+                if(primerFecha != ""){
+                    maxDate.setDate(Number(primerFecha.split("/")[0])); 
+                    maxDate.setMonth(Number(primerFecha.split("/")[1]) - 1); 
+                    maxDate.setFullYear(Number(primerFecha.split("/")[2])); 
+                    break;
+                }
+            }
+            //Busco la mayor fecha de todas!
+            for(var i = 0; i < inputs.length; i++) {            
+                otraFecha = document.getElementById("fechaFinServicio-".concat((i+1).toString())).value;
+                if(otraFecha != ""){
+                    date.setDate(Number(otraFecha.split("/")[0])); 
+                    date.setMonth(Number(otraFecha.split("/")[1]) - 1); 
+                    date.setFullYear(Number(otraFecha.split("/")[2]));
+                    console.log(date);
+                    if (date.getTime() > maxDate.getTime()) {                          
+                        maxDate.setDate(Number(otraFecha.split("/")[0])); 
+                        maxDate.setMonth(Number(otraFecha.split("/")[1]) - 1); 
+                        maxDate.setFullYear(Number(otraFecha.split("/")[2])); 
+                    }
+                }
+            }    
+            document.getElementById("id_fin").value = String(maxDate.getDate()) + '/' + String(maxDate.getMonth() + 1) + '/' + String(maxDate.getFullYear());
+        });
+        
+
+        $('#form-confirmar').submit(function(){
+            $(this).find('input[type=submit]').attr('disabled', 'disabled');
+        });
+
+        $(document).ready(
+            function(){
+                document.getElementById("btn-confirmar").disabled=false;
+            }
+        );
+
+    </script>
+
+
+{% endblock %}

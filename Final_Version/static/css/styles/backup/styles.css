@@ -1,0 +1,349 @@
+.myimg {}
+
+.nav-color{
+	background-color: #FFFFFF;
+	color: #000000;
+	border-color: #EEEEEE;
+}
+
+/*config para boton "inicio" a la derecha de Zenda*/
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+		color: green;
+		background-color: #FFFFFF;
+}
+
+.navbar-inverse .navbar-nav > .active > a:hover{
+		background-color: #EEEEEE;
+}
+/************************************************/
+
+.navbar-inverse .navbar-nav > li > a {
+		color: green;
+}
+
+.navbar-inverse .navbar-brand {
+		color: green;
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus {
+	text-decoration: none;
+	color: green;
+}
+
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-brand:focus {
+	color: green;
+	background-color: #EEEEEE;
+}
+
+
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+		background-color: #FFFFFF;
+		color: green;
+		background-color: #EEEEEE;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+	color: green;
+	background-color: #EEEEEE;
+}
+
+/*Css config para boton dropdown de la derecha*/
+
+#dropdownBtn{
+	padding-bottom: 15px;
+	padding-top: 15px;
+}
+
+#dropdownBtn > a{
+	color:green;
+}
+
+#dropdownBtn > a:hover{
+	background-color:#EEEEEE;
+}
+
+#dropdownBtn > a:focus{
+	color: green;
+	background-color:#EEEEEE;
+}
+
+#menuDropDown li a{
+	color:#000000;
+}
+
+#menuDropDown li a:hover{
+	color:white;
+	background-color: green;
+}
+
+
+/*************************************************/
+
+
+/*estilos para form de claudio*/
+.well {
+		background-color: #F5F5F5;
+		border: 1px solid #E3E3E3;
+		border-radius: 4px 4px 4px 4px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+		margin-left: 0px;
+		margin-top: 0px;
+		min-height: 20px;
+		padding: 10px;
+		width: 970px;
+		height: 700px;
+}
+
+.panel {
+		background-color: #FFFFFF;
+		border: 1px solid transparent;
+		border-radius: 4px 4px 4px 4px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+		margin-bottom: 0px;
+}
+
+.panel-body{
+	margin-bottom: -5px;
+}
+
+.btn-primary{
+	margin-left: 18px;
+}
+
+/*****************************/
+
+.container2 {
+	margin-right: 10px;
+	margin-left: 10px;
+}
+
+.contenido{
+	float:right;
+	margin-right: 10px;
+	margin-bottom: 20px;
+	width: 76%;
+	height: 900px;
+	border-radius: 6px;
+	background-color: white;
+	margin-top: 90px;
+}
+
+#tablaFrec{
+	margin-top: 30px;
+}
+
+
+#footer{
+	clear: both;
+}
+
+.featurette-divider{
+	clear: both; 
+}
+
+
+.form-horizontal .control-label {
+	text-align: left;
+}
+
+.col-nCli {
+	width: 0%;
+	float: right;
+	margin-right: 30px;
+}
+
+
+#accionesPre > .btn{
+	float:right;
+	margin-right: 2px;
+	margin-left: 2px;
+}
+
+#formDatosCli > .form-group{
+	margin-left: -8px;
+
+} 
+
+#formPresupuesto {
+	float: left;
+	padding-bottom: 10px;
+}
+
+#formPrePresupuesto{
+	float: left;
+	padding-bottom: 10px;
+	height: 819px;
+}
+
+#formNewPresupuesto{
+	float: left;
+	height: 790px;
+}
+
+#formSelServices{
+	margin-top: 15px;
+	width: 38%;
+	float: right;
+}
+
+#formPreSelServ{
+	margin-top: 15px;
+	height: 455px;	
+}
+
+#formPreSelServ2{
+	margin-top: 15px;
+	height: 274px;
+	width: 61%;
+	float:left;	
+}
+
+#formValPresupuesto{
+	float: left;
+	height: 350px;
+}
+
+.form-control-static {
+	margin-left: 8px;
+}
+
+#checkboxes{
+	text-align: center;
+	vertical-align: middle;
+}
+
+#diasFrec > th {
+	text-align: center;
+}
+
+#checkboxes > td{
+	padding: 0px;
+}
+
+.zonaBusqueda  {
+	margin-top: 30px;
+}
+
+
+#TipoDoc{
+	height:40px;
+}
+
+.form-actions{
+	float:right;
+}
+
+.tab-content{
+	margin-top: 20px;
+}
+
+#myTab{
+	margin-bottom: 10px;
+}
+
+#abmTabContent .form-group{
+	margin-top: 10px;	
+	margin-bottom: 10px;
+}
+
+#ojoExaminar{
+	width: 14px;
+	height: 14px;
+	margin-left: 25px;
+	color: #333333;
+}
+
+#selectorDiasDeSemana{
+	width: 130px;
+	margin-bottom: 10px;
+}
+
+#spinner{
+	width:60px;
+	margin-right: 10px;
+}
+
+#horariosSpinners{
+	margin-bottom: 10px;
+	display: inline-block;
+}
+
+#myaccordion{ 
+	position:fixed; 
+	margin-top: 51px;
+	width:250px; 
+	border-radius:2px;
+	border: solid 1px #DDDDDD;
+	font-size: 14px;
+	font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#myaccordion .panel{
+	margin-top: -1px;
+}
+
+#myaccordion .panel-heading{
+	background-color: #FCFCFC; 
+	height:30px; 
+	text-indent: 5px; 
+	padding-top: 5px;
+	color: #228B22; 
+}
+#myaccordion .panel-heading a:hover{
+	color:#228B22;
+	text-decoration: underline;
+}
+
+
+#myaccordion .panel-body ul  { 
+	list-style: none;
+	margin-left: -30px
+}
+
+#myaccordion .panel-body ul li{
+	color: #333333; 
+}
+
+
+
+#myaccordion .panel-body ul li:hover{
+	color:#228B22; 
+	text-decoration: underline; 
+}
+
+#myaccordion .panel-body ul li a{
+	color: #333333; 
+}
+
+#myaccordion .panel-body ul li a:hover{
+	color:#228B22; 
+}
+
+#bordeIzquierdo{
+	width:253px;
+	height: 900px;
+	border-right: solid 1px #DDDDDD;
+	background-color: #FCFCFC; 
+}
+
+
+#footer {
+	padding-left: 10px;
+	padding-top: 10px;
+	height: 40px;
+	background-color: #f5f5f5;
+}
+
+#tablaFrec{
+	margin-top:0px;
+	width:58%;
+}
+
+#tablaSC{
+	margin-top: -1px;
+	width:40%;
+}
+

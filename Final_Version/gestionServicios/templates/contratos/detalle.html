@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load pagination_tags %}
+
+{% block "contenido" %}
+   
+    <div class="well">
+        <div class="panel panel-primary pull-left" id="tablaSC">
+            <div class="panel-heading">
+                <h6 class="titulo panel-title"> <strong> Detalle Servicios Presupuesto N° {{presupuesto.id}} </strong></h6>    
+            </div>
+            <div class="panel-body">
+                <table class="table" id="tablaFrecCabezera">
+                    {% autopaginate servicios 5%}
+                        <thead>
+                            <tr>
+                                <th>Servicio</th>
+                                <th>Fecha Fin</th>
+                                <th>Frecuencias </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {{ servicios.management_form }}
+                                {% for servicio in servicios %}
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+
+                                        <tr>
+                                            <td>{{servicio}} </td>
+                                            
+                                            <td>{{servicio.fin }}</td>
+                                            
+                                            <td>
+                                           <input type="Submit" class="btn btn-primary btn-block" value="ver" style="margin-left:0%">
+                                            <!--
+                                            <button class="turnos-frecuencia btn btn-warning" role="button" frecuencia="{{ja}}"><span class="glyphicon glyphicon-search"/>      
+                                            -->
+                                            </td>
+                                            <input type="hidden" value="{{servicio.id}}" name="servicio_contratado">
+                                            <input type="hidden" value="{{servicio.tipo_servicio.codigo_servicio}}" name="tipo_de_servicio">
+                                            <input type="hidden" value="True" name="Es_servicio">
+                                        </tr>
+                                    </form>
+                                {% endfor %}
+                        </tbody>
+                </table>
+                <a href="#myModal" role="button" class="btn btn-danger delete pull-right" data-toggle="modal" id="{{presupuesto.id}}" data-name="{{presupuesto.id}}"><span class="glyphicon glyphicon-trash"></span></a>   
+                {% paginate %}
+            </div>
+        </div><!-- Fin Servicios contrato-->
+
+        <div class="panel panel-primary pull-right" id="tablaFrec">
+            <div class="panel-heading">
+                <h6 class="panel-title" style="text-align:center; font-size:150%"> <strong> Frecuencias </strong></h6>
+            </div>
+            <div class="panel-body">
+                {%if frecuencias%}
+                    <!--{% csrf_token %}-->
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Dia</th>
+                                <th>Hora de inicio</th>
+                                <th>Hora de fin</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for frecuencia in frecuencias%}
+                                <tr>
+                                    <form action="" method="post">
+                                    {% csrf_token %}
+                                        <td>{{frecuencia.dia}}</td>
+                                        <td>{{frecuencia.hora_inicio}}</td>
+                                        <td>{{frecuencia.hora_fin}}</td>
+                                        <td>
+                                        <div class="col-md-12">
+                                                <button class="turnos-frecuencia btn btn-warning" role="button" frecuencia="{{frecuencia.pk}}"><span class="glyphicon glyphicon-search"></span></button>
+                                        </div>
+                                        </td>
+                                    </form>                       
+                                </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                {%endif%}
+            </div>
+        </div>   
+    </div> 
+
+     <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Eliminar Contrato</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Realmente desea eliminar el contrato <span id="modal_name"></span>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="POST" id="frmEliminar">
+                            {% csrf_token %}
+                            <input type="hidden" id="modal_idPresupuesto" name="presupuesto_id">
+                            <div class="form-group">
+                                <label for="motivos" class="col-sm-2 control-label">Motivo:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="motivo" name ="motivo" placeholder="Ingrese motivo de eliminación">
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cerrar</button>                            
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="turnos-frecuencia-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Turnos de frecuencia</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="div-turnos-frecuencia"></div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+{% endblock %}
+
+{%block "scripts"%}
+    <script type="text/javascript">
+       $(function(){
+            $(".turnos-frecuencia").click(function(event) {
+                event.preventDefault();
+                var frecuencia = $(event.target).attr("frecuencia");
+                $("#div-turnos-frecuencia").load("/frecuencia/" + frecuencia);
+                $("#div-turnos-frecuencia").load("/turnosDeFrecuencia/" + frecuencia);
+                $("#div-turnos-frecuencia").unbind("click");
+                $("#turnos-frecuencia-modal").modal();
+            });
+        });
+    </script>
+{% endblock %}

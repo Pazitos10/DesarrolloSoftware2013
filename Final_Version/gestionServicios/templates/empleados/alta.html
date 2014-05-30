@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block "title" %}Alta empleado{% endblock %}
+{% block "contenido" %}
+    <div class="well">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="titulo panel-title" > <strong> Nuevo empleado </strong></h6>
+            </div>    
+            <div class="panel-body">
+                {% if formulario != '' %}
+                <form action="" class="form-horizontal" method='post' id="form-general">
+                    {% crispy formpersona%}
+                    {% crispy formulario %}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Especialidad*</label>
+                        <div class="col-sm-10">
+                            <select class="select form-control selectpicker" id="select-svs" name ="especialidad">
+                                {%for servicio in servicios%}
+                                    <option value="{{servicio.pk}}" >
+                                    {{servicio.nombre}}
+                                </option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                    <h4>Campo obligatorio (*)</h4>
+                    <script type="text/javascript">
+                            var myValue = 'L001'
+                            $("#form-general").ready(
+                                $('#id_especialidad option[value="' + myValue + '"]').prop('selected', true)
+                            );
+                    </script>
+                    <input id="btn-confirmar" type="submit" value="Confirmar" class="btn btn-success pull-right">
+                </form>
+                {% else %}
+                    <form action="" method="get">
+                        <div class="row">
+                           <div id="custom-search-input">
+                                <div class="input-group col-md-5">
+                                    <input type="text" class="  search-query form-control" placeholder="Ingresar nro documento" name="Documento" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">
+                                            <span class=" glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                {% endif%}
+            </div>
+        </div>
+    </div>
+    <script>
+            $(function () {
+                $('#id_nacimiento').datetimepicker({
+                    showToday: true,
+                    pickTime: false,
+                });
+                
+            });
+            $('#form-general').submit(function(){
+                $(this).find('input[type=submit]').attr('disabled', 'disabled');
+            });
+
+            $(document).ready(
+                function(){
+                    document.getElementById("btn-confirmar").disabled=false;
+                }
+            );
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var existe = '{{existe}}';
+            if (existe==='si'){
+                $("#id_nro_documento").prop('disabled', true);
+                $("#id_tipo_documento").prop('disabled', true);
+                $("#id_apellido").prop('disabled', true);
+                $("#id_nombre").prop('disabled', true);
+                $("#id_domicilio").prop('disabled', true);
+                $("#id_telefono").prop('disabled', true);
+                $("#id_email").prop('disabled', true);
+
+            }
+        });
+    </script>
+
+    <script type="text/javascript">
+    $(".btn-success").click(function(event) {
+        $("#id_nro_documento").prop('disabled', false);
+        $("#id_tipo_documento").prop('disabled', false);
+        $("#id_apellido").prop('disabled', false);
+        $("#id_nombre").prop('disabled', false);
+        $("#id_domicilio").prop('disabled', false);
+        $("#id_telefono").prop('disabled', false);
+        $("#id_email").prop('disabled', false);
+
+    });
+    </script>
+    <script>
+        $('.selectpicker').selectpicker({
+              style: 'btn-info',
+              size: 4
+          });
+
+    </script>
+
+{% endblock %}  

@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load pagination_tags %}
+
+{% block "contenido" %}
+   
+    <div class="well">
+        <div class="panel panel-primary pull-left" id="tablaSC">
+            <div class="panel-heading">
+                <h6 class="titulo panel-title"> <strong> Servicios contratados </strong></h6>    
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                {% autopaginate servicios 5%}
+                    {%for servicio in servicios%}
+                    <tr>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <td>
+                                {%if servicio_contratado.pk == servicio.pk%}
+                                    <input type="Submit" class="btn btn-success btn-lg btn-block" value="{{servicio.tipo_servicio}}" style="margin-left:0%">
+                                {%else%}
+                                    <input type="Submit" class="btn btn-primary btn-lg btn-block" value="{{servicio.tipo_servicio}}" style="margin-left:0%">
+                                {%endif%}
+                                <input type="hidden" value="{{servicio.id}}" name="servicio_contratado">
+                                <input type="hidden" value="{{servicio.tipo_servicio.codigo_servicio}}" name="tipo_de_servicio">
+                                <input type="hidden" value="True" name="Es_servicio">
+                            </td>
+                        </form>
+                    </tr>
+                    {%endfor%}
+                {% paginate %}
+                </table>
+            </div>
+        </div><!-- Fin Servicios contrato-->
+
+        <div class="panel panel-primary pull-right" id="tablaFrec">
+            <div class="panel-heading">
+                <h6 class="panel-title" style="text-align:center; font-size:150%"> <strong> Frecuencias </strong></h6>
+            </div>
+            <div class="panel-body">
+                {%if frecuencias%}
+                    <!--{% csrf_token %}-->
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Dia</th>
+                                <th>Hora de inicio</th>
+                                <th>Hora de fin</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for frecuencia in frecuencias%}
+                                <tr>
+                                    <form action="" method="post">
+                                    {% csrf_token %}
+                                        <td>{{frecuencia.dia}}</td>
+                                        <td>{{frecuencia.hora_inicio}}</td>
+                                        <td>{{frecuencia.hora_fin}}</td>
+                                        <td>
+                                            <div class="col-md-12">
+                                                <div class="ui-group-buttons">
+                                                    <button class="turnos-frecuencia btn btn-warning" role="button" frecuencia="{{frecuencia.pk}}"><span class="glyphicon glyphicon-search"></span></button>
+                                                    <div class="or"></div>         
+                                                    <button class="modal-crear-turno btn btn-info" role="button" type="Submit" frecuencia="{{frecuencia.pk}}"><span class="glyphicon glyphicon-share-alt"></span></button>       
+                                                </div>
+                                            </div>
+                                            <input type="hidden" value="{{frecuencia.servicio_contratado.pk}}" name="servicio_contratado">
+                                            <input type="hidden" value="{{frecuencia.pk}}" name="frecuencia_id">
+                                            <input type="hidden" value="True" name="es_frecuencia">
+                                        </td>
+
+                                    </form>                       
+                                </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                {%endif%}
+            </div>
+        </div>   
+    </div> 
+
+    <!-- Modal -->
+    <div class="modal fade" id="turnos-frecuencia-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Turnos de frecuencia</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="div-turnos-frecuencia"></div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="empleados-tipo-servicio-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Empleados disponibles</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="div-empleados-tipo-servicio"></div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
+
+{%block "scripts"%}
+    <script type="text/javascript">
+       $(function(){
+            $(".turnos-frecuencia").click(function(event) {
+                event.preventDefault();
+                var frecuencia = $(event.target).attr("frecuencia");
+                $("#div-turnos-frecuencia").load("/frecuencia/" + frecuencia);
+                $("#div-turnos-frecuencia").unbind("click");
+                $("#turnos-frecuencia-modal").modal();
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+       $(function(){
+            $(".modal-crear-turno").click(function(event) {
+                event.preventDefault();
+                var servicio_contratado ="{{servicio_contratado.tipo_servicio.pk}}";
+                var frecuencia = $(event.target).attr("frecuencia");
+                $("#div-empleados-tipo-servicio").load("/turno/empleados_de_tipo_servicio/" + servicio_contratado +"/"+ frecuencia);
+                $("#div-empleados-tipo-servicio").unbind("click");
+                $("#empleados-tipo-servicio-modal").modal();
+            });
+        });
+    </script>
+
+{%endblock%}

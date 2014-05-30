@@ -1,0 +1,71 @@
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Frecuencias</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for servicio in servicios_contratados%}
+            <tr>
+                {% csrf_token %}
+                <td>{{servicio.tipo_servicio.nombre}}</td>
+                <td>{{servicio.presupuesto.contrato.inicio | date:"d/m/y"}}</td>
+                <td>{{servicio.fin | date:"d/m/y"}}</td>
+                <td><button class="frecuencias-servicio btn btn-warning" role="button" servicio="{{servicio.pk}}" id="frecuencia-button" ><span class="glyphicon glyphicon-search"></span></button></td>
+            </tr>
+        {%endfor%}
+    </tbody>
+</table>
+
+{%block "scripts"%}
+    <script type="text/javascript">
+        function obtener_contenido(servicio) {
+            var content = $.ajax({
+                url: "/servicio/"+servicio,
+                type: "GET",
+                dataType: "html",
+                async: false,
+                success: function(html) {
+                    var popover = $(".frecuencias-servicio")
+                    popover.attr('data-content', html);
+                    // just get the response
+                },
+                error: function() {
+                    // nothing
+                }
+            })
+        }
+        $(document).ready(function(event){
+            $(".frecuencias-servicio").popover({
+                html:'true',
+                title : "Frecuencias de servicio",
+                placement : 'bottom',
+                template: '<div class="popover popover-medium"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>',
+        
+            }).on("mouseenter", function (event) {
+                var _this = this;
+                var servicio = $(event.target).attr("servicio");
+                $(".frecuencias-servicio").popover({
+                    content: obtener_contenido(servicio)
+                });
+                $(this).popover("show");
+                $(".frecuencias-servicio").siblings(".popover").on("mouseleave", function () {
+                    $(_this).popover('hide');
+                });
+            }).on("mouseleave", function () {
+                var _this = this;
+                setTimeout(function () {
+                    if (!$(".frecuencias-servicio:hover").length) {
+                        $(_this).popover("hide")
+                    }
+                }, 100);
+            });
+        });
+
+    </script>
+
+{%endblock%}

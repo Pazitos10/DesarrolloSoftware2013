@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} Registro {% endblock %}
+{% block "contenido"%}
+    {% if notifications %}
+        <div class="alert alert-danger">
+                <ul class="messages">
+                        {% for message in notifications %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                </ul>
+        </div>
+    {% endif %}
+
+	<div class="well">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                    <h6 class="titulo panel-title"> <strong> Registrar usuario </strong></h6>
+            </div>
+            <div class="panel-body">
+					{% csrf_token%}
+                    {%if buscador != ""%}
+                        <form action="" method="get">
+                            <div class="column" id="busqueda">
+                                    {%csrf_token%}
+                                    {% crispy buscador%} 
+                                    <button class="search-button btn btn-default" role="button" ><span class="glyphicon glyphicon-search"></span></button>
+                            </div>
+                        </form>
+                    {%endif%}
+                    {%if cliente != ""%}
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>E-mail</th>
+                                    <th>Dirección</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <tr>
+                                        <td>{{cliente.persona.nombre}}</td>
+                                        <td>{{cliente.persona.apellido}}</td>
+                                        <td>{{cliente.persona.email}}</td>
+                                        <td>{{cliente.persona.domicilio}}</td>
+                                    </tr>
+                                </form>
+                            </tbody>
+                        </table>
+                    {%endif%}
+	               <p>{% crispy form %}</p>
+            </div>
+        </div>
+    </div>        
+{% endblock %}

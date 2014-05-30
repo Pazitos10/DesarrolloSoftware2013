@@ -1,0 +1,51 @@
+<html lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="/static/css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+    <div>
+
+        <div class="invoice-title" style="border-bottom-style: inset;">
+          <h2><img src="{{STATIC_URL}}img/Zendaletra.png" width='150' height='50'></h2>
+          <!--h5 class="pull-right">La Higiene Primero</h5-->
+        </div><br>
+        <div>
+                <table class="table table-striped">
+                    <thead>
+                        <caption><h2>Listado de Empleados</h2></caption>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>DNI</th>
+                            <th>Domicilio</th>
+                            <th>Telefono</th>
+                            <th>E-mail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for cliente in cliente%}   
+                                <tr>
+                                    <td>{{cliente.persona.nombre}}</td>
+                                    <td>{{cliente.persona.apellido}}</td>
+                                    <td>{{cliente.persona.nro_documento}}</td>
+                                    <td>{{cliente.persona.domicilio}}</td>
+                                    <td>{{cliente.persona.telefono}}</td>
+                                    <td>{{cliente.persona.email}}</td>
+                                </tr>
+                         
+                        {%endfor%}
+                    </tbody>
+                </table>
+                Generado: {{hoy}}
+
+          
+        </div>
+    </div>    
+
+
+

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>{% block "title" %}{% endblock %}</title>
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+
+    <link rel="stylesheet" href="{{STATIC_URL}}css/jquery-ui.css" type="text/css">
+	<link href="{{STATIC_URL}}css/bootstrap/bootstrap.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+	<link href="{{STATIC_URL}}css/bootstrap/bootstrap-datetimepicker.min.css" rel="stylesheet">
+	<link href="{{STATIC_URL}}css/styles/styles.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}selectable/css/dj.selectable.css" type="text/css" media="all" rel="stylesheet">
+
+
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+	<div class="navbar-wrapper" id="navbar-ext">
+			<div class="navbar navbar-inverse navbar-static-top nav-color navbar-fixed-top" id="nav-cont">
+				<div class="container">
+					<div class="navbar-header navbar-brandColor">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						{%if request.session.rol_empleado or request.user.is_superuser %}
+							<a class="navbar-brand" href="{%url "home"%}" id="texto">Zenda</a>
+						{% else %}
+							<a class="navbar-brand" href="{%url "privado"%}" id="texto">Zenda</a>	
+						{% endif %}
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">	
+						<li id= "AcercaDe"><a id="texto" href="#about">Acerca De</a></li>
+						<li id= "Contacto"><a id="texto" href="#contact">Contacto</a></li>
+					</ul>
+					<ul class="nav navbar-nav pull-right">
+						<li class="dropdown" id="dropdownBtn">
+				        	<a class="dropdown-toggle" data-toggle="dropdown" href="#dropdownBtn">
+								 <!--nuevo_jueves-->
+								 {{ user }} <b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu" id="menuDropDown">
+								<li><a href="#"><span class="glyphicon glyphicon-cog"></span> Configuración</a></li>
+								<li class="divider"></li>
+								<li><a href="{% url "vista_logout" %}"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
+							</ul>
+				      	</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div><!--Fin Navbar Superior-->
+
+	{% if notifications %}
+	<div class="alert alert-success">
+			<ul class="messages">
+			        {% for message in notifications %}
+			        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+			        {% endfor %}
+			</ul>
+	</div>
+	{% endif %}
+
+	<div class="panel-group" id="myaccordion">
+		<div class="panel panel-default">
+		    <div class="panel-heading">
+		      	<h4 class="panel-title">
+		        	<a data-toggle="collapse" data-parent="#myaccordion" href="#collapseSix">
+		          		Listados
+		        	</a>
+		      	</h4>
+		    </div>
+		    <div id="collapseSix" class="panel-collapse collapse">
+		      	<div class="panel-body">
+					<ul>
+						<li><a href="{% url "listar_presupuestos_usuario" %}">Presupuestos</a></li>
+						<li><a href="{% url "listar_empleados" %}">Empleados</a></li>
+						<li><a href="{% url "listar_presupuestos" %}">Presupuestos</a></li>
+						<li><a href="{% url "empleados_por_fecha" %}">Consultar turnos</a></li>
+						
+		      	</div>
+		    </div>
+	</div><!--Fin Acordeon-->	
+
+		
+
+	<div class="pull-right contenido " id="cont-form">
+		{% block "contenido"%}{% endblock %}		
+	</div><!--Fin Contenido-->
+
+	<div id="footer">
+		<p class="text-muted credit">Powered by ZendaTeam - Desarrollo de Software 2013 - UNPSJB - SEDE TRELEW</p>
+	</div>
+
+	<!-- Sección Js -->
+    <script src="{{STATIC_URL}}js/jquery.min.js"></script>
+    <script src="{{STATIC_URL}}js/jquery-ui.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap/transition.js"></script>
+	<script src="{{STATIC_URL}}js/bootstrap/bootstrap.min.js"></script>
+	<script src="{{STATIC_URL}}js/moment.min.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap/bootstrap-datetimepicker.min.js"></script>
+	<script src="{{STATIC_URL}}js/bootstrap/holder.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap/bootstrap.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}selectable/js/jquery.dj.selectable.js"></script>
+	<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap/collapse.js"></script>
+	<script type="text/javascript">
+		$('.dropdown-toggle').dropdown();
+	</script>
+
+	<script>
+        $(document).ready(function() {
+          $('.datepicker').datetimepicker({pickDate: true,pickTime:false});
+        });
+
+        function bindPickers(){
+            $('.timepicker').datetimepicker({
+                pickDate: false,
+                format: "HH:mm:ss",
+            });
+        };
+    </script>
+
+  	<!-- Fin Sección Js -->
+	{% block "scripts" %}
+		{# Scripts de usuario #}
+	{% endblock "scripts" %}
+
+</body>
+</html>

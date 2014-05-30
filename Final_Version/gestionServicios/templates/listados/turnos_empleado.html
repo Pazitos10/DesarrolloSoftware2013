@@ -1,0 +1,23 @@
+<table class="table table-hover">
+    <thead>
+        <tr>
+        	<th>Domicilio de servicio</th>
+        	<th>Servicio</th>
+            <th>Hora de inicio</th>
+            <th>Hora de fin</th>
+        </tr>
+        </thead>
+        <tbody>
+            {%for turno in turnos_frecuencia%}
+            <tr>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <td>{{turno.frecuencia.servicio_contratado.presupuesto.domicilio_servicio}}</td>
+                    <td>{{turno.frecuencia.servicio_contratado.tipo_servicio}}</td>
+                    <td>{{turno.hora_inicio}}</td>
+                    <td>{{turno.hora_fin}}</td>
+                </form>
+            </tr>
+            {%endfor%}
+    </tbody>
+</table>

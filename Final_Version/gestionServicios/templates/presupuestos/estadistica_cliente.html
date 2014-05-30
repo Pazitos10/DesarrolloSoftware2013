@@ -1,0 +1,72 @@
+
+
+<div id="tab1"></div>
+
+{%block "scripts"%}
+    <script type='text/javascript'>
+        $(function () {
+            var datos1 = [];
+            {% for s in solicitados %}  
+                datos1.push([Date.UTC({{s.0}},{{s.1}},{{s.2}}),{{s.3}}])
+            {% endfor %}
+
+            var datos2 = [];
+            {% for s in confirmados %}  
+                datos2.push([Date.UTC({{s.0}},{{s.1}},{{s.2}}),{{s.3}}])
+            {% endfor %}
+
+            var datos3 = [];
+            {% for s in Rechazados %}  
+                datos2.push([Date.UTC({{s.0}},{{s.1}},{{s.2}}),{{s.3}}])
+            {% endfor %}
+
+            $('#tab1').highcharts({
+            chart: {
+                type: 'spline',
+                width:500,
+                height:300,
+            },
+            title: {
+                text: 'Estadisticas presupuestos'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%b'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Cantidad'
+                },
+                min: 0
+            },
+            tooltip: {
+                formatter: function() {
+                        return '<b>'+ this.series.name +'</b><br/>'+
+                        Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y ;
+                }
+            },
+            
+            series: [{
+                name: 'Solicitados',
+                data:datos1,
+            },{
+                name: 'Confirmados',
+                data:datos2
+                
+            },{
+                name:'Rechazados',
+                data:datos3
+            }]
+            });
+        });
+    </script>
+
+
+
+{%endblock%}

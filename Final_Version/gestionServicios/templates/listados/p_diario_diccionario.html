@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap/bootstrap.min.css">
+    <script src="{{STATIC_URL}}js/wkhtmltopdf.tablesplit.js"></script>
+</head>
+<body>
+    <div class="well">
+        <div><h2><img src="{{STATIC_URL}}img/Zendaletra.png" width='150' height='50'></h2></div>
+        <div class="panel panel-primary"> 
+            <div class="panel-heading">
+                <div class="panel-title" style="text-align:center"><strong><h4>Parte diario:{{fecha}}</h4></strong></div>
+            </div>
+            <div class="panel-body">
+                {% for k,v in presupuestos.iteritems %}
+                        {% for kc,vc in cabeceras.iteritems %}
+                            {% if k == kc %}
+                                <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h4>{{vc}}</h4>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="panel-body">
+                            {% for nombre_serv,turnos in v.iteritems  %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="panel-title">{{nombre_serv}}</div>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <td>Empleado</td>
+                                            <td>Hora Inicio</td>
+                                            <td>Hora Fin</td>
+                                        </thead>
+                                        {% for pkt,datos_turno in turnos.iteritems  %}
+                                        <tbody>
+                                                    <td>{{datos_turno.0}}</td>
+                                                    <td>{{datos_turno.1}}</td>
+                                                    <td>{{datos_turno.2}}</td>
+                                        </tbody>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <h5>Generado {{hoy}}</h5>
+    </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<div class="container">
+	<div class="row">
+		<div class="col-sm-4 col-md-4 user-details">
+            <div class="user-info-block">
+                <div class="user-heading">
+                    <h3>{{cliente.persona.nombre}} {{cliente.persona.apellido}}</h3>
+                    <span class="help-block">Cliente</span>
+                </div>
+                <ul class="navigation">
+                    <li class="active">
+                        <a data-toggle="tab" href="#information">
+                            <span class="glyphicon glyphicon-user"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#settings">
+                            <span class="glyphicon glyphicon-cog"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#email">
+                            <span class="glyphicon glyphicon-envelope"></span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="user-body">
+                    <div class="tab-content">
+                        <div id="information" class="tab-pane active">
+                            <big>Tipo de documento:</big> {{cliente.persona.tipo_documento}}<br/>
+                            <big>Ńúmero de documento:</big> {{cliente.persona.nro_documento}}<br/>
+                            <big>Domicilio:</big> {{cliente.persona.domicilio}}<br/>
+                            <big>Telefono:</big> {{cliente.persona.telefono}}<br/>
+                        </div>
+                        <div id="settings" class="tab-pane">
+                        	{%if cliente.persona.user != None%}
+                            	<big> Nombre de usuario:</big> {{cliente.persona.user}}<br/>
+                            {%else%}
+                            	<big>Nombre de usuario:</big><br/>
+                            {%endif%}
+                            <big>Contraseña:</big> {{cliente.persona.user.password}}<br/>
+                            {%if cliente.persona.user.is_active%}
+                            	<big>Estado:</big> Activo<br/>
+                            {%elif cliente.persona.user != None and not cliente.persona.user.is_active%}
+                            	<big>Estado:</big> No activo<br/>
+                            {%else%}
+                            	<big>Estado:</big><br/>
+                            {%endif%}
+                        </div>
+                        <div id="email" class="tab-pane">
+                            <big>E-mail:</big> {{cliente.persona.email}}<br/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>

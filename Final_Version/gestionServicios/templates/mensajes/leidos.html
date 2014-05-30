@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{%block "contenido"%}
+	<div class="container">
+	    <hr />
+	    <div class="row">
+	        <div class="col-sm-3 col-md-2 nav-mail-opcion">
+	            <ul class="nav nav-pills nav-stacked">
+	                <li><a href="{%url "casilla_mensaje"%}">
+	                	{%if cantidad_mensajes > 0%}
+	                		<span class="badge pull-right">{{cantidad_mensajes}}</span>
+	                	{%endif%}
+	                	 Principal </a>
+	                </li>
+	                <li><a href="{%url "mensajes_no_leidos"%}">
+	                	{%if cantidad_no_leidos > 0%}
+	                		<span class="badge pull-right">{{cantidad_no_leidos}}</span>
+	                	{%endif%}
+	                	No leidos</a>
+	                </li>
+	                <li class="active"><a href="{%url "mensajes_leidos"%}">
+						{%if cantidad_leidos > 0%}
+	                		<span class="badge pull-right">{{cantidad_leidos}}</span>
+	                	{%endif%}
+	                	Leidos</a>
+	                </li>
+	                <li><a href="{%url "enviar_mail"%}">Enviar mail</a></li>
+	            </ul>
+	        </div>
+	        <div class="tab-content">
+				<div class="col-sm-9 col-md-10">
+		            <!-- Nav tabs -->
+		            <ul class="nav nav-tabs">
+		                <li class="active"><a href="#home" data-toggle="tab"><span class="glyphicon glyphicon-inbox"></span>Mensaje</a></li>
+		            </ul>
+		            <!-- Tab panes -->
+		            <div class="tab-content">
+		                <div class="tab-pane fade in active" id="home">
+		                	<form method='post'>
+		                		{%csrf_token%}
+		                    	{%for mensaje in leidos%}
+				                    <li class="list-group-item read" style="width:800px;height:50px">
+                                        <a id="submit-msj" href="{% url "leer_mensaje" mensaje.pk %}">
+                                            <span class="glyphicon glyphicon-ok-circle pull-left"></span>
+                                    
+                                            <span class="name pull-left" style="min-width: 120px; display: inline-block;"> {{mensaje.asunto}} </span>
+                                            <span class="text-muted pull-left" style="font-size: 11px;">- {{mensaje.descripcion}}</span>
+                                            <span class="badge pull-right" style="font-size: 11px;"> {{mensaje.fecha_envio}}</span>
+                                            <span class="pull-right">
+                                                <span class="glyphicon glyphicon-dashboard"></span>
+                                            </span>
+                                            <a id="eliminar-msj" href="{%url "eliminar_mensaje" mensaje.pk %}">
+                                                <span class="glyphicon glyphicon-trash  pull-right" style="color:red"></span>
+                                            </a>
+                                        </a>
+                                    </li>       
+								{%endfor%}
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>       
+	    </div>
+	</div>
+{%endblock%}
+
+{% block "scripts" %}
+    {{block.super}}
+    <script>
+        $("#submit-msj span").attr("style","margin-right:10px")
+    </script>
+
+{% endblock "scripts" %}
+

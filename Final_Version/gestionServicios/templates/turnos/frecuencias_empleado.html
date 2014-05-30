@@ -1,0 +1,44 @@
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Frecuencia</th>
+            <th>Hora de inicio</th>
+            <th>Hora de fin</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            {%for turno in turnos%}
+            <tr>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <td>{{turno.frecuencia.dia}}</td>
+                    <td>{{turno.hora_inicio}}</td>
+                    <td>{{turno.hora_fin}}</td>
+                </form>
+            </tr>
+            {%endfor%}
+    </tbody>
+</table>
+
+{%block "script"%}
+
+    <script type="text/javascript">
+
+        $(".quitarTurno").click(function(event){
+            event.preventDefault();
+            var url = $(event.currentTarget).attr("href");
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function(){
+                    var empleado = $(event.target).attr("empleado");
+                    var frecuencia = $(event.target).attr("frecuencia");
+                    $("#div-eliminar-turno").load("/empleado/"+ empleado+"/"+frecuencia);
+                },
+            });
+        });
+    </script>
+
+{%endblock%}

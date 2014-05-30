@@ -1,0 +1,172 @@
+{% load pagination_tags %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Turnos</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% autopaginate empleados_disponibles 4%}
+        {%for empleado in empleados_disponibles%}
+            <tr>
+                {% csrf_token %}
+                <td>{{empleado.persona.nombre}}</td>
+                <td>{{empleado.persona.apellido}}</td>
+                <td>
+                    <div class="col-md-12">
+                        <div class="ui-group-buttons">
+                            <button class="turnos-empleado btn btn-warning" role="button" empleado="{{empleado.pk}}" id="turno-button" ><span class="glyphicon glyphicon-search"></span></button>
+                            <div class="or"></div>
+                            <button class="crear-turno btn btn-info" role="button" type="Submit" empleado="{{empleado.pk}}">Crear</button>
+                            <div class="or"></div>
+                            <button class="eliminar-turno btn btn-danger" role="button" type="Submit" empleado="{{empleado.pk}}">Eliminar</button>                   
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {%endfor%}
+        {% paginate %}
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="crear-turno-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="turno-dialog modal-dialog">
+        <div class="turno-content modal-content">
+            <div class="modal-header">
+                <button type="button" class="cerrar-turno close" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Crear turno</h4>
+            </div>
+             <div class="modal-body">
+                <div id="div-crear-turno"></div>
+            </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="eliminar-turno-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="turno-dialog modal-dialog">
+        <div class="turno-content modal-content">
+            <div class="modal-header">
+                <button type="button" class="cerrar-turno close" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Eliminar turno</h4>
+            </div>
+             <div class="modal-body">
+                <div id="div-eliminar-turno"></div>
+            </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+{%block "scripts"%}
+    <script type="text/javascript">
+    	function obtener_contenido(empleado) {
+    		var content = $.ajax({
+	            url: "/empleado/"+empleado+"/"+{{frecuencia.pk}},
+	            type: "GET",
+	            dataType: "html",
+	            async: false,
+	            success: function(html) {
+	            	var popover = $(".turnos-empleado")
+	            	popover.attr('data-content', html);
+	                // just get the response
+	            },
+	            error: function() {
+	                // nothing
+	            }
+        	})
+    	}
+        $(document).ready(function(event){
+    	    $(".turnos-empleado").popover({
+    	    	html:'true',
+    	    	title : "Turnos de empleado",
+    	        placement : 'bottom',
+                template: '<div class="popover popover-medium"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>',
+        
+    	    }).on("mouseenter", function (event) {
+                var _this = this;
+                var empleado = $(event.target).attr("empleado");
+                $(".turnos-empleado").popover({
+                    content: obtener_contenido(empleado)
+                });
+                $(this).popover("show");
+                $(".turnos-empleado").siblings(".popover").on("mouseleave", function () {
+                    $(_this).popover('hide');
+                });
+            }).on("mouseleave", function () {
+                var _this = this;
+                setTimeout(function () {
+                    if (!$(".turnos-empleado:hover").length) {
+                        $(_this).popover("hide")
+                    }
+                }, 100);
+            });
+        });
+
+	</script>
+
+    <script type="text/javascript">
+        $(".crear-turno").click(function(event) {
+            event.preventDefault();
+            var empleado = $(event.target).attr("empleado");
+            var frecuencia = {{frecuencia.pk}};
+            $("#div-crear-turno").load("/empleado/" + empleado +"/"+ frecuencia+"/crear_turno_empleado");
+            $("#div-crear-turno").unbind("click");
+            $("#crear-turno-modal").modal({
+                show: true,
+                keyboard: true,
+                backdrop: 'static'
+            });
+            $('#crear-turno-modal').on('shown.bs.modal', function () {
+                bindPickers();
+            });         
+        });
+    </script>
+
+    <script type="text/javascript">
+         $(".cerrar-turno").click(function () {
+            $("#crear-turno-modal.in").modal('hide');
+            $("#eliminar-turno-modal.in").modal('hide');
+            
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(".eliminar-turno").click(function(event) {
+            event.preventDefault();
+            var empleado = $(event.target).attr("empleado");
+            var frecuencia = {{frecuencia.pk}};
+            $("#div-eliminar-turno").load("/empleado/"+ empleado+"/"+frecuencia+"/eliminar");
+            $("#div-crear-turno").unbind("click");
+            $("#eliminar-turno-modal").modal('show');
+            var boton = $('#button-eliminar')
+            var lis = $('#turn-frec td');
+            for  (var i=0; i< lis.length  ; i++) {
+                var h1 = document.createElement("h1");
+                h1.innerHTML = texto;
+                boton.appendChild(h1);
+            }
+        });
+    </script>
+
+{%endblock%}
+
+<!--
+var $currentModals = $('.modal.in');
+            if ($currentModals.length > 0) { // if we have active modals
+                $currentModals.one('hidden', function () { 
+                    // when they've finished hiding
+                    $dialog.modal('show');
+                    $dialog.one('hidden', function () {
+                        // when we close the dialog
+                        $currentModals.modal('show');
+
+                    });
+                }).modal('hide'); 
+            };
+
+-->

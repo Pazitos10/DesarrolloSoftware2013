@@ -1,0 +1,21 @@
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Día</th>
+            <th>Hora de inicio</th>
+            <th>Hora de fin</th>
+        </tr>
+        </thead>
+        <tbody>
+            {%for frecuencia in frecuencias%}
+            <tr>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <td>{{frecuencia.dia}}</td>
+                    <td>{{frecuencia.hora_inicio}}</td>
+                    <td>{{frecuencia.hora_fin}}</td>
+                </form>
+            </tr>
+            {%endfor%}
+    </tbody>
+</table>

@@ -1,0 +1,30 @@
+{% comment %}#--- Written by Bruno ---{% endcomment %}
+    
+<div class="panel panel-primary" style="margin-top:55px;">
+    <div class="panel-heading"><strong>Frecuencias</strong></div>
+    <div class="panel-body" style="padding-top:5px; border:solid; border-color:#fafafa">
+        <table id="tabla-frecuencias" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Día</th>
+                    <th>Hora inicio</th>
+                    <th>Hora fin</th>
+                    <th><span class="glyphicon glyphicon-trash"></span></th>
+                </tr>
+            </thead>
+            <tbody>
+                    
+                {% for pk_frecuencia,frecuencia in frecuencias.iteritems %}
+                <tr style="vertical-align:middle">
+                    {% for dato in frecuencia %}
+                        <td>{{ dato }}</td>{% comment %} dato es dia u hora_inicio u hora_fin {% endcomment %}    
+                    {% endfor %}
+                    <td><a class="btn btn-danger quitarFrec" href="{% url "quitar_frecuencia" pk_servicio pk_frecuencia  %}"><span class="glyphicon glyphicon-minus"></span></a></td>
+                </tr>    
+                {% endfor %}
+                
+            </tbody>
+        </table>
+    </div>  
+</div>
+

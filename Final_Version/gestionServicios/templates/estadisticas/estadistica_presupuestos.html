@@ -1,0 +1,323 @@
+{% extends "base.html" %}
+{% block "contenido" %}
+    <div class="well">
+        <div class="panel panel-primary " id="panel-interno">
+            <div class="panel-heading">
+                <h6 class="titulo panel-title"><strong> Listado presupuestos </strong></h6>
+            </div>
+            
+            <div>
+                <form method="POST">
+                    {%csrf_token%}
+                    <div class="input-group">
+                        <div class="btn-group" data-toggle="buttons" id="myButtons">
+                            <label class="btn btn-primary active" value="semana">
+                                <input type="radio" id="option1"> Semanas
+                            </label>
+                            <label class="btn btn-primary" value="mes">
+                                <input type="radio" id="option2" > Meses
+                            </label>
+                            <label class="btn btn-primary" value="anio">
+                                <input type="radio" id="option3" > Años
+                            </label>
+                        </div>
+                        <input class="form-control" id="estadistica-search" name="cantidad" placeholder="Seamanas" required>
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                        </span>
+                    </div>
+                        <input class="hidden" name="filtrar_por" id="filtro">
+                </form>
+            </div>
+
+            <div class="tabbable">
+               <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-stats"></a></li>
+                  <li><a href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-adjust"></a></li>
+                  <li><a href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-tasks"></a></li>
+                  <li><a href="#tab4" data-toggle="tab"><span class=" glyphicon glyphicon-fullscreen"></a></li>
+               </ul>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab1"></div>
+                        <div class="tab-pane" id="tab2"></div>
+                        <div class="tab-pane" id="tab3"></div>
+                        <div class="tab-pane" id="tab4"></div>
+                    </div>
+                </div>
+            </div>
+    	</div>
+    </div>
+{% endblock %}
+
+{%block "scripts"%}
+    <script type='text/javascript'>
+        $(function () {
+            var datos1 = [];
+            {% for s in solicitados %}  
+                datos1.push([Date.UTC({{s.0}},{{s.1}},{{s.2}}),{{s.3}}])
+            {% endfor %}
+
+            var datos2 = [];
+            {% for s in confirmados %}  
+                datos2.push([Date.UTC({{s.0}},{{s.1}},{{s.2}}),{{s.3}}])
+            {% endfor %}
+
+            var datos3 = [];
+            {% for s in Rechazados %}  
+                datos2.push([Date.UTC({{s.0}},{{s.1}},{{s.2}}),{{s.3}}])
+            {% endfor %}
+
+            $('#tab1').highcharts({
+            chart: {
+                type: 'spline',
+                width:950,
+                height:420,
+            },
+            title: {
+                text: 'Estadisticas presupuestos'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%b'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Cantidad'
+                },
+                min: 0
+            },
+            tooltip: {
+                formatter: function() {
+                        return '<b>'+ this.series.name +'</b><br/>'+
+                        Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y ;
+                }
+            },
+            
+            series: [{
+                name: 'Solicitados',
+                data:datos1,
+            },{
+                name: 'Confirmados',
+                data:datos2
+                
+            },{
+                name:'Rechazados',
+                data:datos3
+            }]
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            var chart;
+            var stats_presup = [['Solicitados',{{cantidad_solicitados}}],
+                                ['Confirmados',{{cantidad_confirmados}}],
+                                ['Rechazados',{{cantidad_rechazados}}]
+                                ]
+            
+            $(document).ready(function () {
+                $('#tab2').highcharts({
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        width:950,
+                        height:420,
+                    },
+                    title: {
+                        text: 'Porcentaje de presupuestos'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: 'Porcentaje',
+                        data: stats_presup
+                    }]
+                });
+            });
+            
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            var fechas = []
+            var cantidad_por_fecha_solicitados = []
+            var cantidad_por_fecha_confirmados = []
+            var cantidad_por_fecha_rechazados = []
+            {% for s in solicitados %}  
+                fechas.push("{{s.2}}/{{s.1}}/{{s.0}}")
+                cantidad_por_fecha_solicitados.push({{s.3}})
+            {% endfor %}
+
+            {% for s in confirmados %}  
+                cantidad_por_fecha_confirmados.push({{s.3}})
+            {% endfor %}
+
+            {% for s in rechazados %}  
+                cantidad_por_fecha_rechazados.push({{s.3}})
+            {% endfor %}
+
+            $('#tab3').highcharts({
+                chart: {
+                    type: 'areaspline',
+                    width:950,
+                    height:420,
+                },
+                title: {
+                    text: 'Estadisticas presupuestos'
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'left',
+                    verticalAlign: 'top',
+                    x: 150,
+                    y: 100,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: '#FFFFFF'
+                },
+                xAxis: {
+                    categories: fechas,
+                },
+                yAxis: {
+                    title: {
+                        text: 'Cantidad'
+                    }
+                },
+                
+                credits: {
+                    enabled: false
+                },
+                plotOptions: {
+                    areaspline: {
+                        fillOpacity: 0.5
+                    }
+                },
+                series: [{
+                    name: 'Solicitados',
+                    data: cantidad_por_fecha_solicitados
+                }, {
+                    name: 'Confirmados',
+                    data: cantidad_por_fecha_confirmados
+                },{
+                   name: 'Rechazados',
+                   data: cantidad_por_fecha_rechazados
+                }]
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            var fechas = []
+            var cantidad_por_fecha_solicitados = []
+            var cantidad_por_fecha_confirmados = []
+            var cantidad_por_fecha_rechazados = []
+            {% for s in solicitados %}  
+                fechas.push("{{s.2}}/{{s.1}}/{{s.0}}")
+                cantidad_por_fecha_solicitados.push({{s.3}})
+            {% endfor %}
+
+            {% for s in confirmados %}  
+                cantidad_por_fecha_confirmados.push({{s.3}})
+            {% endfor %}
+
+            {% for s in rechazados %}  
+                cantidad_por_fecha_rechazados.push({{s.3}})
+            {% endfor %}
+            
+            $('#tab4').highcharts({
+                chart: {
+                    type: 'area',
+                    width:950,
+                    height:420,
+                },
+                title: {
+                    text: 'Estadisticas presupuestos'
+                },
+                subtitle: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: fechas,
+                    tickmarkPlacement: 'on',
+                    title: {
+                        enabled: false
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Porcentaje'
+                    }
+                },
+                tooltip: {
+                    pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f})<br/>',
+                    shared: true
+                },
+                plotOptions: {
+                    area: {
+                        stacking: 'percent',
+                        lineColor: '#ffffff',
+                        lineWidth: 1,
+                        marker: {
+                            lineWidth: 1,
+                            lineColor: '#ffffff'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Solicitados',
+                    data: cantidad_por_fecha_solicitados
+                }, {
+                    name: 'Confirmados',
+                    data: cantidad_por_fecha_confirmados
+                }, {
+                    name: 'Rechazados',
+                    data: cantidad_por_fecha_rechazados
+                }]
+            });
+        });
+    </script>
+
+	<script>
+		$('[data-toggle=tab]').click(function(){
+			if ($(this).parent().hasClass('active')){
+				$($(this).attr("href")).toggleClass('active');
+			}
+		})
+	</script>
+
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            document.getElementById('filtro').value= "semana";
+            $("#myButtons .btn").click(function(){
+            document.getElementById('filtro').value= $(this,"input").attr("value");
+
+            });
+        });
+    </script>
+
+{%endblock%}

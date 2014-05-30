@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block "contenido" %}
+    <div class="well">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="titulo panel-title"> <strong> Alta de contrato </strong></h6>
+            </div>
+            <div class="panel-body">
+            <!--form class="form-horizontal" action="" method ="POST"-->
+	       		{% csrf_token%}
+				<p>{% crispy form %}</p>
+            <!--/form-->
+            </div>
+        </div>                
+    </div>                
+{% endblock %}

@@ -1,0 +1,89 @@
+{% load crispy_forms_tags %}
+<form action="" method="post" id="formTurno">
+    <div>
+    	{% crispy turno %}
+    	<input class="validar btn btn-success" value="Confirmar" empleado="{{empleado.pk}}" type="Submit">
+    		<input type="hidden" value="{{frecuencia}}" id="frec">
+    </div>
+    <div class="modal-footer"></div>
+    <div id="turnos-frecuencias">
+</form>
+
+
+    <script type="text/javascript" src="{{STATIC_URL}}js/jquery.datetimepicker.js"></script>
+
+        
+    <script type="text/javascript">
+        $(function(){
+            $(".validar").click(function(event) {
+                event.preventDefault();
+                var empleado = $(event.target).attr("empleado");
+                var frecuencia = document.getElementById("frec").value;
+                $("#id_empleado").val(empleado);
+                $("#id_frecuencia").val(frecuencia);
+                var turno = $("#formTurno");
+                console.log(turno.serialize());
+                $.ajax({
+    				type: "POST",
+    				url: "/empleado/"+empleado+"/"+frecuencia+"/crear_turno_empleado",
+    				data:{"csrfmiddlewaretoken": '{{ csrf_token }}',
+                            "empleado":empleado,
+                            "frecuencia":frecuencia,
+                            "hora_inicio": $("#id_hora_inicio").val(), 
+                            "hora_fin": $("#id_hora_fin").val(),
+                            },
+                    success: function(){
+                        $('#crear-turno-modal').modal('hide');
+                    },           
+    			})
+            });
+        });
+    </script>
+    <script type="text/javascript">
+    	function handleData(data) {
+        	$('#crear-turnos-modal.in').modal('hide');
+    }
+        $('#id_hora_inicio').datetimepicker({
+            datepicker:false,
+            format:'H:i:s',
+            formatTime:'H:i:s',
+            minTime:'06:00:00',
+            maxTime:'23:59:59',
+            step:5
+        });
+
+        $('#id_hora_fin').datetimepicker({
+            datepicker:false,
+            format:'H:i:s',
+            formatTime:'H:i:s',
+            minTime:'06:00:00',
+            maxTime:'23:59:59',
+            step:5
+        });
+
+    </script>
+    
+
+<!--
+function cargar_turnos(frecuencia) {
+            $("#turnos-frecuencias").load("/frecuencia/" + frecuencia,function(){
+                $(".quitarTurno").click(function(event){
+                    event.preventDefault();
+                    var url = $(event.currentTarget).attr("href");
+                    $.ajax({
+                        url: url,
+                        method: 'GET',
+                        success: function(){
+                            cargar_turnos(frecuencia);
+                        }
+                    });
+                });
+            });
+        }
+        cargar_turnos({{frecuencia}});
+
+
+
+success : cargar_turnos({{frecuencia}}  ),
+
+-->

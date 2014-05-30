@@ -1,0 +1,146 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+     <link href="/static/css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        .invoice-title h2, .invoice-title h3 {
+        display: inline-block;
+        }
+
+        .table > tbody > tr > .no-line {
+            border-top: none;
+        }
+
+        .table > thead > tr > .no-line {
+            border-bottom: none;
+            background-color: red;
+        }
+
+        .table > tbody > tr > {
+            border-top: 2px solid;
+        }
+    </style>
+   
+</head>
+    <body>
+      <div class="container">
+       <div class="row">
+        <div class="col-xs-12">
+        <div class="invoice-title">
+          <h2><img src="{{STATIC_URL}}img/Zendaletra.png" width='150' height='50'></h2>
+          <h3 class="pull-right">PRESUPUESTO Nro <strong>{{nro}}</strong></h3>
+          
+        </div>
+
+        <div class="row">
+          <div class="col-xs-6">
+            <address>
+            <strong>Cliente:</strong><br>{{nro.cliente}}<br>
+              Domicilio: {{nro.cliente.persona.domicilio}}<br>
+              Trelew - Chubut
+            </address>
+          </div>
+          <div class="col-xs-6 text-right">
+            <address>
+              <strong>Datos Presupuesto:</strong><br>
+              <strong>Domicilio de Servico: </strong>   {{nro.domicilio_servicio}}<br><br>
+              <strong><h4>{{nro.obtener_estado_actual}}</strong></h4>
+            </address>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <address>
+              Teléfono: {{nro.cliente.persona.telefono}}<br>
+              E-mail: {{nro.cliente.persona.email}}<br>
+            </address>
+          </div>
+          <div class="col-xs-6 text-right">
+            <address>
+              
+              <h5><strong>Vigencia:</strong></h5>
+              <strong>Desde:</strong> {{nro.contrato.inicio|date:"d - m - Y" }}<br>
+              <strong>Hasta:</strong> {{nro.contrato.fin|date:"d - m - Y" }}<br><br>
+              Generado:  {{hoy}}<br>
+            </address>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-10">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><strong>Servicios</strong></h3>
+          </div>
+          <div class="panel-body">
+            <div>
+              <table class="table">
+                <thead>
+                                <tr>
+                      <!--td><strong>Item</strong></td-->
+                      <td class="text-center"><strong>Codigo</strong></td>
+                      <td class="text-center"><strong>Descripción</strong></td>
+                      <td class="text-right"><strong>Importe</strong></td>
+                                </tr>
+                </thead>
+                <tbody>
+                {%for serv in sc%}
+                  <tr>
+                    <!--td>{{val}}</td-->
+                    <td class="text-center">{{serv.tipo_servicio.codigo_servicio}}</td>
+                    <td class="text-center">{{serv.tipo_servicio.nombre}}</td>
+                    <td class="text-right">${{serv.importe | default_if_none:"0.0" }}</td>
+
+                  </tr> 
+                  <!--td class=></td-->
+                   <tr>
+                        <td colspan="3">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Dia</th>
+                                        <th>Hora de inicio</th>
+                                        <th>Hora de fin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {%for frec in serv.frecuencia_set.all %}
+                                    <tr>
+                                        <td>{{frec.get_dia_display}}</td>
+                                        <td>{{frec.hora_inicio|date:"h:ia" }}</td>
+                                        <td>{{frec.hora_fin|date:"h:ia" }}</td>
+                                    </tr>
+                                    {%endfor%}
+                                </tbody>
+                            </table>
+                        </td>         
+                    </tr> 
+
+                </tbody>
+                {%endfor%}
+                  <!--td></td-->
+                  <td></td>
+                  <tr>
+                    <!--td ></td-->
+                    <td class="text-center"></td>
+                    <td class="text-right"><strong>Total</strong></td>
+                    <td class="text-right"><strong>${{nro.valorizado.valor_final}}</strong></td>
+                  </tr>
+                 
+              </table>
+            </div>
+          </div>
+        </div>
+    
+    </div>
+    </div>
+</div>    
+      
+
+
+
+</body>
+</html>

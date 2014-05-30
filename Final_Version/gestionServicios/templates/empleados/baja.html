@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block "titulo" %}Baja de empleado{% endblock %}
+{% block "contenido" %}
+ {% if notifications %}
+        {% for message in notifications %}
+            {%if message%}
+                <div class="alert alert-danger">
+                        <ul class="messages">
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        </ul>
+                </div>
+            {%endif%}
+        {% endfor %}
+    {% endif %}
+
+	<div class="well">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h6 class="titulo panel-title"> <strong>Baja de empleado</strong></h6>
+			</div>
+			<div class="panel-body">
+				<form action="" method="get">
+                    <div class="column" id="busqueda">
+                            {%csrf_token%}
+                            {% crispy buscar%} 
+                            <button class="search-button btn btn-default button-search" role="button" ><span class="glyphicon glyphicon-search"></span></button>
+                    </div>
+                </form>
+				{% crispy formulario %}
+				{%if formulario != ''%}
+					<p>(*) Campos Obligatorios</p>
+				{%endif%}
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block "scripts" %}
+	{{ block.super }}
+	<script type="text/javascript">
+	    $(document).ready(function() {
+	        $(':input[name=tipoDeServicio_0]').bind('djselectableselect', function(event, ui) {
+	            $(this).parents("form").submit();
+	        });
+	    });
+	    $(function () {
+        	$('#id_baja').datetimepicker({pickTime:false});
+        });
+	</script>
+{% endblock "scripts" %}

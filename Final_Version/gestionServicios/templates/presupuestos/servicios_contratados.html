@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block "contenido" %}
+
+     {% if notifications %}
+        <div class="alert alert-danger">
+                <ul class="messages">
+                        {% for message in notifications %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                </ul>
+        </div>
+    {% endif %}
+
+    <div class="well">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="panel-title"> <strong> SERVICIOS CONTRATADOS </strong></h6>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tipo de servicio</th>
+                            <th>Metros cuadrados</th>
+                            <th>Acciones</th>
+                            <th>Monto total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {%for servicio in servicios%}
+                            <tr>
+                                <form action="" id="form-peso" method="post">
+                                    {% csrf_token %}
+                                    <td>{{servicio.tipo_servicio}}</td>
+                                    <td><input class="form-control" id="cantM2Input-{{servicio.id}}" type="text" name="cantidadM2" value="{{servicio.metros_cuad | default_if_none:"0.0" }}"></td>
+                                        <input type="hidden" value="{{servicio.id}}" name="servicio_contratado">
+                                        <input type="hidden" value="{{servicio.tipo_servicio.codigo_servicio}}" name="tipo_de_servicio">
+                                    </td>
+                                    <td><input class="btn btn-primary" id="input-pesos-{{servicio.id}}" name="input-pesos" type="Submit" value="$" style="vertical-align:left">
+                                        <input type="hidden" id="ConfirmoVal-{{servicio.id}}" name="ConfirmoVal-{{servicio.id}}" value="False">
+                                        <input type="hidden" id="{{servicio.id}}" name="id_serv" value="{{servicio.id}}">
+                                    <td id="subtotal-serv">{{servicio.importe | default_if_none:"0.0" }}
+                                    </td>
+                                </form>
+                            </tr>
+                            {%endfor%}
+                    </tbody>
+                </table>
+                <form action="" id="form-valorizar" method="POST">
+                    {% csrf_token %}
+                    <div class="pull-right">
+                        <p> Total: $ {{total}} </p>
+                        <br>
+                            <p> Nuevo Total (opcional):</p>
+                        <div class="column" id="busqueda">
+                            <input name="nuevoValor" id="valorFinal" class="form-control" type="text">
+                        </div>
+                        <br>
+                        <!--holaaaa :D
+                        <input class="btn btn-success" class="btn-submiteador" value="Confirmar">-->
+                        <button class="btn btn-success" id="btn-submiteador" role="button">Confirmar</button>
+                        <input type="hidden" id="banderin" value="False" name="Confirmo">
+                        <input type="hidden" name="total" value="{{total}}">
+                        <input type="hidden" name="mts-cuad" value="{{servicio.metros_cuad}}" >
+                        <input type="hidden" name="subtotal" value="{{servicio.importe}}" >
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>  
+
+    <!-- Modal -->
+    <div class="modal fade" id="estadistica-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Estadistica de cliente</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="div-estadistica"></div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->  
+
+{% endblock %}
+{% block "scripts" %}
+    {{block.super}}
+    <script type="text/javascript">
+       $(function(){
+            $(".estadistica-button").click(function(event) {
+                event.preventDefault();
+                var cliente = {{servicios.0.presupuesto.cliente.pk}};
+                $("#div-estadistica").load("/presupuesto/estadistica/cliente/"+cliente);
+                $("#div-estadistica").unbind("click");
+                $("#estadistica-modal").modal();
+            });
+        });
+       
+        function hayValorCero(){
+            var result = $('td[id="subtotal-serv"]').map(function(index, item) { return Number($(item).text()); })
+
+            var hay = false;
+            for(var i=0; i<result.length; i++){
+                if (result[i] === 0){
+                    hay = true;
+                    break;
+                }
+            }
+            return hay;
+        }
+
+        $('#btn-submiteador').click(function(e){
+            e.preventDefault;
+            var result = true;
+
+            $.each($('input[id^="cantM2Input-"]'),function(){
+
+                console.log($(this).val());
+                if ($(this).val() === "0.0" || $(this).val().length > 5 || $(this).val().length < 1 || hayValorCero()){
+                    result = false;
+                }
+                return result;
+            });
+
+            if (result === true) {
+                $('#banderin').attr('value', 'True')
+                $('#form-valorizar').Submit() 
+            }else{
+                alert("Valor/es de metro cuadrado erroneo.");
+                $('#banderin').attr('value', 'False')
+            };
+        });
+        
+        
+        $('input[id^="input-pesos-"]').click(function(e){
+            e.preventDefault;
+            result = true;
+        
+            var input_id = this.id;
+            var id = input_id.substr(12);
+
+            var input_precio ='cantM2Input-'+id;
+            
+            if ($('#'+input_precio).val() === "0.0" || $('#'+input_precio).val().length > 3 ||   $('#'+input_precio).val().length < 1){
+                result = false;
+            }
+
+            if (result === true) {
+                $('#ConfirmoVal-'+id).attr('value', 'True')
+                $('#form-peso').Submit() 
+            }else{
+                alert("Cantidad de metros cuadrados erronea o ingreso mismo valor.");
+                $('#ConfirmoVal').attr('value', 'False');
+            };
+                
+        });
+        
+    </script>
+{% endblock %}
+
+
+

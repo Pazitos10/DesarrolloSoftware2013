@@ -1,0 +1,93 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+     <link href="/static/css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        .invoice-title h2, .invoice-title h3 {
+        display: inline-block;
+        }
+
+        .table > tbody > tr > .no-line {
+            border-top: none;
+        }
+
+        .table > thead > tr > .no-line {
+            border-bottom: none;
+            background-color: red;
+        }
+
+        .table > tbody > tr > {
+            border-top: 2px solid;
+        }
+    </style>
+   
+   
+</head>
+
+<body>
+     <div class="row">
+        <div class="col-xs-6">
+            <div class="invoice-title">
+              <h2><img src="{{STATIC_URL}}img/Zendaletra.png" width='150' height='50'></h2>
+              <!--h3 class="pull-right">PRESUPUESTO Nro <strong>{{nro}}</strong></h3-->
+              
+            </div>
+        </div>
+
+        <div class="col-xs-6 text-right"  style= "vertical-align=super"; >
+              <br>
+              <strong>Parte Diario</strong><br><br>
+        </div>
+    </div>  
+    <div class="well">
+                
+        {%for c in lista %}
+                    {% if c.contrato.inicio < fecha_a_comparar1 %}
+                        <div class="panel panel-info" id="panel">
+                            <div class="panel-heading">
+                                <h4 style><strong>Presupuesto Nro.: {{c}} / Cliente: {{c.cliente }} / Domicilio Servicio: {{c.domicilio_servicio }} </strong></h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="panel panel-default" id="panel">
+                                    {%for l in c.serviciocontratado_set.all %}
+                                        {% if l.fin >= fecha_a_comparar%}
+                                        
+                                        <div class="panel-heading">
+                                            <h3>{{l.tipo_servicio.nombre}}</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <th>Empleado</th>
+                                                    <th>Hora Inicio</th>
+                                                    <th>Hora Fin</th>    
+                                                </thead>
+                                                <tbody>
+                                                    {%for t in l.frecuencia_set.all%}
+                                                        {%if t.dia == dia%}
+                                                            {%for m in t.turno_set.all%}
+                                                                
+                                                                    <tr>
+                                                                        <td>{{m.empleado}}</td>
+                                                                        <td>{{m.hora_inicio}}</td>
+                                                                        <td>{{m.hora_fin}}</td>
+                                                                    </tr>
+                                                                
+                                                            {%endfor%}
+                                                        {%endif%}
+                                                    {%endfor%}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        {%endif%}
+                                    {%endfor%}
+                                </div>        
+                            </div>
+                        </div>
+                    {%endif%}
+         {%endfor%}   
+
+</body>
+</html>
+

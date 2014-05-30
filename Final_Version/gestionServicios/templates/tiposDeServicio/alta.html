@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block "titulo" %}Tipo de servicio{% endblock %}
+{% block "contenido" %}
+	<div class="well">
+		<div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="titulo panel-title" > <strong> Nuevo tipo de servicio </strong></h6>
+			</div>
+			<div class="panel-body">	
+					{% crispy formulario %}
+			</div>
+		</div>	
+	</div>
+{% endblock %}	
+
+{% block "scripts"%}
+	{{block.super}}
+{%endblock %}

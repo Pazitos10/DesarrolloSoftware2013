@@ -1,0 +1,7 @@
+Zenda requiere:
+
+postgresql 9.3 (base de datos)
+python 2.7 - python-pip - requirements.txt (instalar con pip)
+wkhtmltopdf (binarios)
+
+

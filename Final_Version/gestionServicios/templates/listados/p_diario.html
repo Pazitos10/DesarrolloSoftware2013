@@ -1,0 +1,156 @@
+{% extends "base.html"%}
+{% block "contenido" %}
+    <div class="well">
+        <div class="panel panel-primary"> 
+            <div class="panel-heading">          
+                <h6 class="titulo panel-title" style="text-center"><strong> Parte diario</strong></h6>
+                <a href="{% url "parte_diario_pdf" %}" id="btn-pdf">
+                    <span class="label label-default pull-right">Exportar a PDF</span> 
+                </a>
+
+                <div>
+                        <form name="form-busqueda" method="post">
+                            {%csrf_token%}
+                            <div class="controls col-lg-6">
+                                <input type="hidden"  name="exporta" id="id-exporta" value="False">
+                                <input type="text" id="id_inicio" name="id_inicio" class="form-control datepicker col-lg-2" style="background-color:white">
+                                <button class="search-button btn btn-default" role="button" ><span class="glyphicon glyphicon-search"></span></button>
+
+                            </div>
+                        </form>
+                        <br>
+                        <br>
+                </div>
+            </div>
+            <div class="panel-body">
+                {% for k,v in presupuestos.iteritems %}
+                        {% for kc,vc in cabeceras.iteritems %}
+                            {% if k == kc %}
+                                <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h4>{{vc}}</h4>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="panel-body">
+                            {% for nombre_serv,turnos in v.iteritems  %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="panel-title">{{nombre_serv}}</div>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <td>Empleado</td>
+                                            <td>Hora Inicio</td>
+                                            <td>Hora Fin</td>
+                                        </thead>
+                                        {% for pkt,datos_turno in turnos.iteritems  %}
+                                        <tbody>
+                                                    <td>{{datos_turno.0}}</td>
+                                                    <td>{{datos_turno.1}}</td>
+                                                    <td>{{datos_turno.2}}</td>
+                                        </tbody>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+        </div>
+    </div>
+    
+{% endblock %}
+
+{%block "scripts"%}
+
+    <script type="text/javascript" src="{{STATIC_URL}}/js/bootstrap-datetimepicker.js"></script>
+        <script type="text/javascript" src="{{STATIC_URL}}/js/bootstrap-datetimepicker.es.js"></script>
+
+    <script type="text/javascript">
+    $(".turnosbtn").click(function(event) {
+                event.preventDefault();
+                var empleado = $(event.currentTarget).attr("empleado");
+                $("#div-empleado-turnos").load("/listado/turnos_empleados_por_fecha/" + empleado);
+                $("#div-empleado-turnos").unbind("click");
+                $("#empleado-turnos-modal").modal();
+                $('#empleado-turnos-modal').on('shown.bs.modal'); 
+            });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+        var activeSystemClass = $('.list-group-item.active');
+
+            //something is entered in search form
+            $('#system-search').keyup( function() {
+               var that = this;
+                // affect all table rows on in systems table
+                var tableBody = $('.table-list-search tbody');
+                var tableRowsClass = $('.table-list-search tbody tr');
+                $('.search-sf').remove();
+                tableRowsClass.each( function(i, val) {
+                
+                    //Lower text for case insensitive
+                    var rowText = $(val).text().toLowerCase();
+                    var inputText = $(that).val().toLowerCase();
+                    if(inputText != '')
+                    {
+                        $('.search-query-sf').remove();
+                        tableBody.prepend('<tr class="search-query-sf"><td colspan="6"><strong>Buscando: "'
+                            + $(that).val()
+                            + '"</strong></td></tr>');
+                    }
+                    else
+                    {
+                        $('.search-query-sf').remove();
+                    }
+
+                    if( rowText.indexOf( inputText ) == -1 )
+                    {
+                        //hide rows
+                        tableRowsClass.eq(i).hide();
+                        
+                    }
+                    else
+                    {
+                        $('.search-sf').remove();
+                        tableRowsClass.eq(i).show();
+                    }
+                });
+                //all tr elements are hidden
+                if(tableRowsClass.children(':visible').length == 0)
+                {
+                    tableBody.append('<tr class="search-sf"><td class="text-muted" colspan="6">No existe un campo con esa cadena.</td></tr>');
+                }
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+    $("#fecha").attr("readonly",true);
+        $("#id_fin").attr("readonly",true);
+        $("input[name^='id_inicio']").attr("readonly",true);
+        $(function () {
+            $('#id_inicio').datetimepicker({
+                language: 'es',
+                showToday: true,
+                minDate: moment().subtract(1, "d"), 
+                sideBySide: true,
+                pickTime: false,
+                daysOfWeekDisabled:[0],
+            });
+            
+        });
+        
+    </script>
+
+
+
+{%endblock%}
+
+

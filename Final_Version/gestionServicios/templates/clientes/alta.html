@@ -1,0 +1,67 @@
+	{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block "title" %}Alta cliente{% endblock %}
+{% block "contenido" %}
+	<div class="well">
+		<div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="titulo panel-title" > <strong> Nuevo cliente </strong></h6>
+            </div>
+
+			<div class="panel-body">
+
+				{% if formulario != '' %}
+					{% crispy formulario %}
+					<h4>Campo obligatorio (*)</h4>
+				{% else %}
+					<form action="" method="get">
+						<div class="row">
+				           <div id="custom-search-input">
+	                            <div class="input-group col-md-5">
+	                                <input type="text" class="  search-query form-control" placeholder="Ingresar nro documento" name="Documento" />
+	                                <span class="input-group-btn">
+	                                    <button class="btn btn-default" type="submit">
+	                                        <span class=" glyphicon glyphicon-search"></span>
+	                                    </button>
+	                                </span>
+	                            </div>
+	                        </div>
+						</div>
+					</form>
+				{% endif%}
+			</div>
+		</div>
+	</div>
+{% endblock %}	
+
+{%block "scripts"%}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var existe = '{{existe}}';
+            if (existe==='si'){
+                $("#id_nro_documento").prop('disabled', true);
+                $("#id_tipo_documento").prop('disabled', true);
+                $("#id_apellido").prop('disabled', true);
+                $("#id_nombre").prop('disabled', true);
+                $("#id_domicilio").prop('disabled', true);
+                $("#id_telefono").prop('disabled', true);
+                $("#id_email").prop('disabled', true);
+
+            }
+        });
+    </script>
+
+    <script type="text/javascript">
+    $(".btn-primary").click(function(event) {
+        $("#id_nro_documento").prop('disabled', false);
+        $("#id_tipo_documento").prop('disabled', false);
+        $("#id_apellido").prop('disabled', false);
+        $("#id_nombre").prop('disabled', false);
+        $("#id_domicilio").prop('disabled', false);
+        $("#id_telefono").prop('disabled', false);
+        $("#id_email").prop('disabled', false);
+
+    });
+    </script>
+
+{%endblock%}

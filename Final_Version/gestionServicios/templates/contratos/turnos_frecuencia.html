@@ -1,0 +1,22 @@
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Hora de inicio</th>
+            <th>Hora de fin</th>
+            <th>Empleado</th>
+        </tr>
+        </thead>
+        <tbody>
+            {%for key,val in turno_empleado.items%}
+            <tr>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {% for e in val %}
+                        <td>{{e}}</td>    
+                    {% endfor %}
+                </form>
+            </tr>
+            {%endfor%}
+    </tbody>
+</table>
