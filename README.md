@@ -19,30 +19,49 @@ Requerimientos
 
 Zenda requiere:
 
-postgresql 9.3 (base de datos)
-python 2.7 - python-pip - requirements.txt (instalar con pip)
+postgresql 9.3 (base de datos),
+python 2.7 - python-pip - requirements.txt (instalar con pip),
 wkhtmltopdf (binarios) -> http://wkhtmltopdf.org/
 
 requirements.txt contiene
 =========================
-Django==1.5.4\n
+Django==1.5.4
+
 argparse==1.2.1
+
 diff-match-patch==20110725.1
+
 django-crispy-forms==1.4.0
+
 django-import-export==0.2.2
+
 django-localflavor==1.0
+
 django-notify==1.1.2
+
 django-pagination==1.0.7
+
 django-selectable==0.7.0
+
 django-wkhtmltopdf==1.2.2
+
 ipdb==0.8
+
 ipython==0.13.2
+
 psycopg2==2.5.2
+
 python-dateutil==2.2
+
 simplejson==3.3.3
+
 six==1.6.1
+
 tablib==0.9.11
+
 wsgiref==0.1.2
+
 xlwt==0.7.5
+
 
 Powered By ZendaTeam
