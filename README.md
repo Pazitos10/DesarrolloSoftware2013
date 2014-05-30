@@ -25,7 +25,7 @@ wkhtmltopdf (binarios) -> http://wkhtmltopdf.org/
 
 requirements.txt contiene
 =========================
-Django==1.5.4
+Django==1.5.4\n
 argparse==1.2.1
 diff-match-patch==20110725.1
 django-crispy-forms==1.4.0
